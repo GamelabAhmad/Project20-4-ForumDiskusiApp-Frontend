@@ -16,7 +16,6 @@ export default function MainPages() {
             <NavLink to={"/question"}>Question</NavLink>
           </li>
           <li>
-            {" "}
             <NavLink to={"/topic"}>Topic</NavLink>
           </li>
         </ul>
