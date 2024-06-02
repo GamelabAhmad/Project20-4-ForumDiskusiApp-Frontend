@@ -1,7 +1,7 @@
-import React from 'react';
-
-export default function IconPlaceholder({variant, className, ...props}) {
+export default function IconPlaceholder({ variant, className, ...props }) {
   return (
-    <i className={`bi bi-${variant} ${className}`} {...props}></i>
+    <>
+      <i className={`bi bi-${variant} ${className}`} {...props}></i>
+    </>
   );
 }
