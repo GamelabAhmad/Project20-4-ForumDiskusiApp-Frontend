@@ -1,4 +1,4 @@
-export default function TypographyText({ children, className, ...props }) {
+export default function TypographyText({ children, className, ...props }) {   
   return (
     <>
       <p
