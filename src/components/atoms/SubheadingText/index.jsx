@@ -2,7 +2,7 @@ export default function SubheadingText({ children, className, ...props }) {
   return (
     <>
       <p
-        className={`fw-semibold fs-3 lh-sm text-uppercase text-start text-black mx-2 py-2 ${className}`}
+        className={`fw-normal fs-3 lh-sm text-start text-black d-flex align-items-center m-0 ${className}`}
         {...props}
       >
         {children}
