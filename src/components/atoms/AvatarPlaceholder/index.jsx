@@ -1,6 +1,8 @@
 export default function AvatarPlaceHolder({
-  image,
+  src,
   alt,
+  widthAvatar,
+  heightAvatar,
   className,
   children,
   ...props
@@ -9,8 +11,9 @@ export default function AvatarPlaceHolder({
     <>
       <img
         className={`rounded-5 ${className}`}
-        src={image}
+        src={src}
         alt={alt}
+        style={{ width: widthAvatar, height: heightAvatar }}
         {...props}
       >
         {children}

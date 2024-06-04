@@ -10,7 +10,7 @@ export default function Input({
   return (
     <>
       <input
-        className={`text-dark ${className}`}
+        className={`text-dark d-grid ${className}`}
         type={type}
         id={id}
         name={name}
