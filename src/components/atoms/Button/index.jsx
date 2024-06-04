@@ -1,7 +1,17 @@
-export default function Button({ className, type, children, ...props }) {
+export default function Button({
+  variant,
+  className,
+  type,
+  children,
+  ...props
+}) {
   return (
     <>
-      <button className={`btn btn-primary ${className}`} type={type} {...props}>
+      <button
+        className={`btn btn-${variant} ${className}`}
+        type={type}
+        {...props}
+      >
         {children}
       </button>
     </>
