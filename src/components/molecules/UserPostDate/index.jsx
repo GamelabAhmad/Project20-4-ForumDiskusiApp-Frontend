@@ -1,13 +1,22 @@
 import AvatarPlaceHolder from "../../atoms/AvatarPlaceholder";
 import TypographyText from "../../atoms/TypographyText";
 
-export default function UserPostDate() {
+export default function UserPostDate({ src, username, time }) {
   return (
     <>
-      <div className="d-flex flex-row">
-        <AvatarPlaceHolder className="rounded-circle border border-dark img-fluid w-25 h-25" src="https://png.pngtree.com/png-clipart/20230426/original/pngtree-school-logo-design-template-png-image_9104626.png"></AvatarPlaceHolder>
-        <TypographyText className="text-primary pe-2 font-bold">Lorem Ipsum</TypographyText>
-        <TypographyText className="font-bold">30 seconds</TypographyText>
+      <div className="d-flex flex-row gap-2">
+        <AvatarPlaceHolder
+          className="rounded-circle border border-dark img-fluid"
+          src={src}
+          heightAvatar={30}
+          widthAvatar={30}
+        />
+        <div className="d-flex gap-2">
+          <TypographyText className="text-primary fw-bold">
+            {username}
+          </TypographyText>
+          <TypographyText className="fw-semibold">{time}</TypographyText>
+        </div>
       </div>
     </>
   );

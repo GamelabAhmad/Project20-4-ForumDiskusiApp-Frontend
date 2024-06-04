@@ -1,38 +1,62 @@
 import AvatarPlaceHolder from "../../atoms/AvatarPlaceholder";
 import TypographyText from "../../atoms/TypographyText";
 
-export default function ForumMember({children, ...props}) {
-    return (
-        <>
-            <div className="d-flex" {...props}>
-            
-            <AvatarPlaceHolder className="rounded-circle z-0 " 
-            src="https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg" 
-            style={{width:30, height:30}} />
-             
-            <AvatarPlaceHolder className="rounded-circle z-10" 
-            src="https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg" 
-            style={{width:30, height:30}} />
-
- 
-            <AvatarPlaceHolder className="rounded-circle z-20" 
-            src="https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg" 
-            style={{width:30, height:30}} />
-
- 
-            <AvatarPlaceHolder className="rounded-circle z-30" 
-            src="https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg" 
-            style={{width:30, height:30}} />
-
- 
-            <AvatarPlaceHolder className="rounded-circle z-40" 
-            src="https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg" 
-            style={{width:30, height:30}} />
-
-            <span><TypographyText>3000 Users</TypographyText></span>
-            </div>
-           
-        
-        </> 
-    )
-}	
+export default function ForumMember() {
+  const forumMember = [
+    {
+      id: 1,
+      src: "https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg",
+      alt: "avatar-1",
+      widthAvatar: "30px",
+      heightAvatar: "30px",
+    },
+    {
+      id: 2,
+      src: "https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg",
+      alt: "avatar-2",
+      widthAvatar: "30px",
+      heightAvatar: "30px",
+    },
+    {
+      id: 3,
+      src: "https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg",
+      alt: "avatar-3",
+      widthAvatar: "30px",
+      heightAvatar: "30px",
+    },
+    {
+      id: 4,
+      src: "https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg",
+      alt: "avatar-4",
+      widthAvatar: "30px",
+      heightAvatar: "30px",
+    },
+    {
+      id: 5,
+      src: "https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg",
+      alt: "avatar-5",
+      widthAvatar: "30px",
+      heightAvatar: "30px",
+    },
+  ];
+  return (
+    <>
+      <div className="d-flex gap-2">
+        {forumMember.map((member) => (
+          <AvatarPlaceHolder
+            key={member.id}
+            src={member.src}
+            alt={member.alt}
+            widthAvatar={member.widthAvatar}
+            heightAvatar={member.heightAvatar}
+          />
+        ))}
+        <TypographyText
+          className="text-black"
+          variant="body2"
+          children="and others"
+        />
+      </div>
+    </>
+  );
+}
