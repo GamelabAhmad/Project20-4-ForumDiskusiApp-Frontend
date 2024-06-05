@@ -1,58 +1,109 @@
 import Button from "../../atoms/Button";
 import IconPlaceholder from "../../atoms/IconPlaceholder";
 import InputForm from "../../molecules/InputForm";
-
+import AvatarPlaceholder from "../../atoms/AvatarPlaceholder";
 
 export default function Navbar({children, className, ...props}) {
     return (
         <>
-        <head {...props}>
+        <section className="Navbar-section-1">
+        <header {...props}>
             <body className="overflow-x-hidden">
                 <header>
-                    <div className="container">
-                        <nav className="navbar navbar-expand-sm bg-blue-200">
-                            <div className="container-fluid my-2">
+                    <div className="container-sm">
+                        <nav className="navbar navbar-expand-sm">
+                            <div className="container-fluid">                             
                                 <img 
                                 src="" 
-                                alt="LOGO" 
                                 width="30" 
-                                height="30" 
-                                class="img-fluid"
+                                height="30"
+                                className="d-inline-block align-center me-4" 
                                 />
                                 
-                                <div clasName="offcanvas offcanvas-end">
-                                    <InputForm 
-                                    type="search"
-                                    name="search"
-                                    id="search"
-                                    placeholder="Search..."
-                                    className="rounded-2 pt-3"
-                                    />
-                                </div>
+                                <InputForm 
+                                type="search"
+                                name="search"
+                                id="search"
+                                placeholder=" Search..."                                
+                                className="d-flex flex-grow-1 p-1 w-50 rounded-2 me-5"
+                                />
+                            
                                 
                                 <IconPlaceholder 
                                 variant="envelope"
-                                style={{width : 30, height : 30}}/>
-                                
-                                <div className="off-canvas body">                                   
-                                    <Button 
-                                    variant="primary" 
-                                    type="submit" 
-                                    className="rounded-2 bg-blue-200"
-                                    >Log In</Button>
+                                className="fs-2 me-5"/>
+                                                          
+                                <div className="gap-3 d-flex">
+                                <Button 
+                                variant="primary" 
+                                type="submit" 
+                                className="px-2"
+                                >Log In</Button>
 
-                                    <Button 
-                                    variant="primary" 
-                                    type="submit" 
-                                    className="rounded-2 bg-blue-200"
-                                    >Sign Up</Button>  
+                                <Button 
+                                variant="primary" 
+                                type="submit" 
+                                className="px-2"
+                                >Sign Up</Button>  
                                 </div>
+                                
                             </div>
                         </nav>
                     </div>
                 </header>
             </body>
-        </head>
+        </header>
+        </section>
+
+        <section className="Navbar-section-2">
+        <header {...props}>
+            <body className="overflow-x-hidden">
+                <header>
+                    <div className="container-sm">
+                        <nav className="navbar navbar-expand-sm">
+                            <div className="container-fluid">                             
+                                <img 
+                                src="" 
+                                width="30" 
+                                height="30"
+                                className="d-inline-block align-center me-4" 
+                                />
+                                
+                                <InputForm 
+                                type="search"
+                                name="search"
+                                id="search"
+                                placeholder=" Search..."                                
+                                className="d-flex flex-grow-1 p-1 w-50 rounded-2 me-5"
+                                />
+                            
+                                
+                                <IconPlaceholder 
+                                variant="envelope"
+                                className="fs-2 me-5"/>
+                                                          
+                               <container className="">
+                                <div className="gap-3 d-flex">
+                                    <IconPlaceholder 
+                                    variant="gear"
+                                    className="fs-2"/>
+                                    
+                                    <AvatarPlaceholder 
+                                    className=""
+                                    src=""
+                                    alt=""
+                                    style={{width: 30, height: 30}}
+                                    />
+                                                                   
+                                </div>
+                                </container>
+                            </div>
+                        </nav>
+                    </div>
+                </header>
+            </body>
+        </header>
+        </section>
         </>
     )
 }
