@@ -1,7 +1,22 @@
-export default function Input({ className, type, children, name, placeholder, ...props }) {
+export default function Input({
+  className,
+  type,
+  id,
+  name,
+  placeholder,
+  children,
+  ...props
+}) {
   return (
     <>
-      <input className={`text-dark ${className}`} type={type} placeholder={placeholder} name={name} {...props}></input>
+      <input
+        className={`text-dark d-grid ${className}`}
+        type={type}
+        id={id}
+        name={name}
+        placeholder={placeholder}
+        {...props}
+      ></input>
     </>
   );
 }
