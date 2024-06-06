@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
+import "bootstrap/dist/js/bootstrap.js";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import MainPages from "./pages/MainPages.jsx";
 import QuestionPages from "./pages/QuestionPages.jsx";
