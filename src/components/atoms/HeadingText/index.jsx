@@ -1,8 +1,18 @@
-export default function HeadingText({ children, className, ...props }) {
+import useCssReset from "../../../hooks/useCssReset";
+
+export default function HeadingText({
+  children,
+  className,
+  cssReset,
+  ...props
+}) {
+  const style = useCssReset(cssReset);
+
   return (
     <>
       <p
-        className={`fw-normal fs-2 lh-sm text-start text-black d-flex align-items-center m-0 ${className}`}
+        className={`fw-normal fs-2 lh-sm ${className}`}
+        style={style}
         {...props}
       >
         {children}
