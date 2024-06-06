@@ -6,9 +6,9 @@ export default function TypographyText({
   cssReset,
   ...props
 }) {
-  const style = useCssReset(cssReset);
+const style = useCssReset(cssReset);
 
-  return (
+return (
     <>
       <p
         className={`fw-normal fs-6 lh-sm ${className}`}
