@@ -1,5 +1,7 @@
-import React from "react";
 import TypographyText from "../../atoms/TypographyText";
+import ContainerLayout from "../../templates/ContainerLayout.jsx";
+import IconPlaceholder from "../../atoms/IconPlaceholder/index.jsx";
+import SubheadingText from "../../atoms/SubheadingText/index.jsx";
 
 export default function Footer() {
   const footerList = [
@@ -29,55 +31,102 @@ export default function Footer() {
     },
   ];
 
+  const footerSupportList = [
+    {
+      id: 1,
+      href: "/",
+      variant: "question-circle",
+      text: "FAQ",
+    },
+    {
+      id: 2,
+      href: "/",
+      variant: "shield",
+      text: "Privacy Policy",
+    },
+    {
+      id: 3,
+      href: "/",
+      variant: "archive",
+      text: "Terms of Service",
+    },
+  ];
+
   return (
     <>
-      <footer>
-        <section>
-          <div className="container">
-            <div className="container-fluid fw-lighter">
-              <div className="pt-5 mb-3">
-                <div className="row border-bottom border-top border-dark py-4">
-                  <div className="col-12 col-sm-12 col-md-6 mb-4">
-                    <div className="d-flex gap-2">
-                      <img src="https://toppng.com/uploads/preview/illustration-of-flag-of-indonesia-indonesia-flag-logo-11562943954zddevcowom.png" alt="" width="80" height="50" className="img-fluid" />
-                      <div className="align-content-center">
-                        <h4 className="text-dark mt-2 fst-italic">Twenties</h4>
-                      </div>
-                    </div>
-                    <div>
-                      <p className="text-white py-3">We're a team of experienced designers, developers, and marketers, passionate about delivering exceptional digital solutions.</p>
-                      <a href="mailto:twenties@gmail.com">twenties@gmail.com</a>
-                    </div>
-                  </div>
-                  <div className="col-6 col-sm-6 col-md-2 text-dark">
-                    <h6 className="fw-bold">Menu</h6>
-                    <ul className="list-unstyled d-grid gap-2 py-2">
-                      {footerList.map((footer) => (
-                        <>
-                          <li key={footer.id}>
-                            <a href={footer.href} className="d-flex gap-2 align-items-center text-decoration-none text-dark">
-                              <TypographyText className="d-flex align-items-center m-0">{footer.text}</TypographyText>
-                            </a>
-                          </li>
-                        </>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="col-6 col-sm-6 col-md-2 text-dark">
-                    <h6 className="fw-bold">Support</h6>
-                    <ul className="list-unstyled d-grid gap-2 py-2">
-                      <li>FAQ</li>
-                      <li>Privacy Policy</li>
-                      <li>Terms of Service</li>
-                    </ul>
-                  </div>
+      <div className="border border-top border-primary">
+        <ContainerLayout className="pt-5 mb-3">
+          <div className="row p-4">
+            <div className="col-12 col-md-8 mb-4">
+              <div className="d-flex gap-2">
+                <div className="align-content-center">
+                  <SubheadingText
+                    cssReset={true}
+                    className="text-dark mt-2 fw-semibold"
+                  >
+                    Twenties
+                  </SubheadingText>
                 </div>
               </div>
-              <p className="text-dark py-2 text-center">Copyright © 2024 by twenties.</p>
+              <div>
+                <TypographyText className="py-3 lh-lg me-5 me-sm-0">
+                  Twenties is a platform for forum discussion. We're a team of
+                  experienced developers, seeking to provide a platform for
+                  people to discuss and share their thoughts.
+                </TypographyText>
+              </div>
+            </div>
+            <div className="col-6 col-md-2 text-dark">
+              <TypographyText cssReset={true} className="fw-bold">
+                Menu
+              </TypographyText>
+              <ul className="list-unstyled d-grid gap-2 py-2">
+                {footerList.map((footer) => (
+                  <>
+                    <li key={footer.id}>
+                      <a
+                        href={footer.href}
+                        className="d-flex gap-2 align-items-center text-decoration-none text-dark"
+                      >
+                        <IconPlaceholder variant={footer.variant} />
+                        <TypographyText className="d-flex align-items-center m-0">
+                          {footer.text}
+                        </TypographyText>
+                      </a>
+                    </li>
+                  </>
+                ))}
+              </ul>
+            </div>
+            <div className="col-6 col-sm-6 col-md-2 text-dark">
+              <TypographyText cssReset={true} className="fw-bold">
+                Support
+              </TypographyText>
+              <ul className="list-unstyled d-grid gap-2 py-2">
+                {footerSupportList.map((footer) => (
+                  <li key={footer.id}>
+                    <a
+                      href={footer.href}
+                      className="d-flex gap-2 align-items-center text-decoration-none text-dark"
+                    >
+                      <IconPlaceholder variant={footer.variant} />
+                      <TypographyText className="d-flex align-items-center m-0">
+                        {footer.text}
+                      </TypographyText>
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
-        </section>
-      </footer>
+        </ContainerLayout>
+        <TypographyText
+          cssReset={true}
+          className="bg-primary text-white py-3 text-center"
+        >
+          Copyright &copy; 2024 by Twenties
+        </TypographyText>
+      </div>
     </>
   );
 }
