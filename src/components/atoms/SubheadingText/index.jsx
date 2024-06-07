@@ -11,7 +11,7 @@ export default function SubheadingText({
   return (
     <>
       <p
-        className={`fw-normal fs-3 lh-sm text-black ${className}`}
+        className={`fw-normal fs-3 lh-sm ${className}`}
         style={style}
         {...props}
       >
