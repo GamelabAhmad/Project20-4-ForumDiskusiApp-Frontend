@@ -1,7 +1,10 @@
+import { useState, useEffect } from "react";
 import TypographyText from "../../atoms/TypographyText";
 import IconPlaceholder from "../../atoms/IconPlaceholder";
 
 export default function Sidebar() {
+  const [activeLink, setActiveLink] = useState("/");
+
   const sidebarList = [
     {
       id: 1,
@@ -29,23 +32,29 @@ export default function Sidebar() {
     },
   ];
 
+  useEffect(() => {
+    const currentPath = window.location.pathname;
+    setActiveLink(currentPath);
+  }, []);
+
+  const handleLinkClick = (href) => {
+    setActiveLink(href);
+  };
+
   return (
     <>
       <ul className="list-unstyled">
         {sidebarList.map((sidebar) => (
-          <>
-            <li key={sidebar.id}>
-              <a
-                href={sidebar.href}
-                className="d-flex gap-2 align-items-center text-decoration-none text-dark"
-              >
-                <IconPlaceholder variant={sidebar.variant} />
-                <TypographyText className="d-flex align-items-center m-0">
-                  {sidebar.text}
-                </TypographyText>
-              </a>
-            </li>
-          </>
+          <li key={sidebar.id}>
+            <a
+              href={sidebar.href}
+              onClick={() => handleLinkClick(sidebar.href)}
+              className={`d-flex gap-2 align-items-center text-decoration-none p-2 ${activeLink === sidebar.href ? "text-primary" : "text-dark"}`}
+            >
+              <IconPlaceholder variant={sidebar.variant} />
+              <TypographyText cssReset={true}>{sidebar.text}</TypographyText>
+            </a>
+          </li>
         ))}
       </ul>
     </>
