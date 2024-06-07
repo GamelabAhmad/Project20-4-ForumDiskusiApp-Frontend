@@ -62,7 +62,7 @@ export default function Footer() {
                 <div className="align-content-center">
                   <SubheadingText
                     cssReset={true}
-                    className="text-dark mt-2 fw-semibold"
+                    className="text-primary mt-2 fw-semibold"
                   >
                     Twenties
                   </SubheadingText>
@@ -77,7 +77,7 @@ export default function Footer() {
               </div>
             </div>
             <div className="col-6 col-md-2 text-dark">
-              <TypographyText cssReset={true} className="fw-bold">
+              <TypographyText cssReset={true} className="fw-bold text-primary">
                 Menu
               </TypographyText>
               <ul className="list-unstyled d-grid gap-2 py-2">
@@ -89,7 +89,7 @@ export default function Footer() {
                         className="d-flex gap-2 align-items-center text-decoration-none text-dark"
                       >
                         <IconPlaceholder variant={footer.variant} />
-                        <TypographyText className="d-flex align-items-center m-0">
+                        <TypographyText cssReset={true}>
                           {footer.text}
                         </TypographyText>
                       </a>
@@ -99,7 +99,7 @@ export default function Footer() {
               </ul>
             </div>
             <div className="col-6 col-sm-6 col-md-2 text-dark">
-              <TypographyText cssReset={true} className="fw-bold">
+              <TypographyText cssReset={true} className="fw-bold text-primary">
                 Support
               </TypographyText>
               <ul className="list-unstyled d-grid gap-2 py-2">
@@ -110,7 +110,7 @@ export default function Footer() {
                       className="d-flex gap-2 align-items-center text-decoration-none text-dark"
                     >
                       <IconPlaceholder variant={footer.variant} />
-                      <TypographyText className="d-flex align-items-center m-0">
+                      <TypographyText cssReset={true}>
                         {footer.text}
                       </TypographyText>
                     </a>
