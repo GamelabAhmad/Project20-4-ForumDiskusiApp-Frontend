@@ -3,6 +3,11 @@ import RegisterForm from "../components/organisms/RegisterForm/index.jsx";
 import Card from "../components/molecules/Card/index.jsx";
 
 export default function RegisterPages() {
+  const token = localStorage.getItem("token");
+  if (token !== "null") {
+    window.location.href = "/";
+  }
+
   return (
     <>
       <div className="d-flex align-items-center justify-content-center min-vh-100 p-4 p-sm-0">
