@@ -71,7 +71,7 @@ export default function LoginForm() {
           variant={"primary"}
           type={"submit"}
           children={"Login"}
-          className="w-100 mt-1"
+          className="w-100 mt-1 rounded-3"
         />
       </form>
     </>

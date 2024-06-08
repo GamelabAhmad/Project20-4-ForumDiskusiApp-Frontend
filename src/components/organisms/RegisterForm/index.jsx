@@ -79,7 +79,7 @@ export default function RegisterForm() {
           label={"Password"}
           type={"password"}
           placeholder={"Your password"}
-          className={"mb-2"}
+          className={"mb-3"}
           value={formValues.password}
           onChange={handleChange}
           error={errors.password}
@@ -88,7 +88,7 @@ export default function RegisterForm() {
           variant={"primary"}
           type={"submit"}
           children={"Register"}
-          className="mt-1 w-100"
+          className="mt-1 w-100 rounded-3"
         />
       </form>
     </>
