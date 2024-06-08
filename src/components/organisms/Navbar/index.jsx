@@ -10,7 +10,7 @@ export default function Navbar() {
     <header>
       <ContainerLayout>
         <nav className="navbar navbar-expand-lg">
-          <div className="container-fluid my-4">
+          <div className="container-fluid my-3">
             <Link to="/" className="navbar-brand text-primary">
               <HeadingText
                 cssReset={true}
@@ -45,20 +45,20 @@ export default function Navbar() {
                 ></button>
               </div>
               <div className="offcanvas-body">
-                <div className="row">
-                  <div className="col-lg-12">
+                <div className="row col-lg-8">
+                  <div className="col-lg-12 mt-1">
                     <InputForm
                       type="search"
                       name="search"
                       id="search"
                       placeholder=" Search..."
-                      className="d-flex flex-grow-1 p-1 rounded-2 me-lg-5 w-100"
+                      className="d-flex p-1 rounded-2 me-lg-5 w-100"
                     />
                   </div>
                 </div>
-                <div className="row mt-3">
+                <div className="row my-2 col-lg-4">
                   <div className="col-lg-12 d-flex justify-content-center">
-                    <div className="dropdown me-2">
+                    <div className="dropdown me-2 ">
                       <Button
                         variant="primary"
                         className="rounded-5 dropdown-toggle"
@@ -89,7 +89,7 @@ export default function Navbar() {
                     <Button variant="primary" className="rounded-5 me-2">
                       <Link
                         to="/login"
-                        className="text-white text-decoration-none p-2 px-3"
+                        className="text-white text-decoration-none p-1 px-3 "
                       >
                         Login
                       </Link>
@@ -97,7 +97,7 @@ export default function Navbar() {
                     <Button variant="primary" className="rounded-5">
                       <Link
                         to="/register"
-                        className="text-white text-decoration-none p-2 px-3"
+                        className="text-white text-decoration-none p-1 px-3"
                       >
                         Register
                       </Link>
