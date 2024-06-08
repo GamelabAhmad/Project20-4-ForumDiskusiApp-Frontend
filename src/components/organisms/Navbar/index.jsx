@@ -7,108 +7,103 @@ import IconPlaceholder from "../../atoms/IconPlaceholder/index.jsx";
 
 export default function Navbar() {
   return (
-    <header>
-      <ContainerLayout>
-        <nav className="navbar navbar-expand-lg">
-          <div className="container-fluid my-3">
-            <Link to="/" className="navbar-brand text-primary">
-              <HeadingText
-                cssReset={true}
-                className="d-inline-block fw-semibold"
-              >
-                Twenties
-              </HeadingText>
-            </Link>
-            <button
-              className="navbar-toggler custom-toggler"
-              type="button"
-              data-bs-toggle="offcanvas"
-              data-bs-target="#offcanvasRight"
-              aria-controls="offcanvasRight"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            >
-              <span className="navbar-toggler-icon"></span>
-            </button>
-            <div
-              className="offcanvas offcanvas-end"
-              tabIndex="-1"
-              id="offcanvasRight"
-              aria-labelledby="offcanvasRightLabel"
-            >
-              <div className="offcanvas-header m-3">
-                <button
-                  type="button"
-                  className="btn-close btn-close-dark"
-                  data-bs-dismiss="offcanvas"
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div className="offcanvas-body">
-                <div className="row col-lg-8">
-                  <div className="col-lg-12 mt-1">
-                    <InputForm
-                      type="search"
-                      name="search"
-                      id="search"
-                      placeholder=" Search..."
-                      className="d-flex p-1 rounded-2 me-lg-5 w-100"
-                    />
-                  </div>
+    <ContainerLayout>
+      <nav className="navbar navbar-expand-lg">
+        <div className="container-fluid my-3">
+          <Link to="/" className="navbar-brand text-primary">
+            <HeadingText cssReset={true} className="d-inline-block fw-semibold">
+              Twenties
+            </HeadingText>
+          </Link>
+          <button
+            className="navbar-toggler custom-toggler"
+            type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasRight"
+            aria-controls="offcanvasRight"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
+          <div
+            className="offcanvas offcanvas-end"
+            tabIndex="-1"
+            id="offcanvasRight"
+            aria-labelledby="offcanvasRightLabel"
+          >
+            <div className="offcanvas-header m-3">
+              <button
+                type="button"
+                className="btn-close btn-close-dark"
+                data-bs-dismiss="offcanvas"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="offcanvas-body d-xl-flex justify-content-xl-between">
+              <div className="row col-lg-8">
+                <div className="col-lg-12 mt-1 ms-xl-4">
+                  <InputForm
+                    type="search"
+                    name="search"
+                    id="search"
+                    placeholder=" Search..."
+                    className="d-flex p-1 rounded-2 me-lg-5 w-100"
+                  />
                 </div>
-                <div className="row my-2 col-lg-4">
-                  <div className="col-lg-12 d-flex justify-content-center">
-                    <div className="dropdown me-2 ">
-                      <Button
-                        variant="primary"
-                        className="rounded-5 dropdown-toggle"
-                        type="button"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                      >
-                        <IconPlaceholder variant={"envelope"} />
-                      </Button>
-                      <ul className="dropdown-menu">
-                        <li>
-                          <a className="dropdown-item" href="#">
-                            Action
-                          </a>
-                        </li>
-                        <li>
-                          <a className="dropdown-item" href="#">
-                            Another action
-                          </a>
-                        </li>
-                        <li>
-                          <a className="dropdown-item" href="#">
-                            Something else here
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                    <Button variant="primary" className="rounded-5 me-2">
-                      <Link
-                        to="/login"
-                        className="text-white text-decoration-none p-1 px-3 "
-                      >
-                        Login
-                      </Link>
+              </div>
+              <div className="row my-2 col-lg-4">
+                <div className="col-lg-12 d-flex justify-content-center ms-xl-5">
+                  <div className="dropdown me-2">
+                    <Button
+                      variant="primary"
+                      className="rounded-5 dropdown-toggle"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <IconPlaceholder variant={"envelope"} />
                     </Button>
-                    <Button variant="primary" className="rounded-5">
-                      <Link
-                        to="/register"
-                        className="text-white text-decoration-none p-1 px-3"
-                      >
-                        Register
-                      </Link>
-                    </Button>
+                    <ul className="dropdown-menu">
+                      <li>
+                        <a className="dropdown-item" href="#">
+                          Action
+                        </a>
+                      </li>
+                      <li>
+                        <a className="dropdown-item" href="#">
+                          Another action
+                        </a>
+                      </li>
+                      <li>
+                        <a className="dropdown-item" href="#">
+                          Something else here
+                        </a>
+                      </li>
+                    </ul>
                   </div>
+                  <Button variant="primary" className="rounded-5 me-2">
+                    <Link
+                      to="/login"
+                      className="text-white text-decoration-none p-1 px-3 "
+                    >
+                      Login
+                    </Link>
+                  </Button>
+                  <Button variant="primary" className="rounded-5">
+                    <Link
+                      to="/register"
+                      className="text-white text-decoration-none p-1 px-3"
+                    >
+                      Register
+                    </Link>
+                  </Button>
                 </div>
               </div>
             </div>
           </div>
-        </nav>
-      </ContainerLayout>
-    </header>
+        </div>
+      </nav>
+    </ContainerLayout>
   );
 }
