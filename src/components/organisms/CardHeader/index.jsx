@@ -4,7 +4,12 @@ import Card from "../../molecules/Card/index.jsx";
 import Button from "../../atoms/Button/index.jsx";
 import Toasts from "../../molecules/Toasts/index.jsx";
 
-export default function CardHeader({ title, description, buttonTitle }) {
+export default function CardHeader({
+  title,
+  description,
+  buttonTitle,
+  toastsMessage,
+}) {
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const [showToast, setShowToast] = useState(false);
@@ -46,7 +51,7 @@ export default function CardHeader({ title, description, buttonTitle }) {
           variantBody={"danger-subtle"}
           title={"Warning"}
           titleColor={"white"}
-          description={"You need to login to ask a question."}
+          description={`You need to login to ${toastsMessage}.`}
         />
       )}
     </Card>

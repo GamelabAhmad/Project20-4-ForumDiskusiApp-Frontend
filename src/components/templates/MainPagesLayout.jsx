@@ -45,6 +45,7 @@ export default function MainPagesLayout() {
                   "lorem ipsum dolor sit amet, consectetur adipiscing elit."
                 }
                 buttonTitle={"Ask a Question"}
+                toastsMessage={"ask a question"}
               />
             </div>
             <div className="col-12 col-lg-10 ms-auto mb-4">

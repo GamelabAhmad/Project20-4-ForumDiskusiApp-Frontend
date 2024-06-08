@@ -45,6 +45,7 @@ export default function QuestionPagesLayout() {
                   "This is the list of questions that have been asked by the community. Feel free to answer any of them! If you have a question, feel free to ask! We are here to help!"
                 }
                 buttonTitle={"Ask a Question"}
+                toastsMessage={"ask a question"}
               />
             </div>
             <div className="col-12 col-lg-10 ms-auto mb-4">
