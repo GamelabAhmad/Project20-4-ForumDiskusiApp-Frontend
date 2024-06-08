@@ -49,7 +49,7 @@ export default function Navbar() {
                 aria-label="Close"
               ></button>
             </div>
-            <div className="offcanvas-body d-xl-flex justify-content-xl-between">
+            <div className="offcanvas-body d-xl-flex justify-content-between">
               <div className="row col-lg-8">
                 <div className="col-lg-12 mt-1 ms-xl-4">
                   <InputForm
@@ -62,7 +62,7 @@ export default function Navbar() {
                 </div>
               </div>
               <div className="row my-2 col-lg-4">
-                <div className="col-lg-12 d-flex justify-content-center">
+                <div className="col-lg-12 d-flex justify-content-center justify-content-lg-end">
                   {token && token !== "null" && (
                     <div className="dropdown me-2">
                       <Button
