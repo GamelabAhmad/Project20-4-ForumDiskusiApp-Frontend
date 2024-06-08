@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import "bootstrap/dist/js/bootstrap.js";
@@ -11,6 +11,7 @@ import TopicPages from "./pages/TopicPages.jsx";
 import RegisterPages from "./pages/RegisterPages.jsx";
 import LoginPages from "./pages/LoginPages.jsx";
 import SinglePostPages from "./pages/SinglePostPages.jsx";
+import DashboardPages from "./pages/DashboardPages.jsx";
 
 const router = createBrowserRouter([
   {
@@ -38,13 +39,17 @@ const router = createBrowserRouter([
     element: <TopicPages />,
   },
   {
+    path: "/dashboard",
+    element: <DashboardPages />,
+  },
+  {
     path: "/question/:id",
     element: <SinglePostPages />,
   },
 ]);
 
 const App = () => {
-  React.useEffect(() => {
+  useEffect(() => {
     isAuthenticated();
   }, []);
 
