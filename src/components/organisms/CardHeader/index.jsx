@@ -4,7 +4,7 @@ import Card from "../../molecules/Card/index.jsx";
 import Button from "../../atoms/Button/index.jsx";
 import Toasts from "../../molecules/Toasts/index.jsx";
 
-export default function CardHeader({ title, description }) {
+export default function CardHeader({ title, description, buttonTitle }) {
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const [showToast, setShowToast] = useState(false);
@@ -25,17 +25,19 @@ export default function CardHeader({ title, description }) {
 
   return (
     <Card className="shadow-sm p-3">
-      <div className="d-flex justify-content-between mb-3 mb-lg-0">
+      <div className="d-flex justify-content-between mb-3">
         <Card.Title className="fw-semibold text-primary">{title}</Card.Title>
         <Button
           variant="primary"
           onClick={handleAskQuestionClick}
           className="rounded-3"
         >
-          Ask Question
+          {buttonTitle}
         </Button>
       </div>
-      <Card.Description className="mb-5">{description}</Card.Description>
+      <Card.Description className="mb-5 lh-base">
+        {description}
+      </Card.Description>
 
       {showToast && (
         <Toasts
