@@ -2,8 +2,8 @@ import AvatarPlaceHolder from "../../atoms/AvatarPlaceholder";
 import TypographyText from "../../atoms/TypographyText";
 
 export default function UserPostDate({
-  imgSrc,
-  imgAlt,
+  avatarSrc,
+  avatarAlt,
   username,
   createdAt,
   className,
@@ -14,8 +14,8 @@ export default function UserPostDate({
       <div className={`d-flex flex-row gap-2 ${className}`} {...props}>
         <AvatarPlaceHolder
           className="rounded-circle border border-dark img-fluid"
-          src={imgSrc}
-          alt={imgAlt}
+          src={avatarSrc}
+          alt={avatarAlt}
           heightAvatar={30}
           widthAvatar={30}
         />
