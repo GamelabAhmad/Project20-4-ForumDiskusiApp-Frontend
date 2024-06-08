@@ -44,9 +44,9 @@ export default function Navbar() {
                   aria-label="Close"
                 ></button>
               </div>
-              <div className="offcanvas-body">
+              <div className="offcanvas-body d-xl-flex justify-content-xl-between">
                 <div className="row col-lg-8">
-                  <div className="col-lg-12 mt-1">
+                  <div className="col-lg-12 mt-1 ms-xl-4">
                     <InputForm
                       type="search"
                       name="search"
@@ -57,8 +57,8 @@ export default function Navbar() {
                   </div>
                 </div>
                 <div className="row my-2 col-lg-4">
-                  <div className="col-lg-12 d-flex justify-content-center">
-                    <div className="dropdown me-2 ">
+                  <div className="col-lg-12 d-flex justify-content-center ms-xl-5">
+                    <div className="dropdown me-2">
                       <Button
                         variant="primary"
                         className="rounded-5 dropdown-toggle"
