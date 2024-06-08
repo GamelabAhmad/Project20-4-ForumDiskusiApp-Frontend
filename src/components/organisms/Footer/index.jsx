@@ -54,8 +54,8 @@ export default function Footer() {
 
   return (
     <>
-      <div className="border border-top border-primary">
-        <ContainerLayout className="pt-5 mb-3">
+      <div className="border-top shadow-sm">
+        <ContainerLayout className="pt-3 pt-sm-5 mb-3">
           <div className="row p-4">
             <div className="col-12 col-md-8 mb-4">
               <div className="d-flex gap-2">
@@ -86,7 +86,7 @@ export default function Footer() {
                     <li key={footer.id}>
                       <a
                         href={footer.href}
-                        className="d-flex gap-2 align-items-center text-decoration-none text-dark"
+                        className="d-flex gap-2 align-items-center text-decoration-none text-body"
                       >
                         <IconPlaceholder variant={footer.variant} />
                         <TypographyText cssReset={true}>
@@ -107,7 +107,7 @@ export default function Footer() {
                   <li key={footer.id}>
                     <a
                       href={footer.href}
-                      className="d-flex gap-2 align-items-center text-decoration-none text-dark"
+                      className="d-flex gap-2 align-items-center text-decoration-none text-body"
                     >
                       <IconPlaceholder variant={footer.variant} />
                       <TypographyText cssReset={true}>
