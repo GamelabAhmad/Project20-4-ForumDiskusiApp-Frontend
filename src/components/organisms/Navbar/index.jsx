@@ -68,7 +68,7 @@ export default function Navbar() {
                     name="search"
                     id="search"
                     placeholder=" Search..."
-                    className="d-flex p-1 rounded-2 me-lg-5 w-100"
+                    className="d-flex p-1 rounded-3 me-lg-5 w-100"
                   />
                 </div>
               </div>
@@ -112,7 +112,7 @@ export default function Navbar() {
                       <Button variant="primary" className="rounded-5">
                         <Link
                           to="/login"
-                          className="text-white text-decoration-none p-1 px-3 "
+                          className="text-white text-decoration-none"
                         >
                           Login
                         </Link>
@@ -120,7 +120,7 @@ export default function Navbar() {
                       <Button variant="primary" className="rounded-5">
                         <Link
                           to="/register"
-                          className="text-white text-decoration-none p-1 px-3"
+                          className="text-white text-decoration-none"
                         >
                           Register
                         </Link>
