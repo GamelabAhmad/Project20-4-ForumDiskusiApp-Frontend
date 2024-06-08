@@ -1,8 +1,9 @@
 export default function Toasts({
-  setShowToast,
+  onClose,
   variant,
   variantBody,
   title,
+  titleColor,
   description,
 }) {
   return (
@@ -18,11 +19,11 @@ export default function Toasts({
           aria-atomic="true"
         >
           <div className={`toast-header bg-${variant}`}>
-            <strong className="me-auto text-white">{title}</strong>
+            <strong className={`me-auto text-${titleColor}`}>{title}</strong>
             <button
               type="button"
               className="btn-close btn-close-white"
-              onClick={() => setShowToast(false)}
+              onClick={onClose}
               aria-label="Close"
             ></button>
           </div>

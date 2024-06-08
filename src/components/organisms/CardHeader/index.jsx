@@ -19,6 +19,10 @@ export default function CardHeader({ title, description }) {
     }
   };
 
+  const handleCloseToast = () => {
+    setShowToast(false); // Menutup toast
+  };
+
   return (
     <Card className="shadow-sm p-3">
       <div className="d-flex justify-content-between mb-3 mb-lg-0">
@@ -31,9 +35,11 @@ export default function CardHeader({ title, description }) {
 
       {showToast && (
         <Toasts
+          onClose={handleCloseToast}
           variant={"danger"}
           variantBody={"danger-subtle"}
           title={"Warning"}
+          titleColor={"white"}
           description={"You need to login to ask a question."}
         />
       )}
