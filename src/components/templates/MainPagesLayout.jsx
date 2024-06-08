@@ -7,6 +7,7 @@ import CardHeader from "../organisms/CardHeader/index.jsx";
 import CardPost from "../organisms/CardPost/index.jsx";
 import SkeletonPlaceholder from "../atoms/SkeletonPlaceholder/index.jsx";
 import { getQuestions } from "../../api/questionApi.js";
+import { Link } from "react-router-dom";
 
 export default function MainPagesLayout() {
   const [userPosts, setUserPosts] = useState([]);
@@ -102,17 +103,23 @@ export default function MainPagesLayout() {
                 userPosts.map((post) => (
                   <CardPost
                     key={post.uuid}
-                    title={post.title}
+                    title={
+                      <Link
+                        to={`/question/${post.uuid}`}
+                        className="text-decoration-none"
+                      >
+                        {post.title}
+                      </Link>
+                    }
                     description={post.body}
-                    imageSrc={post.imageUrl}
-                    imageAlt={post.title}
                     createdAt={new Date(post.createdAt).toLocaleString()}
                     username={post.createdBy.username}
                     avatarSrc={post.createdBy.avatar}
                     avatarAlt={post.createdBy.username}
-                    votes={post.votes || 0}
                     answers={post.answers || 0}
                     views={post.views || 0}
+                    showImage={false}
+                    showButtons={false}
                     className={"mb-3"}
                   />
                 ))
