@@ -38,7 +38,12 @@ export default function MainPagesLayout() {
               </Card>
             </aside>
             <div className="col-12 col-lg-10 mb-3 mb-lg-0">
-              <CardHeader />
+              <CardHeader
+                title={"Welcome to Twenties!"}
+                description={
+                  "lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                }
+              />
             </div>
             <div className="col-12 col-lg-10 ms-auto mb-4">
               {loading ? (
