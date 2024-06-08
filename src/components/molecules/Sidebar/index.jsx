@@ -105,7 +105,9 @@ export default function Sidebar() {
                 href={sidebar.href}
                 onClick={() => handleLinkClick(sidebar.href)}
                 className={`d-flex gap-2 align-items-center text-decoration-none p-2 ${
-                  activeLink === sidebar.href ? "text-primary" : "text-dark"
+                  activeLink === sidebar.href
+                    ? "bg-primary-subtle text-primary rounded-3"
+                    : "text-dark"
                 }`}
               >
                 <IconPlaceholder variant={sidebar.variant} />
