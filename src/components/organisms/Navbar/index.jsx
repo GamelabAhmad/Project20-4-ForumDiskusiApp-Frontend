@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import HeadingText from "../../atoms/HeadingText/index.jsx";
 import ContainerLayout from "../../templates/ContainerLayout.jsx";
@@ -7,11 +8,21 @@ import IconPlaceholder from "../../atoms/IconPlaceholder/index.jsx";
 
 export default function Navbar() {
   const token = localStorage.getItem("token");
+  const [darkMode, setDarkMode] = useState(false);
 
   const handleLogout = () => {
     if (token !== "null") {
       localStorage.removeItem("token");
       window.location.reload();
+    }
+  };
+
+  const handleDarkModeToggle = () => {
+    setDarkMode(!darkMode);
+    if (darkMode) {
+      document.documentElement.setAttribute("data-bs-theme", "dark");
+    } else {
+      document.documentElement.removeAttribute("data-bs-theme");
     }
   };
 
@@ -62,9 +73,9 @@ export default function Navbar() {
                 </div>
               </div>
               <div className="row my-2 col-lg-4">
-                <div className="col-lg-12 d-flex justify-content-center justify-content-lg-end">
+                <div className="col-lg-12 d-flex justify-content-center justify-content-lg-end gap-2">
                   {token && token !== "null" && (
-                    <div className="dropdown me-2">
+                    <div className="dropdown">
                       <Button
                         variant="primary"
                         className="rounded-5 dropdown-toggle"
@@ -91,14 +102,14 @@ export default function Navbar() {
                   {token && token !== "null" ? (
                     <Button
                       variant="primary"
-                      className="rounded-5 me-2"
+                      className="rounded-5"
                       onClick={handleLogout}
                     >
                       Logout
                     </Button>
                   ) : (
                     <>
-                      <Button variant="primary" className="rounded-5 me-2">
+                      <Button variant="primary" className="rounded-5">
                         <Link
                           to="/login"
                           className="text-white text-decoration-none p-1 px-3 "
@@ -116,6 +127,13 @@ export default function Navbar() {
                       </Button>
                     </>
                   )}
+                  <Button
+                    variant="primary"
+                    className="rounded-5"
+                    onClick={handleDarkModeToggle}
+                  >
+                    <IconPlaceholder variant={darkMode ? "moon" : "sun"} />
+                  </Button>
                 </div>
               </div>
             </div>
