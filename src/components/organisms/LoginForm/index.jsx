@@ -11,6 +11,7 @@ export default function LoginForm() {
     password: "",
   });
   const [errors, setErrors] = useState({});
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const handleChange = (event) => {
     setFormValues({
@@ -35,6 +36,7 @@ export default function LoginForm() {
         });
         setErrors(errorMessages);
       } else {
+        setErrorMessage("Invalid username or password.");
         console.error("Error:", error);
       }
     }
@@ -43,6 +45,11 @@ export default function LoginForm() {
   return (
     <>
       <form onSubmit={handleSubmit}>
+        {errorMessage && (
+          <div className="alert alert-danger" role="alert">
+            {errorMessage}
+          </div>
+        )}
         <InputForm
           htmlFor={"username"}
           id={"username"}
