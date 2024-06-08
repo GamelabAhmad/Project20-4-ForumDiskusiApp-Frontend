@@ -116,6 +116,7 @@ export default function MainPagesLayout() {
                     username={post.createdBy.username}
                     avatarSrc={post.createdBy.avatar}
                     avatarAlt={post.createdBy.username}
+                    votes={post.votes || 0}
                     answers={post.answers || 0}
                     views={post.views || 0}
                     showImage={false}
