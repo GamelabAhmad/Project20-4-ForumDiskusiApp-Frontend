@@ -45,13 +45,19 @@ export default function CardPost({
             />
             <div className="d-flex justify-content-between row">
               <div className="d-flex gap-3 col-12 col-md-6 mb-3 mb-md-0">
-                <Button variant={"primary"} className={"w-100 w-md-auto"}>
+                <Button
+                  variant={"primary"}
+                  className={"w-100 w-md-auto rounded-3"}
+                >
                   <IconPlaceholder variant={"arrow-up"} />
                   Upvote
                 </Button>
-                <Button variant={"primary"} className="w-100 w-md-auto">
+                <Button
+                  variant={"primary"}
+                  className="w-100 w-md-auto rounded-3"
+                >
                   <IconPlaceholder variant={"arrow-down"} />
-                  Upvote
+                  Downvote
                 </Button>
               </div>
               <div className="col-12 col-md-6">

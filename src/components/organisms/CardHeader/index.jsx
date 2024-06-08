@@ -20,14 +20,18 @@ export default function CardHeader({ title, description }) {
   };
 
   const handleCloseToast = () => {
-    setShowToast(false); // Menutup toast
+    setShowToast(false);
   };
 
   return (
     <Card className="shadow-sm p-3">
       <div className="d-flex justify-content-between mb-3 mb-lg-0">
         <Card.Title className="fw-semibold text-primary">{title}</Card.Title>
-        <Button variant="primary" onClick={handleAskQuestionClick}>
+        <Button
+          variant="primary"
+          onClick={handleAskQuestionClick}
+          className="rounded-3"
+        >
           Ask Question
         </Button>
       </div>

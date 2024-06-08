@@ -70,7 +70,7 @@ export default function Sidebar() {
             </TypographyText>
           </div>
           <button
-            className="btn btn-primary dropdown-toggle"
+            className="btn btn-primary rounded-3 dropdown-toggle"
             type="button"
             id="dropdownMenuButton"
             data-bs-toggle="dropdown"
