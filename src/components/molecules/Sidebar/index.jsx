@@ -4,6 +4,7 @@ import IconPlaceholder from "../../atoms/IconPlaceholder";
 
 export default function Sidebar() {
   const [activeLink, setActiveLink] = useState("/");
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
 
   const sidebarList = [
     {
@@ -35,6 +36,19 @@ export default function Sidebar() {
   useEffect(() => {
     const currentPath = window.location.pathname;
     setActiveLink(currentPath);
+
+    const mediaQuery = window.matchMedia("(max-width: 400px)");
+    setIsSmallScreen(mediaQuery.matches);
+
+    const handleMediaQueryChange = (e) => {
+      setIsSmallScreen(e.matches);
+    };
+
+    mediaQuery.addEventListener("change", handleMediaQueryChange);
+
+    return () => {
+      mediaQuery.removeEventListener("change", handleMediaQueryChange);
+    };
   }, []);
 
   const handleLinkClick = (href) => {
@@ -43,20 +57,64 @@ export default function Sidebar() {
 
   return (
     <>
-      <ul className="list-unstyled">
-        {sidebarList.map((sidebar) => (
-          <li key={sidebar.id}>
-            <a
-              href={sidebar.href}
-              onClick={() => handleLinkClick(sidebar.href)}
-              className={`d-flex gap-2 align-items-center text-decoration-none p-2 ${activeLink === sidebar.href ? "text-primary" : "text-dark"}`}
-            >
-              <IconPlaceholder variant={sidebar.variant} />
-              <TypographyText cssReset={true}>{sidebar.text}</TypographyText>
-            </a>
-          </li>
-        ))}
-      </ul>
+      {isSmallScreen ? (
+        <div className="dropdown d-flex justify-content-between">
+          <div className="d-flex align-items-center">
+            <TypographyText cssReset={true} className="fw-lighter d-flex gap-1">
+              <IconPlaceholder
+                variant={
+                  sidebarList.find((item) => item.href === activeLink)?.variant
+                }
+              />
+              {sidebarList.find((item) => item.href === activeLink)?.text}
+            </TypographyText>
+          </div>
+          <button
+            className="btn btn-primary dropdown-toggle"
+            type="button"
+            id="dropdownMenuButton"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Menu
+          </button>
+          <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            {sidebarList.map((sidebar) => (
+              <li key={sidebar.id}>
+                <a
+                  className={`dropdown-item d-flex align-items-center gap-2 ${
+                    activeLink === sidebar.href ? "active" : ""
+                  }`}
+                  href={sidebar.href}
+                  onClick={() => handleLinkClick(sidebar.href)}
+                >
+                  <IconPlaceholder variant={sidebar.variant} />
+                  <TypographyText cssReset={true}>
+                    {sidebar.text}
+                  </TypographyText>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : (
+        <ul className="list-unstyled d-flex d-lg-block justify-content-center justify-content-lg-start align-items-center m-0">
+          {sidebarList.map((sidebar) => (
+            <li key={sidebar.id}>
+              <a
+                href={sidebar.href}
+                onClick={() => handleLinkClick(sidebar.href)}
+                className={`d-flex gap-2 align-items-center text-decoration-none p-2 ${
+                  activeLink === sidebar.href ? "text-primary" : "text-dark"
+                }`}
+              >
+                <IconPlaceholder variant={sidebar.variant} />
+                <TypographyText cssReset={true}>{sidebar.text}</TypographyText>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
     </>
   );
 }
