@@ -1,7 +1,9 @@
+import ForumPagesLayout from "../components/templates/ForumPagesLayout.jsx";
+
 export default function ForumPages() {
   return (
     <>
-      <h1>Forum Pages</h1>
+      <ForumPagesLayout />
     </>
   );
 }
