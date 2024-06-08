@@ -23,7 +23,7 @@ export default function UserPostDate({
           <TypographyText cssReset={true} className="text-primary fw-bold">
             {username}
           </TypographyText>
-          <TypographyText cssReset={true} className="fw-semibold">
+          <TypographyText cssReset={true} className="fw-lighter">
             {createdAt}
           </TypographyText>
         </div>
