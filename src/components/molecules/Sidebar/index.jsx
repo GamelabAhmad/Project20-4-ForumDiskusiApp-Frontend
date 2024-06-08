@@ -58,7 +58,7 @@ export default function Sidebar() {
   return (
     <>
       {isSmallScreen ? (
-        <div className="dropdown d-flex justify-content-between">
+        <div className="dropdown d-flex justify-content-between px-3">
           <div className="d-flex align-items-center">
             <TypographyText cssReset={true} className="fw-lighter d-flex gap-1">
               <IconPlaceholder
