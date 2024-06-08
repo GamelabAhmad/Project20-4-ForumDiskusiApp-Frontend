@@ -38,12 +38,13 @@ export default function MainPagesLayout() {
                 <Sidebar />
               </Card>
             </aside>
-            <div className="col-12 col-lg-10 mb-3 mb-lg-0">
+            <div className="col-12 col-lg-10 mb-3">
               <CardHeader
                 title={"Welcome to Twenties!"}
                 description={
                   "lorem ipsum dolor sit amet, consectetur adipiscing elit."
                 }
+                buttonTitle={"Ask a Question"}
               />
             </div>
             <div className="col-12 col-lg-10 ms-auto mb-4">
@@ -72,6 +73,8 @@ export default function MainPagesLayout() {
                         />
                       </>
                     }
+                    showImage={false}
+                    showButtons={false}
                     votes={
                       <>
                         <SkeletonPlaceholder
