@@ -17,6 +17,8 @@ export default function CardPost({
   avatarSrc,
   avatarAlt,
   createdAt,
+  showButtons = true,
+  showImage = true,
   className,
   ...props
 }) {
@@ -36,30 +38,42 @@ export default function CardPost({
             <Card.Description className="lh-base mb-3">
               {description}
             </Card.Description>
-            <Card.Images
-              imageSrc={imageSrc}
-              imageAlt={imageAlt}
-              widthImage={"1000px"}
-              heightImage={"500px"}
-              className={"object-fit-contain w-100"}
-            />
+            {showImage && (
+              <Card.Images
+                imageSrc={imageSrc}
+                imageAlt={imageAlt}
+                widthImage={"1000px"}
+                heightImage={"500px"}
+                className={"object-fit-contain w-100"}
+              />
+            )}
             <div className="d-flex justify-content-between row">
-              <div className="d-flex gap-3 col-12 col-md-6 mb-3 mb-md-0">
-                <Button
-                  variant={"primary"}
-                  className={"w-100 w-md-auto rounded-3"}
-                >
-                  <IconPlaceholder variant={"arrow-up"} />
-                  Upvote
-                </Button>
-                <Button
-                  variant={"primary"}
-                  className="w-100 w-md-auto rounded-3"
-                >
-                  <IconPlaceholder variant={"arrow-down"} />
-                  Downvote
-                </Button>
-              </div>
+              {showButtons ? (
+                <>
+                  <div className={`d-flex gap-3 col-12 col-md-6 mb-3 mb-md-0`}>
+                    <Button
+                      variant={"primary"}
+                      className={"w-100 w-md-auto rounded-3"}
+                    >
+                      <IconPlaceholder variant={"arrow-up"} />
+                      Upvote
+                    </Button>
+                    <Button
+                      variant={"primary"}
+                      className="w-100 w-md-auto rounded-3"
+                    >
+                      <IconPlaceholder variant={"arrow-down"} />
+                      Downvote
+                    </Button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div
+                    className={`d-flex gap-3 col-12 col-md-6 mb-3 mb-md-0`}
+                  ></div>
+                </>
+              )}
               <div className="col-12 col-md-6">
                 <UserPostDate
                   className={"d-md-flex justify-content-md-end"}
