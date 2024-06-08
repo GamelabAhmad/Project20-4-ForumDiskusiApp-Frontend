@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import TypographyText from "../../atoms/TypographyText";
 import IconPlaceholder from "../../atoms/IconPlaceholder";
+import { Link } from "react-router-dom";
 
 export default function Sidebar() {
   const [activeLink, setActiveLink] = useState("/");
@@ -81,18 +82,18 @@ export default function Sidebar() {
           <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
             {sidebarList.map((sidebar) => (
               <li key={sidebar.id}>
-                <a
+                <Link
+                  to={sidebar.href}
+                  onClick={() => handleLinkClick(sidebar.href)}
                   className={`dropdown-item d-flex align-items-center gap-2 ${
                     activeLink === sidebar.href ? "active" : ""
                   }`}
-                  href={sidebar.href}
-                  onClick={() => handleLinkClick(sidebar.href)}
                 >
                   <IconPlaceholder variant={sidebar.variant} />
                   <TypographyText cssReset={true}>
                     {sidebar.text}
                   </TypographyText>
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
@@ -101,8 +102,8 @@ export default function Sidebar() {
         <ul className="list-unstyled d-flex d-lg-block justify-content-center justify-content-lg-start align-items-center m-0">
           {sidebarList.map((sidebar) => (
             <li key={sidebar.id}>
-              <a
-                href={sidebar.href}
+              <Link
+                to={sidebar.href}
                 onClick={() => handleLinkClick(sidebar.href)}
                 className={`d-flex gap-2 align-items-center text-decoration-none p-2 ${
                   activeLink === sidebar.href
@@ -112,7 +113,7 @@ export default function Sidebar() {
               >
                 <IconPlaceholder variant={sidebar.variant} />
                 <TypographyText cssReset={true}>{sidebar.text}</TypographyText>
-              </a>
+              </Link>
             </li>
           ))}
         </ul>
