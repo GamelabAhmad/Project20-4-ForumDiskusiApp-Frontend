@@ -6,6 +6,15 @@ import InputForm from "../../molecules/InputForm/index.jsx";
 import IconPlaceholder from "../../atoms/IconPlaceholder/index.jsx";
 
 export default function Navbar() {
+  const token = localStorage.getItem("token");
+
+  const handleLogout = () => {
+    if (token !== "null") {
+      localStorage.removeItem("token");
+      window.location.reload();
+    }
+  };
+
   return (
     <ContainerLayout>
       <nav className="navbar navbar-expand-lg">
@@ -53,51 +62,60 @@ export default function Navbar() {
                 </div>
               </div>
               <div className="row my-2 col-lg-4">
-                <div className="col-lg-12 d-flex justify-content-center ms-xl-5">
-                  <div className="dropdown me-2">
+                <div className="col-lg-12 d-flex justify-content-center">
+                  {token && token !== "null" && (
+                    <div className="dropdown me-2">
+                      <Button
+                        variant="primary"
+                        className="rounded-5 dropdown-toggle"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        <IconPlaceholder variant={"person-circle"} />
+                      </Button>
+                      <ul className="dropdown-menu">
+                        <li>
+                          <Link className="dropdown-item" to={"/profile"}>
+                            Profile
+                          </Link>
+                        </li>
+                        <li>
+                          <Link className="dropdown-item" to={"/dashboard"}>
+                            Dashboard
+                          </Link>
+                        </li>
+                      </ul>
+                    </div>
+                  )}
+                  {token && token !== "null" ? (
                     <Button
                       variant="primary"
-                      className="rounded-5 dropdown-toggle"
-                      type="button"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
+                      className="rounded-5 me-2"
+                      onClick={handleLogout}
                     >
-                      <IconPlaceholder variant={"envelope"} />
+                      Logout
                     </Button>
-                    <ul className="dropdown-menu">
-                      <li>
-                        <a className="dropdown-item" href="#">
-                          Action
-                        </a>
-                      </li>
-                      <li>
-                        <a className="dropdown-item" href="#">
-                          Another action
-                        </a>
-                      </li>
-                      <li>
-                        <a className="dropdown-item" href="#">
-                          Something else here
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <Button variant="primary" className="rounded-5 me-2">
-                    <Link
-                      to="/login"
-                      className="text-white text-decoration-none p-1 px-3 "
-                    >
-                      Login
-                    </Link>
-                  </Button>
-                  <Button variant="primary" className="rounded-5">
-                    <Link
-                      to="/register"
-                      className="text-white text-decoration-none p-1 px-3"
-                    >
-                      Register
-                    </Link>
-                  </Button>
+                  ) : (
+                    <>
+                      <Button variant="primary" className="rounded-5 me-2">
+                        <Link
+                          to="/login"
+                          className="text-white text-decoration-none p-1 px-3 "
+                        >
+                          Login
+                        </Link>
+                      </Button>
+                      <Button variant="primary" className="rounded-5">
+                        <Link
+                          to="/register"
+                          className="text-white text-decoration-none p-1 px-3"
+                        >
+                          Register
+                        </Link>
+                      </Button>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
