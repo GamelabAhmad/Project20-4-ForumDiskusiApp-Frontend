@@ -51,11 +51,7 @@ export default function ForumMember() {
             heightAvatar={member.heightAvatar}
           />
         ))}
-        <TypographyText
-          className="text-black"
-          variant="body2"
-          children="and others"
-        />
+        <TypographyText cssReset={true} children="and others" />
       </div>
     </>
   );
