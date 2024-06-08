@@ -1,24 +1,37 @@
 import HeadingText from "../../atoms/HeadingText/index.jsx";
 import TypographyText from "../../atoms/TypographyText/index.jsx";
 
-export default function Card({ children, className, src, alt, ...props }) {
+export default function Card({
+  children,
+  className,
+  imagesSrc,
+  imagesAlt,
+  ...props
+}) {
   return (
     <>
       <div className={`card ${className}`} {...props}>
-        <Card.Images src={src} alt={alt} />
         <div className="card-body">{children}</div>
       </div>
     </>
   );
 }
 
-const Images = ({ src, alt, className, ...props }) => {
+const Images = ({
+  imageSrc,
+  imageAlt,
+  widthImage,
+  heightImage,
+  className,
+  ...props
+}) => {
   return (
     <>
       <img
-        src={src}
-        className={`card-img-top ${className}`}
-        alt={alt}
+        src={imageSrc}
+        className={`card-img-top img-fluid mb-3 rounded-3 ${className}`}
+        alt={imageAlt}
+        style={{ width: widthImage, height: heightImage }}
         {...props}
       />
     </>
