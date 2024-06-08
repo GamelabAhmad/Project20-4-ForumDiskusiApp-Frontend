@@ -107,7 +107,7 @@ export default function Sidebar() {
                 className={`d-flex gap-2 align-items-center text-decoration-none p-2 ${
                   activeLink === sidebar.href
                     ? "bg-primary-subtle text-primary rounded-3"
-                    : "text-dark"
+                    : "text-reset"
                 }`}
               >
                 <IconPlaceholder variant={sidebar.variant} />
