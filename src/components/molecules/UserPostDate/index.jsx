@@ -1,5 +1,6 @@
 import AvatarPlaceHolder from "../../atoms/AvatarPlaceholder";
 import TypographyText from "../../atoms/TypographyText";
+import { Link } from "react-router-dom";
 
 export default function UserPostDate({
   avatarSrc,
@@ -20,9 +21,11 @@ export default function UserPostDate({
           widthAvatar={30}
         />
         <div className="d-flex gap-2 align-items-center m-0">
-          <TypographyText cssReset={true} className="text-primary fw-bold">
-            {username}
-          </TypographyText>
+          <Link to={`/profile/${username}`} className="text-decoration-none">
+            <TypographyText cssReset={true} className="text-primary fw-bold">
+              {username}
+            </TypographyText>
+          </Link>
           <TypographyText cssReset={true} className="fw-lighter">
             {createdAt}
           </TypographyText>
