@@ -1,8 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import "bootstrap/dist/js/bootstrap.js";
-import { isAuthenticated } from "./utils/isAuthenticated.js";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import MainPages from "./pages/MainPages.jsx";
 import QuestionPages from "./pages/QuestionPages.jsx";
@@ -53,16 +52,8 @@ const router = createBrowserRouter([
   },
 ]);
 
-const App = () => {
-  useEffect(() => {
-    isAuthenticated();
-  }, []);
-
-  return <RouterProvider router={router} />;
-};
-
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <App />
+    <RouterProvider router={router} />
   </React.StrictMode>,
 );
