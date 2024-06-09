@@ -27,6 +27,7 @@ export default function LoginForm() {
       await loginValidationSchema.validate(formValues, { abortEarly: false });
       const data = await signIn(formValues.username, formValues.password);
       localStorage.setItem("token", data.token);
+      localStorage.setItem("user", data.user.username);
       window.location.href = "/";
     } catch (error) {
       if (error instanceof yup.ValidationError) {
