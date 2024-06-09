@@ -1,20 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import HeadingText from "../../atoms/HeadingText/index.jsx";
 import ContainerLayout from "../../templates/ContainerLayout.jsx";
 import Button from "../../atoms/Button/index.jsx";
 import InputForm from "../../molecules/InputForm/index.jsx";
 import IconPlaceholder from "../../atoms/IconPlaceholder/index.jsx";
+import Cookies from "js-cookie";
 
 export default function Navbar() {
-  const token = localStorage.getItem("token");
   const [darkMode, setDarkMode] = useState(false);
+  const [token, setToken] = useState(Cookies.get("jwt"));
+
+  useEffect(() => {
+    const checkToken = () => {
+      const jwt = Cookies.get("jwt");
+      setToken(jwt);
+    };
+    checkToken();
+    const intervalId = setInterval(checkToken, 1000);
+    return () => clearInterval(intervalId);
+  }, []);
 
   const handleLogout = () => {
-    if (token !== "null") {
-      localStorage.removeItem("token");
-      window.location.reload();
-    }
+    Cookies.remove("jwt", { sameSite: "Strict" });
+    Cookies.remove("user", { sameSite: "Strict" });
+    window.location.href = "/";
   };
 
   const handleDarkModeToggle = () => {
@@ -74,7 +84,7 @@ export default function Navbar() {
               </div>
               <div className="row my-2 col-lg-4">
                 <div className="col-lg-12 d-flex justify-content-center justify-content-lg-end gap-2">
-                  {token && token !== "null" && (
+                  {token && (
                     <div className="dropdown">
                       <Button
                         variant="primary"
@@ -99,7 +109,7 @@ export default function Navbar() {
                       </ul>
                     </div>
                   )}
-                  {token && token !== "null" ? (
+                  {token ? (
                     <Button
                       variant="primary"
                       className="rounded-5"

@@ -4,8 +4,6 @@ import HeadingText from "../atoms/HeadingText/index.jsx";
 import TypographyText from "../atoms/TypographyText/index.jsx";
 
 export default function DashboardPagesLayout() {
-  const user = localStorage.getItem("user");
-
   return (
     <>
       <PagesLayout>
@@ -17,8 +15,8 @@ export default function DashboardPagesLayout() {
             Dashboard
           </HeadingText>
           <TypographyText cssReset={true} className="text-center">
-            Welcome to your dashboard {user}! Here you can view your recent
-            activities and manage your account.
+            Welcome to your dashboard! Here you can view your recent activities
+            and manage your account.
           </TypographyText>
         </ContainerLayout>
       </PagesLayout>

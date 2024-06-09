@@ -1,11 +1,10 @@
 import DashboardPagesLayout from "../components/templates/DashboardPagesLayout.jsx";
+import Cookies from "js-cookie";
 
 export default function DashboardPages() {
-  const token = localStorage.getItem("token");
-  const user = localStorage.getItem("user");
-  if (token === "null" || user === "null") {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+  const token = Cookies.get("jwt");
+
+  if (!token) {
     window.location.href = "/";
     return null;
   }

@@ -1,11 +1,14 @@
 import AuthLayout from "../components/templates/AuthLayout.jsx";
 import LoginForm from "../components/organisms/LoginForm/index.jsx";
 import Card from "../components/molecules/Card/index.jsx";
+import Cookies from "js-cookie";
 
 export default function LoginPages() {
-  const token = localStorage.getItem("token");
-  if (token !== "null") {
+  const token = Cookies.get("jwt");
+
+  if (token) {
     window.location.href = "/";
+    return null;
   }
 
   return (

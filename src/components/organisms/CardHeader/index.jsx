@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Card from "../../molecules/Card/index.jsx";
 import Button from "../../atoms/Button/index.jsx";
 import Toasts from "../../molecules/Toasts/index.jsx";
+import Cookies from "js-cookie";
 
 export default function CardHeader({
   title,
@@ -10,15 +11,15 @@ export default function CardHeader({
   buttonTitle,
   toastsMessage,
 }) {
-  const token = localStorage.getItem("token");
+  const token = Cookies.get("jwt");
   const navigate = useNavigate();
   const [showToast, setShowToast] = useState(false);
 
   const handleAskQuestionClick = (e) => {
-    if (token === "null" || !token) {
+    if (!token) {
       e.preventDefault();
       setShowToast(true);
-      setTimeout(() => setShowToast(false), 10000);
+      setTimeout(() => setShowToast(false), 3000);
     } else {
       navigate("/dashboard");
     }
