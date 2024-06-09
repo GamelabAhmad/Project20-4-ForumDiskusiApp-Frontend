@@ -1,9 +1,9 @@
-import SinglePostPagesLayout from "../components/templates/SinglePostPagesLayout.jsx";
+import SinglePostQuestionPagesLayout from "../components/templates/SinglePostQuestionPagesLayout.jsx";
 
 export default function SinglePostPages() {
   return (
     <>
-      <SinglePostPagesLayout />
+      <SinglePostQuestionPagesLayout />
     </>
   );
 }
