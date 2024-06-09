@@ -12,6 +12,7 @@ import RegisterPages from "./pages/RegisterPages.jsx";
 import LoginPages from "./pages/LoginPages.jsx";
 import SinglePostPages from "./pages/SinglePostPages.jsx";
 import DashboardPages from "./pages/DashboardPages.jsx";
+import UserProfilePages from "./pages/UserProfilePages.jsx";
 
 const router = createBrowserRouter([
   {
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
   {
     path: "/question/:id",
     element: <SinglePostPages />,
+  },
+  {
+    path: "/profile/:id",
+    element: <UserProfilePages />,
   },
 ]);
 
