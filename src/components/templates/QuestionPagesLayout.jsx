@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { getQuestions } from "../../api/questionApi.js";
+import { getCommentsByPostId } from "../../api/commentApi.js";
 import Sidebar from "../molecules/Sidebar/index.jsx";
 import Card from "../molecules/Card/index.jsx";
 import ContainerLayout from "./ContainerLayout.jsx";
@@ -6,26 +8,31 @@ import PagesLayout from "./PagesLayout.jsx";
 import CardHeader from "../organisms/CardHeader/index.jsx";
 import CardPost from "../organisms/CardPost/index.jsx";
 import SkeletonPlaceholder from "../atoms/SkeletonPlaceholder/index.jsx";
-import { getQuestions } from "../../api/questionApi.js";
 import { Link } from "react-router-dom";
 
 export default function QuestionPagesLayout() {
   const [userPosts, setUserPosts] = useState([]);
+  const [comments, setComments] = useState({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchQuestions() {
+    async function fetchQuestionsAndComments() {
       try {
         const questions = await getQuestions();
         setUserPosts(questions);
+        const comments = {};
+        for (let question of questions) {
+          comments[question.uuid] = await getCommentsByPostId(question.uuid);
+        }
+        setComments(comments);
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching questions:", error);
+        console.error("Error fetching questions and comments:", error);
         setLoading(false);
       }
     }
 
-    fetchQuestions();
+    fetchQuestionsAndComments();
   }, []);
 
   return (
@@ -121,7 +128,7 @@ export default function QuestionPagesLayout() {
                     avatarSrc={post.createdBy.avatar}
                     avatarAlt={post.createdBy.username}
                     votes={post.votes || 0}
-                    answers={post.answers || 0}
+                    answers={comments[post.uuid].length || 0}
                     views={post.views || 0}
                     showImage={false}
                     showButtons={false}
