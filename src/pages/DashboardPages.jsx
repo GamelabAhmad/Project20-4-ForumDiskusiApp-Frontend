@@ -2,7 +2,10 @@ import DashboardPagesLayout from "../components/templates/DashboardPagesLayout.j
 
 export default function DashboardPages() {
   const token = localStorage.getItem("token");
-  if (token === "null") {
+  const user = localStorage.getItem("user");
+  if (token === "null" || user === "null") {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
     window.location.href = "/";
     return null;
   }
