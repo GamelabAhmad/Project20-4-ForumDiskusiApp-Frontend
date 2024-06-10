@@ -6,7 +6,7 @@ import Cookies from "js-cookie";
 import IconPlaceholder from "../atoms/IconPlaceholder/index.jsx";
 import Button from "../atoms/Button/index.jsx";
 import SubheadingText from "../atoms/SubheadingText/index.jsx";
-import { getQuestions } from "../../api/questionApi.js";
+import { getQuestionsByUser } from "../../api/questionApi.js";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { deleteQuestion } from "../../api/questionApi.js";
@@ -43,7 +43,7 @@ export default function DashboardPagesLayout() {
 
   useEffect(() => {
     const fetchQuestions = async () => {
-      const userQuestions = await getQuestions();
+      const userQuestions = await getQuestionsByUser();
       const urls = userQuestions.map((question) => question.imageUrl);
       setImageUrls(urls);
       setQuestions(userQuestions);
@@ -79,10 +79,15 @@ export default function DashboardPagesLayout() {
             <SubheadingText cssReset={true} className="fw-semibold ">
               Question Management
             </SubheadingText>
-            <Button variant={"primary"} className="btn-sm d-flex gap-2">
-              <IconPlaceholder variant={"plus"} />
-              Add Question
-            </Button>
+            <Link to={"/dashboard/create-question"}>
+              <Button
+                variant={"primary"}
+                className="btn-sm d-flex gap-2 rounded-3"
+              >
+                <IconPlaceholder variant={"plus"} />
+                Add Question
+              </Button>
+            </Link>
           </div>
           <div className="table-responsive">
             <table className="table table-hover table-striped">
@@ -108,7 +113,7 @@ export default function DashboardPagesLayout() {
                     <td>
                       <Button
                         variant={"info"}
-                        className="btn-sm d-flex gap-2"
+                        className="btn-sm d-flex gap-2 rounded-3"
                         data-bs-toggle="modal"
                         data-bs-target="#exampleModal"
                         onClick={() => handleViewClick(question)}
@@ -116,6 +121,9 @@ export default function DashboardPagesLayout() {
                         <IconPlaceholder variant={"eye"} />
                         View Images
                       </Button>
+                      {isModalOpen && (
+                        <div className="modal-backdrop fade show"></div>
+                      )}
                       <Modal
                         isOpen={isModalOpen}
                         onClose={() => setIsModalOpen(false)}
@@ -141,7 +149,7 @@ export default function DashboardPagesLayout() {
                         <Link to={`/question/${question.uuid}`}>
                           <Button
                             variant={"success"}
-                            className="btn-sm d-flex gap-2"
+                            className="btn-sm d-flex gap-2 rounded-3"
                           >
                             <IconPlaceholder variant={"eye"} />
                             View
@@ -149,14 +157,14 @@ export default function DashboardPagesLayout() {
                         </Link>
                         <Button
                           variant={"warning"}
-                          className="btn-sm d-flex gap-2"
+                          className="btn-sm d-flex gap-2 rounded-3"
                         >
                           <IconPlaceholder variant={"pencil"} />
                           Edit
                         </Button>
                         <Button
                           variant={"danger"}
-                          className="btn-sm d-flex gap-2"
+                          className="btn-sm d-flex gap-2 rounded-3"
                           onClick={() => handleDeleteClick(question.uuid)}
                         >
                           <IconPlaceholder variant={"trash"} />
