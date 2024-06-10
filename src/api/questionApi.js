@@ -1,4 +1,7 @@
 import axios from "axios";
+import Cookies from "js-cookie";
+
+const token = Cookies.get("jwt");
 
 export async function getQuestions() {
   try {
@@ -54,12 +57,15 @@ export async function updateQuestion(id, data) {
   }
 }
 
-export async function deleteQuestion(id) {
+export async function deleteQuestion(uuid) {
   try {
     const response = await axios({
       method: "delete",
-      url: `http://localhost:3000/question/${id}`,
-      headers: { "Content-Type": "application/json" },
+      url: `http://localhost:3000/question/${uuid}`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
     });
     return response.data;
   } catch (error) {
