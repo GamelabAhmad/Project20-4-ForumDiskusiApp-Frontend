@@ -12,6 +12,8 @@ import LoginPages from "./pages/LoginPages.jsx";
 import SinglePostPages from "./pages/SinglePostPages.jsx";
 import DashboardPages from "./pages/DashboardPages.jsx";
 import UserProfilePages from "./pages/UserProfilePages.jsx";
+import CreateQuestionPages from "./pages/CreateQuestionPages.jsx";
+import AuthAdminPages from "./pages/AuthAdminPages.jsx";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +43,14 @@ const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: <DashboardPages />,
+  },
+  {
+    path: "/dashboard/create-question",
+    element: <CreateQuestionPages />,
+  },
+  {
+    path: "/dashboard/admin/create-topic",
+    element: <AuthAdminPages />,
   },
   {
     path: "/question/:id",
