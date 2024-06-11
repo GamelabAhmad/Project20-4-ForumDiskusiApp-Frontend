@@ -4,7 +4,7 @@ import ContainerLayout from "./ContainerLayout.jsx";
 import PagesLayout from "./PagesLayout.jsx";
 import CardHeader from "../organisms/CardHeader/index.jsx";
 import Button from "../atoms/Button/index.jsx";
-import { getForum } from "../../api/forumApi.js";
+import { getForums } from "../../api/forumApi.js";
 import { useState, useEffect } from "react";
 
 export default function ForumPagesLayout() {
@@ -14,7 +14,7 @@ export default function ForumPagesLayout() {
   useEffect(() => {
     async function fetchForum() {
       try {
-        const forums = await getForum();
+        const forums = await getForums();
         setForums(forums);
         setLoading(false);
       } catch (error) {
