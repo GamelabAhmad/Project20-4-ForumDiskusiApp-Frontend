@@ -96,7 +96,6 @@ export default function DashboardPagesLayout() {
                   <th scope="col">#</th>
                   <th scope="col">Questions</th>
                   <th scope="col">Topic</th>
-                  <th scope="col">Forum</th>
                   <th scope="col">Image</th>
                   <th scope="col" className="text-center">
                     Action
@@ -109,7 +108,6 @@ export default function DashboardPagesLayout() {
                     <th scope="row">{index + 1}</th>
                     <td>{question.title}</td>
                     <td>{question.topicsID}</td>
-                    <td>{question.forumID}</td>
                     <td>
                       <Button
                         variant={"info"}
@@ -146,7 +144,10 @@ export default function DashboardPagesLayout() {
                     </td>
                     <td>
                       <div className="d-flex gap-2 justify-content-center">
-                        <Link to={`/question/${question.uuid}`}>
+                        <Link
+                          to={`/question/${question.uuid}`}
+                          className="text-decoration-none"
+                        >
                           <Button
                             variant={"success"}
                             className="btn-sm d-flex gap-2 rounded-3"

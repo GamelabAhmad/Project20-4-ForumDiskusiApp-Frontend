@@ -30,7 +30,8 @@ export default function QuestionForm() {
       };
 
       const formData = await createQuestion(questionData);
-      console.log(formData);
+      console.log("Question created:", formData);
+      window.location.href = `/dashboard`;
     } catch (error) {
       console.error("Error:", error);
     }
@@ -54,7 +55,7 @@ export default function QuestionForm() {
           id={"body"}
           name={"body"}
           label={"Description"}
-          type={"body"}
+          type={"text"}
           placeholder={"Your description"}
           value={formValues.body}
           onChange={handleChange}
@@ -63,9 +64,9 @@ export default function QuestionForm() {
           htmlFor={"image"}
           id={"image"}
           name={"image"}
-          label={"image"}
+          label={"Image"}
           type={"file"}
-          placeholder={"Image"}
+          placeholder={"Upload your image"}
           value={formValues.image}
           onChange={handleChange}
         />
@@ -74,7 +75,7 @@ export default function QuestionForm() {
           id={"topic"}
           name={"topic"}
           label={"Topics"}
-          type={"topic"}
+          type={"select"}
           placeholder={"Topics"}
           className={"mb-3"}
           value={formValues.topic}
@@ -84,7 +85,7 @@ export default function QuestionForm() {
           variant={"primary"}
           type={"submit"}
           children={"Submit"}
-          className="mt-1 w-100 rounded-3"
+          className="mt-1 w-100 rounded-3 mb-4"
         />
       </form>
     </>
