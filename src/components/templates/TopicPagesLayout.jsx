@@ -43,6 +43,7 @@ export default function TopicPagesLayout() {
                   "This is the list of topics that have been created by the community. Feel free to join any of them! If you have a topic, please talk to the admin to create one! We are here to help!"
                 }
                 buttonTitle={"Create a Discussion"}
+                toastsMessage={"ask a question with related topic"}
               />
             </div>
             <div className="col-12 col-lg-10 ms-auto mb-4">
