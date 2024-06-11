@@ -68,6 +68,18 @@ export default function AuthTableAdminQuestion() {
           <SubheadingText cssReset={true} className="fw-semibold ">
             Question Management
           </SubheadingText>
+          <Link
+            to={"/dashboard/create-question"}
+            className="text-decoration-none"
+          >
+            <Button
+              variant={"primary"}
+              className="btn-sm d-flex gap-2 rounded-3"
+            >
+              <IconPlaceholder variant={"plus"} />
+              Add Question
+            </Button>
+          </Link>
         </div>
         <div className="table-responsive">
           <table className="table table-hover table-striped">

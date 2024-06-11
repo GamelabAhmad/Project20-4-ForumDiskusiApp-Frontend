@@ -22,18 +22,15 @@ export default function AuthAdminPagesLayout() {
               children={"Admin Page"}
               className="fw-semibold text-primary text-center my-3"
             />
-
             <AuthTableAdmin />
             <AuthTableAdminForum />
             <AuthTableAdminTopic />
-
             <Card className="p-4 mb-3">
               <SubheadingText className="text-primary">
                 Topic Form
               </SubheadingText>
               <AuthTopicForm />
             </Card>
-
             <Card className="p-4 mb-3">
               <SubheadingText className="text-primary">
                 Forum Form
