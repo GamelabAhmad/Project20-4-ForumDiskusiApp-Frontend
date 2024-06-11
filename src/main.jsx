@@ -9,11 +9,13 @@ import ForumPages from "./pages/ForumPages.jsx";
 import TopicPages from "./pages/TopicPages.jsx";
 import RegisterPages from "./pages/RegisterPages.jsx";
 import LoginPages from "./pages/LoginPages.jsx";
-import SinglePostPages from "./pages/SinglePostPages.jsx";
 import DashboardPages from "./pages/DashboardPages.jsx";
 import UserProfilePages from "./pages/UserProfilePages.jsx";
 import CreateQuestionPages from "./pages/CreateQuestionPages.jsx";
 import AuthAdminPages from "./pages/AuthAdminPages.jsx";
+import SinglePostQuestionPages from "./pages/SinglePostQuestionPages.jsx";
+import SinglePostForumPages from "./pages/SinglePostForumPages.jsx";
+import SinglePostTopicPages from "./pages/SinglePostTopicPages.jsx";
 
 const router = createBrowserRouter([
   {
@@ -33,12 +35,24 @@ const router = createBrowserRouter([
     element: <QuestionPages />,
   },
   {
+    path: "/question/:id",
+    element: <SinglePostQuestionPages />,
+  },
+  {
     path: "/forum",
     element: <ForumPages />,
   },
   {
+    path: "/forum/:id",
+    element: <SinglePostForumPages />,
+  },
+  {
     path: "/topic",
     element: <TopicPages />,
+  },
+  {
+    path: "/topic/:id",
+    element: <SinglePostTopicPages />,
   },
   {
     path: "/dashboard",
@@ -49,13 +63,10 @@ const router = createBrowserRouter([
     element: <CreateQuestionPages />,
   },
   {
-    path: "/dashboard/admin/create-topic",
+    path: "/dashboard/admin",
     element: <AuthAdminPages />,
   },
-  {
-    path: "/question/:id",
-    element: <SinglePostPages />,
-  },
+
   {
     path: "/profile/:id",
     element: <UserProfilePages />,
