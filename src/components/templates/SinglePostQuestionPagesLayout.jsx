@@ -14,6 +14,7 @@ import TypographyText from "../atoms/TypographyText/index.jsx";
 import SubheadingText from "../atoms/SubheadingText/index.jsx";
 import IconPlaceholder from "../atoms/IconPlaceholder/index.jsx";
 import Button from "../atoms/Button/index.jsx";
+import CommentForm from "../organisms/CommentForm/index.jsx";
 
 export default function SinglePostQuestionPagesLayout() {
   const [post, setPost] = useState(null);
@@ -64,6 +65,10 @@ export default function SinglePostQuestionPagesLayout() {
   const handleSortOrderChange = (order, event) => {
     event.preventDefault();
     setSortOrder(order);
+  };
+
+  const handleNewComment = (newComment) => {
+    setComments((prevComments) => [newComment, ...prevComments]);
   };
 
   return (
@@ -153,23 +158,27 @@ export default function SinglePostQuestionPagesLayout() {
                   </ul>
                 </div>
               </div>
-
+              <div>
+                <CommentForm onNewComment={handleNewComment} />
+              </div>
               {comments.map((comment) => (
                 <>
-                  <Card key={comment.uuid} className="mb-3">
-                    <TypographyText cssReset={true}>
-                      {timeAgo(comment.commentedAt)}
-                    </TypographyText>
-                    <SubheadingText
-                      cssReset={true}
-                      className="fw-semibold text-primary"
-                    >
-                      {comment.commentedBy.username}
-                    </SubheadingText>
-                    <TypographyText cssReset={true}>
-                      {comment.body}
-                    </TypographyText>
-                  </Card>
+                  {comment && comment.commentedBy && (
+                    <Card key={comment.uuid} className="mb-3">
+                      <TypographyText cssReset={true}>
+                        {timeAgo(comment.commentedAt)}
+                      </TypographyText>
+                      <SubheadingText
+                        cssReset={true}
+                        className="fw-semibold text-primary"
+                      >
+                        {comment.commentedBy.username}
+                      </SubheadingText>
+                      <TypographyText cssReset={true}>
+                        {comment.body}
+                      </TypographyText>
+                    </Card>
+                  )}
                 </>
               ))}
             </div>

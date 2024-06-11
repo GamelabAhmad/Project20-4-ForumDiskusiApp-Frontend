@@ -45,6 +45,21 @@ export async function getQuestionById(id) {
   }
 }
 
+export async function getQuestionByUser(uuid) {
+  try {
+    const response = await axios({
+      method: "get",
+      url: `http://localhost:3000/questionByUser/${uuid}`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function createQuestion(data) {
   const token = Cookies.get("jwt");
   const formData = new FormData();
@@ -84,6 +99,8 @@ export async function updateQuestion(id, data) {
 }
 
 export async function deleteQuestion(uuid) {
+  const token = Cookies.get("jwt");
+
   try {
     const response = await axios({
       method: "delete",
