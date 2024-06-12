@@ -6,9 +6,9 @@ import HeadingText from "../atoms/HeadingText/index.jsx";
 import Cookies from "js-cookie";
 import Card from "../molecules/Card/index.jsx";
 import SubheadingText from "../atoms/SubheadingText/index.jsx";
-import AuthTableAdmin from "../organisms/AuthTableAdminQuestion/index.jsx";
 import AuthTableAdminForum from "../organisms/AuthTableAdminForum/index.jsx";
 import AuthTableAdminTopic from "../organisms/AuthTableAdminTopic/index.jsx";
+import AuthTableAdminQuestion from "../organisms/AuthTableAdminQuestion/index.jsx";
 
 export default function AuthAdminPagesLayout() {
   const user = Cookies.get("user");
@@ -23,7 +23,7 @@ export default function AuthAdminPagesLayout() {
               children={"Admin Page"}
               className="fw-semibold text-primary text-center my-3"
             />
-            <AuthTableAdmin />
+            <AuthTableAdminQuestion />
             <AuthTableAdminForum />
             <AuthTableAdminTopic />
             <Card className="p-4 mb-3">
