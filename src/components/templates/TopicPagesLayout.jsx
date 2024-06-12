@@ -6,6 +6,7 @@ import CardHeader from "../organisms/CardHeader/index.jsx";
 import Button from "../atoms/Button/index.jsx";
 import { getTopics } from "../../api/topicApi.js";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 export default function TopicPagesLayout() {
   const [topics, setTopics] = useState([]);
@@ -57,7 +58,14 @@ export default function TopicPagesLayout() {
                       <Card.Title className="fw-semibold text-primary">
                         {topic.name}
                       </Card.Title>
-                      <Button variant="primary">View</Button>
+                      <Link
+                        to={`/topic/${topic.uuid}`}
+                        className="text-decoration-none"
+                      >
+                        <Button variant="primary" className="w-100 rounded-3">
+                          View
+                        </Button>
+                      </Link>
                     </Card>
                   ))}
                 </div>
