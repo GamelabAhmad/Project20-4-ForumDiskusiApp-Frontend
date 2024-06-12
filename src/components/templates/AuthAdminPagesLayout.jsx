@@ -12,7 +12,7 @@ import AuthTableAdminTopic from "../organisms/AuthTableAdminTopic/index.jsx";
 
 export default function AuthAdminPagesLayout() {
   const user = Cookies.get("user");
-  const allowedUsers = ["restu", "dina", "alixa", "rama", "josua"];
+  const allowedUsers = ["restu", "dina", "alixa", "rama", "josua", "Twenties"];
 
   if (allowedUsers.includes(user)) {
     return (
