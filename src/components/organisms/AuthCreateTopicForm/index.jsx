@@ -4,10 +4,9 @@ import Toasts from "../../molecules/Toasts/index.jsx";
 import { useState } from "react";
 import { createTopic } from "../../../api/topicApi";
 
-export default function AuthTopicForm() {
+export default function AuthCreateTopicForm() {
   const [formValues, setFormValues] = useState({
     name: "",
-    body: "",
   });
   const [showToast, setShowToast] = useState(false);
   const [toastContent, setToastContent] = useState({});
@@ -58,19 +57,9 @@ export default function AuthTopicForm() {
           label={"Topic Name"}
           type={"text"}
           placeholder={"Your topic name"}
+          className={"text-body"}
           value={formValues.name}
           onChange={handleChange}
-        />
-        <InputForm
-          htmlFor={"body"}
-          id={"body"}
-          name={"body"}
-          label={"Body"}
-          type={"text"}
-          placeholder={"Your body text"}
-          value={formValues.body}
-          onChange={handleChange}
-          className={"mb-3"}
         />
         <Button type={"submit"} variant={"primary"}>
           Create Topic
