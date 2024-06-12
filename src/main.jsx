@@ -16,6 +16,7 @@ import AuthAdminPages from "./pages/AuthAdminPages.jsx";
 import SinglePostQuestionPages from "./pages/SinglePostQuestionPages.jsx";
 import SinglePostForumPages from "./pages/SinglePostForumPages.jsx";
 import SinglePostTopicPages from "./pages/SinglePostTopicPages.jsx";
+import EditQuestionPages from "./pages/EditQuestionPages.jsx";
 
 const router = createBrowserRouter([
   {
@@ -62,6 +63,11 @@ const router = createBrowserRouter([
     path: "/dashboard/create-question",
     element: <CreateQuestionPages />,
   },
+  {
+    path: "/dashboard/edit-question/:id",
+    element: <EditQuestionPages />,
+  },
+
   {
     path: "/dashboard/admin",
     element: <AuthAdminPages />,

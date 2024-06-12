@@ -158,13 +158,18 @@ export default function DashboardPagesLayout() {
                             View
                           </Button>
                         </Link>
-                        <Button
-                          variant={"warning"}
-                          className="btn-sm d-flex gap-2 rounded-3"
+                        <Link
+                          to={`/dashboard/edit-question/${question.uuid}`}
+                          className="text-decoration-none"
                         >
-                          <IconPlaceholder variant={"pencil"} />
-                          Edit
-                        </Button>
+                          <Button
+                            variant={"warning"}
+                            className="btn-sm d-flex gap-2 rounded-3"
+                          >
+                            <IconPlaceholder variant={"pencil"} />
+                            Edit
+                          </Button>
+                        </Link>
                         <Button
                           variant={"danger"}
                           className="btn-sm d-flex gap-2 rounded-3"

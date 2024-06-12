@@ -5,8 +5,9 @@ import HeadingText from "../atoms/HeadingText/index.jsx";
 import Button from "../atoms/Button/index.jsx";
 import IconPlaceholder from "../atoms/IconPlaceholder/index.jsx";
 import { Link } from "react-router-dom";
+import EditForm from "../organisms/EditForm/index.jsx";
 
-export default function CreateQuestionPagesLayout() {
+export default function CreateEditQuestionPagesLayout({ title }) {
   return (
     <>
       <PagesLayout>
@@ -20,9 +21,9 @@ export default function CreateQuestionPagesLayout() {
             cssReset={true}
             className="fw-semibold text-primary text-center py-3"
           >
-            Ask a Question
+            {title}
           </HeadingText>
-          <QuestionForm />
+          {title === "Ask a Question" ? <QuestionForm /> : <EditForm />}
         </ContainerLayout>
       </PagesLayout>
     </>

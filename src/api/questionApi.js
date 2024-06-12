@@ -98,12 +98,22 @@ export async function createQuestion(data) {
 }
 
 export async function updateQuestion(id, data) {
+  const token = Cookies.get("jwt");
+  const formData = new FormData();
+
+  for (const key in data) {
+    formData.append(key, data[key]);
+  }
+
   try {
     const response = await axios({
       method: "put",
       url: `http://localhost:3000/question/${id}`,
-      headers: { "Content-Type": "application/json" },
-      data,
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
+      data: formData,
     });
     return response.data;
   } catch (error) {
