@@ -149,13 +149,6 @@ export default function AuthTableAdminQuestion() {
                         </Button>
                       </Link>
                       <Button
-                        variant={"warning"}
-                        className="btn-sm d-flex gap-2 rounded-3"
-                      >
-                        <IconPlaceholder variant={"pencil"} />
-                        Edit
-                      </Button>
-                      <Button
                         variant={"danger"}
                         className="btn-sm d-flex gap-2 rounded-3"
                         onClick={() => handleDeleteClick(question.uuid)}
