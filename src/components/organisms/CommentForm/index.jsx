@@ -73,7 +73,7 @@ export default function CommentForm({ onNewComment }) {
           placeholder={`Your comment as ${user}`}
           value={formValues.body}
           onChange={handleChange}
-          className="align-items-center d-flex m-0 py-2"
+          className="align-items-center d-flex m-0 py-2 text-body"
         />
         <Button
           variant={"primary"}
