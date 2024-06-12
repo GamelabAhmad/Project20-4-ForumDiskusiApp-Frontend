@@ -60,6 +60,19 @@ export async function getQuestionByUser(uuid) {
   }
 }
 
+export async function getQuestionsByTopic(uuid) {
+  try {
+    const response = await axios({
+      method: "get",
+      url: `http://localhost:3000/questionsByTopic/${uuid}`,
+      headers: { "Content-Type": "application/json" },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function createQuestion(data) {
   const token = Cookies.get("jwt");
   const formData = new FormData();

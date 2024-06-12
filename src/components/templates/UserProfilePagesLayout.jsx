@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getUserByUsername } from "../../api/userApi.js";
 import PagesLayout from "./PagesLayout.jsx";
@@ -11,11 +11,13 @@ import Card from "../molecules/Card/index.jsx";
 import CardPost from "../organisms/CardPost/index.jsx";
 import Button from "../atoms/Button/index.jsx";
 import { getCommentsByPostId } from "../../api/commentApi.js";
+import { getVotes } from "../../api/voteApi.js";
 
 export default function UserProfilePagesLayout() {
   const [questions, setQuestions] = useState([]);
   const [user, setUser] = useState(null);
   const [comments, setComments] = useState({});
+  const [votes, setVotes] = useState(0);
   const { id } = useParams();
 
   useEffect(() => {
@@ -24,10 +26,13 @@ export default function UserProfilePagesLayout() {
         const fetchedUser = await getUserByUsername(id);
         setUser(fetchedUser);
         const comments = {};
+        const votes = {};
         for (let question of questions) {
           comments[question.uuid] = await getCommentsByPostId(question.uuid);
+          votes[question.uuid] = await getVotes(question.uuid);
         }
         setComments(comments);
+        setVotes(votes);
         if (fetchedUser) {
           const fetchedQuestions = await getQuestionByUser(fetchedUser.uuid);
           setQuestions(fetchedQuestions);
@@ -91,7 +96,7 @@ export default function UserProfilePagesLayout() {
                   username={question.createdBy.username}
                   avatarSrc={question.createdBy.avatar}
                   avatarAlt={question.createdBy.username}
-                  votes={question.votes || 0}
+                  votes={votes[question.uuid] ? votes[question.uuid].length : 0}
                   answers={
                     comments[question.uuid] ? comments[question.uuid].length : 0
                   }
