@@ -42,6 +42,18 @@ export default function AuthTableAdminForum() {
           <SubheadingText cssReset={true} className="fw-semibold ">
             Forum Management
           </SubheadingText>
+          <Link
+            to={"/dashboard/admin/create-forum"}
+            className="text-decoration-none"
+          >
+            <Button
+              variant={"primary"}
+              className="btn-sm d-flex gap-2 rounded-3"
+            >
+              <IconPlaceholder variant={"plus"} />
+              Add Forum
+            </Button>
+          </Link>
         </div>
         <div className="table-responsive">
           <table className="table table-hover table-striped">
@@ -75,13 +87,18 @@ export default function AuthTableAdminForum() {
                           View
                         </Button>
                       </Link>
-                      <Button
-                        variant={"warning"}
-                        className="btn-sm d-flex gap-2 rounded-3"
+                      <Link
+                        to={`/dashboard/admin/edit-forum/${forum.uuid}`}
+                        className="text-decoration-none"
                       >
-                        <IconPlaceholder variant={"pencil"} />
-                        Edit
-                      </Button>
+                        <Button
+                          variant={"warning"}
+                          className="btn-sm d-flex gap-2 rounded-3"
+                        >
+                          <IconPlaceholder variant={"pencil"} />
+                          Edit
+                        </Button>
+                      </Link>
                       <Button
                         variant={"danger"}
                         className="btn-sm d-flex gap-2 rounded-3"
