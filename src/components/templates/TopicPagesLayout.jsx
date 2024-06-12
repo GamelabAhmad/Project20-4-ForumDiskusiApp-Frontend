@@ -10,17 +10,14 @@ import { Link } from "react-router-dom";
 
 export default function TopicPagesLayout() {
   const [topics, setTopics] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchTopics() {
       try {
         const topics = await getTopics();
         setTopics(topics);
-        setLoading(false);
       } catch (error) {
         console.error("Error fetching topics:", error);
-        setLoading(false);
       }
     }
 
