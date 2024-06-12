@@ -12,11 +12,6 @@ export default function UserPostSummary({ votes, answers, views }) {
       title: "Answers",
       value: answers,
     },
-    {
-      id: 3,
-      title: "Views",
-      value: views,
-    },
   ];
 
   return (
