@@ -1,4 +1,4 @@
-import CreateEditQuestionPagesLayout from "../components/templates/CreateEditQuestionPagesLayout.jsx";
+import CreateEditQuestionPagesLayout from "../components/templates/CreateEditQuestionForumTopicPagesLayout.jsx";
 
 export default function CreateQuestionPages() {
   return (

@@ -4,7 +4,7 @@ import Button from "../../atoms/Button/index.jsx";
 import { getQuestionById, updateQuestion } from "../../../api/questionApi";
 import { useParams } from "react-router-dom";
 
-export default function EditForm() {
+export default function EditQuestionForm() {
   const { id } = useParams();
 
   const [formValues, setFormValues] = useState({

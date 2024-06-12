@@ -52,18 +52,6 @@ export default function AuthTableAdminQuestion() {
   return (
     <>
       <ContainerLayout>
-        <div className="py-3">
-          <TypographyText
-            cssReset={true}
-            className="text-center alert alert-primary"
-            role="alert"
-          >
-            <IconPlaceholder variant={"info-circle"} className="me-2" />
-            Welcome to your dashboard{" "}
-            <span className="text-primary">{user}</span>! Here you can view your
-            recent activities.
-          </TypographyText>
-        </div>
         <div className="d-flex justify-content-between align-items-center mb-3">
           <SubheadingText cssReset={true} className="fw-semibold ">
             Question Management
