@@ -1,9 +1,9 @@
-import CreateQuestionPagesLayout from "../components/templates/CreateQuestionPagesLayout.jsx";
+import CreateEditQuestionPagesLayout from "../components/templates/CreateEditQuestionPagesLayout.jsx";
 
 export default function CreateQuestionPages() {
   return (
     <>
-      <CreateQuestionPagesLayout />
+      <CreateEditQuestionPagesLayout title="Ask a Question" />
     </>
   );
 }

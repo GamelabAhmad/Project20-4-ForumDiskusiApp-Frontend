@@ -47,6 +47,7 @@ export default function QuestionForm() {
           label={"Question Title"}
           type={"text"}
           placeholder={"Your question title"}
+          className={"text-body"}
           value={formValues.title}
           onChange={handleChange}
         />
@@ -57,6 +58,7 @@ export default function QuestionForm() {
           label={"Description"}
           type={"text"}
           placeholder={"Your description"}
+          className={"text-body"}
           value={formValues.body}
           onChange={handleChange}
         />
@@ -67,6 +69,7 @@ export default function QuestionForm() {
           label={"Image"}
           type={"file"}
           placeholder={"Upload your image"}
+          className={"text-body"}
           value={formValues.image}
           onChange={handleChange}
         />
@@ -77,7 +80,7 @@ export default function QuestionForm() {
           label={"Topics"}
           type={"select"}
           placeholder={"Topics"}
-          className={"mb-3"}
+          className={"mb-3 text-body"}
           value={formValues.topic}
           onChange={handleChange}
         />
