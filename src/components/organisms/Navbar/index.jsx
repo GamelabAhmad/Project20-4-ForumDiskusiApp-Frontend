@@ -8,7 +8,9 @@ import IconPlaceholder from "../../atoms/IconPlaceholder/index.jsx";
 import Cookies from "js-cookie";
 
 export default function Navbar() {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(
+    () => JSON.parse(localStorage.getItem("darkMode")) || false,
+  );
   const [token, setToken] = useState(Cookies.get("jwt"));
 
   useEffect(() => {
@@ -27,13 +29,19 @@ export default function Navbar() {
     window.location.href = "/";
   };
 
-  const handleDarkModeToggle = () => {
-    setDarkMode(!darkMode);
+  useEffect(() => {
     if (darkMode) {
       document.documentElement.setAttribute("data-bs-theme", "dark");
     } else {
       document.documentElement.removeAttribute("data-bs-theme");
     }
+  }, [darkMode]);
+
+  const handleDarkModeToggle = () => {
+    setDarkMode((prevMode) => {
+      localStorage.setItem("darkMode", !prevMode);
+      return !prevMode;
+    });
   };
 
   return (
