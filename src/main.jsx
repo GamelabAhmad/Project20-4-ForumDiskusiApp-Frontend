@@ -17,6 +17,10 @@ import SinglePostQuestionPages from "./pages/SinglePostQuestionPages.jsx";
 import SinglePostForumPages from "./pages/SinglePostForumPages.jsx";
 import SinglePostTopicPages from "./pages/SinglePostTopicPages.jsx";
 import EditQuestionPages from "./pages/EditQuestionPages.jsx";
+import AuthCreateForumFormPages from "./pages/AuthCreateForumFormPages.jsx";
+import AuthEditForumFormPages from "./pages/AuthEditForumFormPages.jsx";
+import AuthCreateTopicFormPages from "./pages/AuthCreateTopicFormPages.jsx";
+import AuthEditTopicFormPages from "./pages/AuthEditTopicFormPages.jsx";
 
 const router = createBrowserRouter([
   {
@@ -67,12 +71,26 @@ const router = createBrowserRouter([
     path: "/dashboard/edit-question/:id",
     element: <EditQuestionPages />,
   },
-
   {
     path: "/dashboard/admin",
     element: <AuthAdminPages />,
   },
-
+  {
+    path: "/dashboard/admin/create-forum",
+    element: <AuthCreateForumFormPages />,
+  },
+  {
+    path: "/dashboard/admin/edit-forum/:id",
+    element: <AuthEditForumFormPages />,
+  },
+  {
+    path: "/dashboard/admin/create-topic",
+    element: <AuthCreateTopicFormPages />,
+  },
+  {
+    path: "/dashboard/admin/edit-topic/:id",
+    element: <AuthEditTopicFormPages />,
+  },
   {
     path: "/profile/:id",
     element: <UserProfilePages />,
