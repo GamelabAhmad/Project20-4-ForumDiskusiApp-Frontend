@@ -4,6 +4,7 @@ import { getForumById } from "../../api/forumApi.js";
 import HeadingText from "../atoms/HeadingText/index.jsx";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import TypographyText from "../atoms/TypographyText/index.jsx";
 
 export default function SinglePostForumPagesLayout() {
   const [forum, setForum] = useState(null);
@@ -28,7 +29,7 @@ export default function SinglePostForumPagesLayout() {
           {forum ? (
             <>
               <HeadingText>{forum.name}</HeadingText>
-              <p>{forum.description}</p>
+              <TypographyText>{forum.description}</TypographyText>
             </>
           ) : (
             <p>Loading...</p>
