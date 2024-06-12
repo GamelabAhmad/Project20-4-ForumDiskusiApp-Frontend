@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import HeadingText from "../../atoms/HeadingText/index.jsx";
 import ContainerLayout from "../../templates/ContainerLayout.jsx";
@@ -8,6 +8,7 @@ import IconPlaceholder from "../../atoms/IconPlaceholder/index.jsx";
 import Cookies from "js-cookie";
 
 export default function Navbar() {
+  const user = Cookies.get("user");
   const [darkMode, setDarkMode] = useState(
     () => JSON.parse(localStorage.getItem("darkMode")) || false,
   );
@@ -105,7 +106,10 @@ export default function Navbar() {
                       </Button>
                       <ul className="dropdown-menu">
                         <li>
-                          <Link className="dropdown-item" to={"/profile"}>
+                          <Link
+                            className="dropdown-item"
+                            to={`/profile/${user}`}
+                          >
                             Profile
                           </Link>
                         </li>
