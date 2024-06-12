@@ -41,9 +41,7 @@ export default function CardHeader({
           {buttonTitle}
         </Button>
       </div>
-      <Card.Description className="mb-5 lh-base">
-        {description}
-      </Card.Description>
+      <Card.Description className="lh-base">{description}</Card.Description>
 
       {showToast && (
         <Toasts
