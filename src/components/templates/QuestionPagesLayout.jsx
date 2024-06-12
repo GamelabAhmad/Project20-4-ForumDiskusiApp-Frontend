@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getQuestions } from "../../api/questionApi.js";
 import { getCommentsByPostId } from "../../api/commentApi.js";
 import Sidebar from "../molecules/Sidebar/index.jsx";
@@ -9,11 +9,13 @@ import CardHeader from "../organisms/CardHeader/index.jsx";
 import CardPost from "../organisms/CardPost/index.jsx";
 import SkeletonPlaceholder from "../atoms/SkeletonPlaceholder/index.jsx";
 import { Link } from "react-router-dom";
+import { getVotes } from "../../api/voteApi.js";
 
 export default function QuestionPagesLayout() {
   const [userPosts, setUserPosts] = useState([]);
   const [comments, setComments] = useState({});
   const [loading, setLoading] = useState(true);
+  const [votes, setVotes] = useState(0);
 
   useEffect(() => {
     async function fetchQuestionsAndComments() {
@@ -21,10 +23,13 @@ export default function QuestionPagesLayout() {
         const questions = await getQuestions();
         setUserPosts(questions);
         const comments = {};
+        const votes = {};
         for (let question of questions) {
           comments[question.uuid] = await getCommentsByPostId(question.uuid);
+          votes[question.uuid] = await getVotes(question.uuid);
         }
         setComments(comments);
+        setVotes(votes);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching questions and comments:", error);
@@ -99,14 +104,6 @@ export default function QuestionPagesLayout() {
                         />
                       </>
                     }
-                    views={
-                      <>
-                        <SkeletonPlaceholder
-                          variant={"secondary"}
-                          className={"col-12 col-lg-4"}
-                        />
-                      </>
-                    }
                     className={"placeholder-glow mb-3"}
                   />
                 </>
@@ -127,9 +124,8 @@ export default function QuestionPagesLayout() {
                     username={post.createdBy.username}
                     avatarSrc={post.createdBy.avatar}
                     avatarAlt={post.createdBy.username}
-                    votes={post.votes || 0}
+                    votes={votes[post.uuid] ? votes[post.uuid].length : 0}
                     answers={comments[post.uuid].length || 0}
-                    views={post.views || 0}
                     showImage={false}
                     showButtons={false}
                     className={"mb-3"}

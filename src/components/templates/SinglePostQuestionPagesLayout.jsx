@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getQuestionById } from "../../api/questionApi.js";
 import { getCommentsByPostId } from "../../api/commentApi.js";
-import { timeAgo } from "../../utils/timeDistance.js"; // new import
+import { getVotes } from "../../api/voteApi.js";
+import { timeAgo } from "../../utils/timeDistance.js";
 import Sidebar from "../molecules/Sidebar/index.jsx";
 import Card from "../molecules/Card/index.jsx";
 import ContainerLayout from "./ContainerLayout.jsx";
@@ -20,15 +21,24 @@ export default function SinglePostQuestionPagesLayout() {
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [votes, setVotes] = useState(0);
   const [sortOrder, setSortOrder] = useState("latest");
   const { id } = useParams();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [commentsPerPage] = useState(5);
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const indexOfLastComment = currentPage * commentsPerPage;
+  const indexOfFirstComment = indexOfLastComment - commentsPerPage;
+  const currentComments = comments.slice(
+    indexOfFirstComment,
+    indexOfLastComment,
+  );
 
   useEffect(() => {
     async function fetchQuestionAndComments() {
       try {
         const question = await getQuestionById(id);
         let comments = await getCommentsByPostId(id);
-
         comments = comments.sort((a, b) => {
           if (sortOrder === "latest") {
             return new Date(b.commentedAt) - new Date(a.commentedAt);
@@ -36,7 +46,8 @@ export default function SinglePostQuestionPagesLayout() {
             return new Date(a.commentedAt) - new Date(b.commentedAt);
           }
         });
-
+        let votes = await getVotes(id);
+        setVotes(votes.length);
         setPost(question);
         setComments(comments);
         setLoading(false);
@@ -50,7 +61,6 @@ export default function SinglePostQuestionPagesLayout() {
 
   useEffect(() => {
     const sortedComments = [...comments];
-
     sortedComments.sort((a, b) => {
       if (sortOrder === "latest") {
         return new Date(b.commentedAt) - new Date(a.commentedAt);
@@ -97,9 +107,8 @@ export default function SinglePostQuestionPagesLayout() {
                   username={post.createdBy.username}
                   avatarSrc={post.createdBy.avatar}
                   avatarAlt={post.createdBy.username}
-                  votes={post.votes || 0}
+                  votes={votes}
                   answers={comments.length || 0}
-                  views={post.views || 0}
                   className={"mb-3"}
                 />
               ) : (
@@ -161,7 +170,7 @@ export default function SinglePostQuestionPagesLayout() {
               <div>
                 <CommentForm onNewComment={handleNewComment} />
               </div>
-              {comments.map((comment) => (
+              {currentComments.map((comment) => (
                 <>
                   {comment && comment.commentedBy && (
                     <Card key={comment.uuid} className="mb-3">
@@ -181,6 +190,50 @@ export default function SinglePostQuestionPagesLayout() {
                   )}
                 </>
               ))}
+              <div className="justify-content-center d-flex">
+                <ul className="pagination">
+                  <li className="page-item">
+                    <a
+                      role="button"
+                      className="page-link"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        paginate(currentPage - 1);
+                      }}
+                    >
+                      Previous
+                    </a>
+                  </li>
+                  {Array(Math.ceil(comments.length / commentsPerPage))
+                    .fill()
+                    .map((_, index) => (
+                      <li key={index} className={`page-item`}>
+                        <a
+                          role="button"
+                          className={`page-link ${currentPage === index + 1 ? "bg-primary-subtle text-body" : ""}`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            paginate(index + 1);
+                          }}
+                        >
+                          {index + 1}
+                        </a>
+                      </li>
+                    ))}
+                  <li className="page-item">
+                    <a
+                      role="button"
+                      className="page-link"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        paginate(currentPage + 1);
+                      }}
+                    >
+                      Next
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </ContainerLayout>
