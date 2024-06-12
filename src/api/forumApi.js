@@ -47,6 +47,8 @@ export async function createForum(data) {
 }
 
 export async function updateForum(id, data) {
+  const token = Cookies.get("jwt");
+
   try {
     const response = await axios({
       method: "put",

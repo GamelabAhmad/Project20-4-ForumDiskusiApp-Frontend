@@ -47,6 +47,8 @@ export async function createTopic(data) {
 }
 
 export async function updateTopic(id, data) {
+  const token = Cookies.get("jwt");
+
   try {
     const response = await axios({
       method: "put",
