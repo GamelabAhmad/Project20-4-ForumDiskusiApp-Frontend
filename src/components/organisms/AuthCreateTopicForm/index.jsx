@@ -61,7 +61,11 @@ export default function AuthCreateTopicForm() {
           value={formValues.name}
           onChange={handleChange}
         />
-        <Button type={"submit"} variant={"primary"}>
+        <Button
+          type={"submit"}
+          variant={"primary"}
+          className="rounded-3 mb-3 w-100"
+        >
           Create Topic
         </Button>
       </form>

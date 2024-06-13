@@ -74,7 +74,11 @@ export default function AuthCreateForumForm() {
           onChange={handleChange}
           className={"mb-3 text-body"}
         />
-        <Button type={"submit"} variant={"primary"}>
+        <Button
+          type={"submit"}
+          variant={"primary"}
+          className="rounded-3 w-100 mb-3"
+        >
           Create Forum
         </Button>
       </form>
