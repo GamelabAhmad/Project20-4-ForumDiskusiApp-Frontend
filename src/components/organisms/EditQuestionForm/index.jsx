@@ -22,7 +22,7 @@ export default function EditQuestionForm() {
           title: questionData.title,
           body: questionData.body,
           image: questionData.image,
-          topic: questionData.topicsID,
+          topic: questionData.topic.name,
         });
       } catch (error) {
         console.error("Error fetching question:", error);
