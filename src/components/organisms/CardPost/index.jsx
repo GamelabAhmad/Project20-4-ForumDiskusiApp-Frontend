@@ -7,9 +7,10 @@ import UserPostSummary from "../../molecules/UserPostSummary/index.jsx";
 import { useParams } from "react-router-dom";
 import { getVotes, voteQuestion } from "../../../api/voteApi.js";
 import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
 
 export default function CardPost({
-  votes,
+  votes: initialVotes,
   answers,
   title,
   description,
@@ -26,12 +27,17 @@ export default function CardPost({
 }) {
   const { id } = useParams();
   const [upvoteSuccessful, setUpvoteSuccessful] = useState(false);
+  const [votes, setVotes] = useState(initialVotes);
+  const user = Cookies.get("user");
 
   useEffect(() => {
     async function checkVoteStatus() {
       try {
         const response = await getVotes(id);
-        if (response.role === "VOTE") {
+        const userVote = response.find(
+          (vote) => vote.user.username === user && vote.role === "VOTE",
+        );
+        if (userVote) {
           setUpvoteSuccessful(true);
         } else {
           setUpvoteSuccessful(false);
@@ -42,7 +48,7 @@ export default function CardPost({
     }
 
     checkVoteStatus();
-  }, [id]);
+  }, [id, user]);
 
   const handleUpvote = async () => {
     try {
@@ -50,8 +56,10 @@ export default function CardPost({
       console.log("Upvoted question:", response);
       if (response.role === "VOTE") {
         setUpvoteSuccessful(true);
+        setVotes(votes + 1);
       } else if (response.message === "VOTE removed") {
         setUpvoteSuccessful(false);
+        setVotes(votes - 1);
       }
     } catch (error) {
       console.error("Error upvoting question:", error);
