@@ -81,6 +81,16 @@ export default function SinglePostQuestionPagesLayout() {
     setComments((prevComments) => [newComment, ...prevComments]);
   };
 
+  const maxPageNumbersToShow = 5;
+  const startPage = Math.max(
+    currentPage - Math.floor(maxPageNumbersToShow / 2),
+    1,
+  );
+  const endPage = Math.min(
+    startPage + maxPageNumbersToShow - 1,
+    Math.ceil(comments.length / commentsPerPage),
+  );
+
   return (
     <>
       <PagesLayout>
@@ -198,25 +208,27 @@ export default function SinglePostQuestionPagesLayout() {
                       className="page-link"
                       onClick={(e) => {
                         e.preventDefault();
-                        paginate(currentPage - 1);
+                        if (currentPage > 1) {
+                          paginate(currentPage - 1);
+                        }
                       }}
                     >
                       Previous
                     </a>
                   </li>
-                  {Array(Math.ceil(comments.length / commentsPerPage))
+                  {Array(endPage - startPage + 1)
                     .fill()
                     .map((_, index) => (
-                      <li key={index} className={`page-item`}>
+                      <li key={index + startPage} className={`page-item`}>
                         <a
                           role="button"
-                          className={`page-link ${currentPage === index + 1 ? "bg-primary-subtle text-body" : ""}`}
+                          className={`page-link ${currentPage === index + startPage ? "bg-primary-subtle text-body" : ""}`}
                           onClick={(e) => {
                             e.preventDefault();
-                            paginate(index + 1);
+                            paginate(index + startPage);
                           }}
                         >
-                          {index + 1}
+                          {index + startPage}
                         </a>
                       </li>
                     ))}
@@ -226,7 +238,12 @@ export default function SinglePostQuestionPagesLayout() {
                       className="page-link"
                       onClick={(e) => {
                         e.preventDefault();
-                        paginate(currentPage + 1);
+                        if (
+                          currentPage <
+                          Math.ceil(comments.length / commentsPerPage)
+                        ) {
+                          paginate(currentPage + 1);
+                        }
                       }}
                     >
                       Next
