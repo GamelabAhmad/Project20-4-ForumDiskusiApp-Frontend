@@ -106,17 +106,17 @@ export default function Navbar() {
                       </Button>
                       <ul className="dropdown-menu">
                         <li>
-                          <Link
+                          <a
                             className="dropdown-item"
-                            to={`/profile/${user}`}
+                            href={`/profile/${user}`}
                           >
                             Profile
-                          </Link>
+                          </a>
                         </li>
                         <li>
-                          <Link className="dropdown-item" to={"/dashboard"}>
+                          <a className="dropdown-item" href={"/dashboard"}>
                             Dashboard
-                          </Link>
+                          </a>
                         </li>
                       </ul>
                     </div>
