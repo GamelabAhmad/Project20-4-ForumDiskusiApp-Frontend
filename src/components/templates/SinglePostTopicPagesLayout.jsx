@@ -10,13 +10,11 @@ import Card from "../molecules/Card/index.jsx";
 import Sidebar from "../molecules/Sidebar/index.jsx";
 import CardHeader from "../organisms/CardHeader/index.jsx";
 import TypographyText from "../atoms/TypographyText/index.jsx";
-import { getVotes } from "../../api/voteApi.js";
 
 export default function SinglePostTopicPagesLayout() {
   const [questions, setQuestions] = useState([]);
   const [comments, setComments] = useState({});
   const [topic, setTopic] = useState(null);
-  const [votes, setVotes] = useState(0);
   const { id } = useParams();
 
   useEffect(() => {
@@ -27,13 +25,10 @@ export default function SinglePostTopicPagesLayout() {
         const questions = await getQuestionsByTopic(id);
         setQuestions(questions);
         const comments = {};
-        const votes = {};
         for (let question of questions) {
           comments[question.uuid] = await getCommentsByPostId(question.uuid);
-          votes[question.uuid] = await getVotes(question.uuid);
         }
         setComments(comments);
-        setVotes(votes);
       } catch (error) {
         console.error("Error fetching topic:", error);
       }
@@ -101,9 +96,7 @@ export default function SinglePostTopicPagesLayout() {
                         username={question.createdBy.username}
                         avatarSrc={question.createdBy.avatar}
                         avatarAlt={question.createdBy.username}
-                        votes={
-                          votes[question.uuid] ? votes[question.uuid].length : 0
-                        }
+                        votes={question.QuestionVotes.length}
                         answers={
                           comments[question.uuid]
                             ? comments[question.uuid].length

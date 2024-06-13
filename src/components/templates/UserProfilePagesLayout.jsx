@@ -96,7 +96,7 @@ export default function UserProfilePagesLayout() {
                   username={question.createdBy.username}
                   avatarSrc={question.createdBy.avatar}
                   avatarAlt={question.createdBy.username}
-                  votes={votes[question.uuid] ? votes[question.uuid].length : 0}
+                  votes={question.QuestionVotes.length}
                   answers={
                     comments[question.uuid] ? comments[question.uuid].length : 0
                   }
