@@ -10,6 +10,7 @@ import CardPost from "../organisms/CardPost/index.jsx";
 import SkeletonPlaceholder from "../atoms/SkeletonPlaceholder/index.jsx";
 import { Link } from "react-router-dom";
 import { getVotes } from "../../api/voteApi.js";
+import Button from "../atoms/Button/index.jsx";
 
 export default function QuestionPagesLayout() {
   const [userPosts, setUserPosts] = useState([]);
@@ -111,6 +112,7 @@ export default function QuestionPagesLayout() {
                 userPosts.map((post) => (
                   <CardPost
                     key={post.uuid}
+                    topic={post.topic?.name}
                     title={
                       <Link
                         to={`/question/${post.uuid}`}

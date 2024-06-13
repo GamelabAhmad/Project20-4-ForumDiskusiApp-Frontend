@@ -11,6 +11,7 @@ import Cookies from "js-cookie";
 
 export default function CardPost({
   votes: initialVotes,
+  topic,
   answers,
   title,
   description,
@@ -74,6 +75,14 @@ export default function CardPost({
             <UserPostSummary votes={votes} answers={answers} />
           </div>
           <div className="col-12 col-lg-10">
+            <div className="">
+              <Button
+                variant={"primary"}
+                className="rounded-3 pe-none btn-sm mb-1"
+              >
+                #{topic}
+              </Button>
+            </div>
             <Card.Title className="text-primary">
               <SubheadingText cssReset={true} className="fw-semibold">
                 {title}
