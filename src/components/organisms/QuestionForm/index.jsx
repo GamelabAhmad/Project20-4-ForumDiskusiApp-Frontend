@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import InputForm from "../../molecules/InputForm/index.jsx";
 import Button from "../../atoms/Button/index.jsx";
 import { createQuestion } from "../../../api/questionApi";
+import { getTopics } from "../../../api/topicApi.js";
 
 export default function QuestionForm() {
+  const [topics, setTopics] = useState([]);
+
   const [formValues, setFormValues] = useState({
     title: "",
     body: "",
@@ -15,6 +18,13 @@ export default function QuestionForm() {
     setFormValues({
       ...formValues,
       [event.target.name]: event.target.value,
+    });
+  };
+
+  const handleTopicChange = (topic) => {
+    setFormValues({
+      ...formValues,
+      topic: topic.name,
     });
   };
 
@@ -37,9 +47,40 @@ export default function QuestionForm() {
     }
   };
 
+  useEffect(() => {
+    const fetchTopics = async () => {
+      const topicsData = await getTopics();
+      setTopics(topicsData);
+    };
+
+    fetchTopics();
+  }, []);
+
   return (
     <>
       <form onSubmit={handleSubmit}>
+        <InputForm
+          htmlFor={"topicDropdown"}
+          id={"topicDropdown"}
+          name={"topicDropdown"}
+          label={"Topics"}
+          type={"text"}
+          placeholder={"Select a topic"}
+          className={"text-body w-100 mb-2"}
+          options={topics}
+          onOptionChange={handleTopicChange}
+        />
+        <InputForm
+          htmlFor={"topic"}
+          id={"topic"}
+          name={"topic"}
+          label={"Selected Topic"}
+          type={"text"}
+          placeholder={"Selected topic will appear here"}
+          className={"text-body w-100 mb-3"}
+          value={formValues.topic}
+          readOnly={true}
+        />
         <InputForm
           htmlFor={"title"}
           id={"title"}
@@ -71,17 +112,6 @@ export default function QuestionForm() {
           placeholder={"Upload your image"}
           className={"text-body"}
           value={formValues.image}
-          onChange={handleChange}
-        />
-        <InputForm
-          htmlFor={"topic"}
-          id={"topic"}
-          name={"topic"}
-          label={"Topics"}
-          type={"select"}
-          placeholder={"Topics"}
-          className={"mb-3 text-body"}
-          value={formValues.topic}
           onChange={handleChange}
         />
         <Button
