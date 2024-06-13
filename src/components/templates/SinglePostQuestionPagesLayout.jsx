@@ -110,6 +110,7 @@ export default function SinglePostQuestionPagesLayout() {
               ) : post ? (
                 <CardPost
                   title={post.title}
+                  topic={post.topic?.name}
                   description={post.body}
                   imageSrc={post.imageUrl}
                   imageAlt={post.title}

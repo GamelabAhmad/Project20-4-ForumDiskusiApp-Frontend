@@ -89,6 +89,7 @@ export default function SinglePostTopicPagesLayout() {
                             {question.title}
                           </Link>
                         }
+                        topic={question.topic?.name}
                         description={question.body}
                         createdAt={new Date(
                           question.createdAt,
