@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getQuestionById } from "../../api/questionApi.js";
-import { getCommentsByPostId } from "../../api/commentApi.js";
+import {
+  deleteCommentById,
+  getCommentsByPostId,
+} from "../../api/commentApi.js";
 import { getVotes } from "../../api/voteApi.js";
 import { timeAgo } from "../../utils/timeDistance.js";
 import Sidebar from "../molecules/Sidebar/index.jsx";
@@ -16,12 +19,15 @@ import SubheadingText from "../atoms/SubheadingText/index.jsx";
 import IconPlaceholder from "../atoms/IconPlaceholder/index.jsx";
 import Button from "../atoms/Button/index.jsx";
 import CommentForm from "../organisms/CommentForm/index.jsx";
+import { getUserProfile } from "../../api/userApi.js";
+import Toasts from "../molecules/Toasts/index.jsx";
 
 export default function SinglePostQuestionPagesLayout() {
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [votes, setVotes] = useState(0);
+  const [profiles, setProfiles] = useState([]);
   const [sortOrder, setSortOrder] = useState("latest");
   const { id } = useParams();
   const [currentPage, setCurrentPage] = useState(1);
@@ -33,12 +39,15 @@ export default function SinglePostQuestionPagesLayout() {
     indexOfFirstComment,
     indexOfLastComment,
   );
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const [showFailureToast, setShowFailureToast] = useState(false);
 
   useEffect(() => {
     async function fetchQuestionAndComments() {
       try {
         const question = await getQuestionById(id);
         let comments = await getCommentsByPostId(id);
+        const profile = await getUserProfile();
         comments = comments.sort((a, b) => {
           if (sortOrder === "latest") {
             return new Date(b.commentedAt) - new Date(a.commentedAt);
@@ -48,6 +57,7 @@ export default function SinglePostQuestionPagesLayout() {
         });
         let votes = await getVotes(id);
         setVotes(votes.length);
+        setProfiles(profile);
         setPost(question);
         setComments(comments);
         setLoading(false);
@@ -58,6 +68,25 @@ export default function SinglePostQuestionPagesLayout() {
     }
     fetchQuestionAndComments();
   }, [id, sortOrder]);
+
+  const handleDeleteComment = async (uuid) => {
+    try {
+      await deleteCommentById(uuid);
+      setComments((prevComments) =>
+        prevComments.filter((comment) => comment.uuid !== uuid),
+      );
+
+      // Menampilkan toast sukses setelah komentar berhasil dihapus
+      setShowSuccessToast(true);
+      setTimeout(() => setShowSuccessToast(false), 3000);
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+
+      // Menampilkan toast gagal jika terjadi kesalahan saat menghapus komentar
+      setShowFailureToast(true);
+      setTimeout(() => setShowFailureToast(false), 3000);
+    }
+  };
 
   useEffect(() => {
     const sortedComments = [...comments];
@@ -185,9 +214,55 @@ export default function SinglePostQuestionPagesLayout() {
                 <>
                   {comment && comment.commentedBy && (
                     <Card key={comment.uuid} className="mb-3">
-                      <TypographyText cssReset={true}>
-                        {timeAgo(comment.commentedAt)}
-                      </TypographyText>
+                      <div className="d-flex justify-content-between m-0 align-items-center">
+                        <TypographyText cssReset={true}>
+                          {timeAgo(comment.commentedAt)}
+                        </TypographyText>
+                        <div className="d-flex gap-2">
+                          {comment.commentedBy.username ===
+                            profiles.username && (
+                            <>
+                              <Button
+                                variant={"success"}
+                                className="rounded-3 btn-sm mb-1"
+                              >
+                                <IconPlaceholder variant={"pencil"} />
+                              </Button>
+                              <Button
+                                variant={"danger"}
+                                className="rounded-3 btn-sm mb-1"
+                                onClick={() =>
+                                  handleDeleteComment(comment.uuid)
+                                }
+                              >
+                                <IconPlaceholder variant={"trash"} />
+                              </Button>
+                            </>
+                          )}
+                          {showSuccessToast && (
+                            <Toasts
+                              onClose={() => setShowSuccessToast(false)}
+                              variant={"success"}
+                              variantBody={"success-subtle"}
+                              title={"Success"}
+                              titleColor={"white"}
+                              description={
+                                "Comment has been successfully deleted."
+                              }
+                            />
+                          )}
+                          {showFailureToast && (
+                            <Toasts
+                              onClose={() => setShowFailureToast(false)}
+                              variant={"danger"}
+                              variantBody={"danger-subtle"}
+                              title={"Failure"}
+                              titleColor={"white"}
+                              description={"Failed to delete comment."}
+                            />
+                          )}
+                        </div>
+                      </div>
                       <SubheadingText
                         cssReset={true}
                         className="fw-semibold text-primary"
@@ -197,6 +272,22 @@ export default function SinglePostQuestionPagesLayout() {
                       <TypographyText cssReset={true}>
                         {comment.body}
                       </TypographyText>
+                      <div className="d-flex gap-2">
+                        <Button
+                          variant={"primary"}
+                          className={"w-100 w-md-auto rounded-3 mt-3"}
+                        >
+                          <IconPlaceholder variant={"arrow-up"} />
+                          Upvote
+                        </Button>
+                        <Button
+                          variant={"primary"}
+                          className={"w-100 w-md-auto rounded-3 mt-3"}
+                        >
+                          <IconPlaceholder variant={"arrow-down"} />
+                          Downvote
+                        </Button>
+                      </div>
                     </Card>
                   )}
                 </>
