@@ -33,6 +33,25 @@ export async function createCommentById(uuid, data) {
   }
 }
 
+export async function updateCommentById(uuid, data) {
+  const token = Cookies.get("jwt");
+
+  try {
+    const response = await axios({
+      method: "put",
+      url: `http://localhost:3000/comment/${uuid}`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      data: data,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function deleteCommentById(uuid) {
   const token = Cookies.get("jwt");
 

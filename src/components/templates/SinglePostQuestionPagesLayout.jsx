@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getQuestionById } from "../../api/questionApi.js";
 import {
-  deleteCommentById,
   getCommentsByPostId,
+  deleteCommentById,
 } from "../../api/commentApi.js";
 import { getVotes } from "../../api/voteApi.js";
 import { timeAgo } from "../../utils/timeDistance.js";
@@ -39,8 +39,10 @@ export default function SinglePostQuestionPagesLayout() {
     indexOfFirstComment,
     indexOfLastComment,
   );
+  const [editingComment, setEditingComment] = useState(null);
   const [showSuccessToast, setShowSuccessToast] = useState(false);
   const [showFailureToast, setShowFailureToast] = useState(false);
+  const [formValues, setFormValues] = useState({ body: "" });
 
   useEffect(() => {
     async function fetchQuestionAndComments() {
@@ -69,20 +71,34 @@ export default function SinglePostQuestionPagesLayout() {
     fetchQuestionAndComments();
   }, [id, sortOrder]);
 
+  const handleEditComment = (comment) => {
+    setEditingComment(comment);
+    setFormValues({ body: comment.body });
+    console.log("Editing comment:", comment);
+  };
+
+  useEffect(() => {
+    setFormValues({ body: editingComment ? editingComment.body : "" });
+  }, [editingComment]);
+
+  const handleUpdateComment = (updatedComment) => {
+    setComments((prevComments) =>
+      prevComments.map((comment) =>
+        comment.uuid === updatedComment.uuid ? updatedComment : comment,
+      ),
+    );
+  };
+
   const handleDeleteComment = async (uuid) => {
     try {
       await deleteCommentById(uuid);
       setComments((prevComments) =>
         prevComments.filter((comment) => comment.uuid !== uuid),
       );
-
-      // Menampilkan toast sukses setelah komentar berhasil dihapus
       setShowSuccessToast(true);
       setTimeout(() => setShowSuccessToast(false), 3000);
     } catch (error) {
       console.error("Error deleting comment:", error);
-
-      // Menampilkan toast gagal jika terjadi kesalahan saat menghapus komentar
       setShowFailureToast(true);
       setTimeout(() => setShowFailureToast(false), 3000);
     }
@@ -208,7 +224,11 @@ export default function SinglePostQuestionPagesLayout() {
                 </div>
               </div>
               <div>
-                <CommentForm onNewComment={handleNewComment} />
+                <CommentForm
+                  onNewComment={handleNewComment}
+                  onUpdateComment={handleUpdateComment}
+                  editingComment={editingComment}
+                />
               </div>
               {currentComments.map((comment) => (
                 <>
@@ -225,6 +245,7 @@ export default function SinglePostQuestionPagesLayout() {
                               <Button
                                 variant={"success"}
                                 className="rounded-3 btn-sm mb-1"
+                                onClick={() => handleEditComment(comment)}
                               >
                                 <IconPlaceholder variant={"pencil"} />
                               </Button>

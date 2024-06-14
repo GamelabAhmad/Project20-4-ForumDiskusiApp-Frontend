@@ -1,12 +1,19 @@
 import InputForm from "../../molecules/InputForm/index.jsx";
 import Button from "../../atoms/Button/index.jsx";
-import { useState } from "react";
-import { createCommentById } from "../../../api/commentApi.js";
+import { useEffect, useState } from "react";
+import {
+  createCommentById,
+  updateCommentById,
+} from "../../../api/commentApi.js";
 import { useParams } from "react-router-dom";
 import Cookies from "js-cookie";
 import Toasts from "../../molecules/Toasts/index.jsx";
 
-export default function CommentForm({ onNewComment }) {
+export default function CommentForm({
+  onNewComment,
+  onUpdateComment,
+  editingComment,
+}) {
   const token = Cookies.get("jwt");
   const user = Cookies.get("user");
 
@@ -25,6 +32,12 @@ export default function CommentForm({ onNewComment }) {
     });
   };
 
+  useEffect(() => {
+    if (editingComment) {
+      setFormValues({ body: editingComment.body });
+    }
+  }, [editingComment]);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -39,19 +52,24 @@ export default function CommentForm({ onNewComment }) {
         body: formValues.body,
       };
 
-      let newComment = await createCommentById(id, data);
-      console.log(newComment);
+      if (editingComment && editingComment.uuid) {
+        const updatedComment = await updateCommentById(
+          editingComment.uuid,
+          data,
+        );
+        onUpdateComment(updatedComment);
+      } else {
+        let newComment = await createCommentById(id, data);
+        newComment = {
+          ...newComment,
+          commentedAt: new Date().toISOString(),
+          commentedBy: { username: user },
+          body: formValues.body,
+        };
+        onNewComment(newComment);
+      }
 
-      newComment = {
-        ...newComment,
-        commentedAt: new Date().toISOString(),
-        commentedBy: { username: user },
-        body: formValues.body,
-      };
-
-      onNewComment(newComment);
       setFormValues({ body: "" });
-
       setShowSuccessToast(true);
       setTimeout(() => setShowSuccessToast(false), 3000);
     } catch (error) {
@@ -80,7 +98,7 @@ export default function CommentForm({ onNewComment }) {
           type="submit"
           className="rounded-3 d-flex align-items-center m-0"
         >
-          Comment
+          {editingComment ? "Update" : "Comment"}
         </Button>
       </form>
       {showSuccessToast && (
