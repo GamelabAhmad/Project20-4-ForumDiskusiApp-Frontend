@@ -1,29 +1,23 @@
+import { useState, useEffect } from "react";
 import InputForm from "../../molecules/InputForm/index.jsx";
 import Button from "../../atoms/Button/index.jsx";
-import { useEffect, useState } from "react";
-import {
-  createCommentById,
-  updateCommentById,
-} from "../../../api/commentApi.js";
-import { useParams } from "react-router-dom";
+import { updateCommentById } from "../../../api/commentApi.js";
 import Cookies from "js-cookie";
 import Toasts from "../../molecules/Toasts/index.jsx";
 
-export default function CommentForm({
-  onNewComment,
-  onUpdateComment,
-  editingComment,
-}) {
+export default function EditCommentForm({ onUpdateComment, editingComment }) {
   const token = Cookies.get("jwt");
   const user = Cookies.get("user");
 
-  const { id } = useParams();
   const [formValues, setFormValues] = useState({
     body: "",
   });
 
-  const [showSuccessToast, setShowSuccessToast] = useState(false);
-  const [showFailureToast, setShowFailureToast] = useState(false);
+  useEffect(() => {
+    if (editingComment) {
+      setFormValues({ body: editingComment.body });
+    }
+  }, [editingComment]);
 
   const handleChange = (event) => {
     setFormValues({
@@ -32,11 +26,8 @@ export default function CommentForm({
     });
   };
 
-  useEffect(() => {
-    if (editingComment) {
-      setFormValues({ body: editingComment.body });
-    }
-  }, [editingComment]);
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const [showFailureToast, setShowFailureToast] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -52,37 +43,23 @@ export default function CommentForm({
         body: formValues.body,
       };
 
-      if (editingComment && editingComment.uuid) {
-        const updatedComment = await updateCommentById(
-          editingComment.uuid,
-          data,
-        );
-        onUpdateComment(updatedComment);
-      } else {
-        let newComment = await createCommentById(id, data);
-        newComment = {
-          ...newComment,
-          commentedAt: new Date().toISOString(),
-          commentedBy: { username: user },
-          body: formValues.body,
-        };
-        onNewComment(newComment);
-      }
+      const updatedComment = await updateCommentById(editingComment.uuid, data);
+      onUpdateComment(updatedComment);
 
       setFormValues({ body: "" });
+      window.location.reload();
       setShowSuccessToast(true);
       setTimeout(() => setShowSuccessToast(false), 3000);
     } catch (error) {
       console.error("Error:", error);
+      setShowFailureToast(true);
+      setTimeout(() => setShowFailureToast(false), 3000);
     }
   };
 
   return (
     <>
-      <form
-        onSubmit={handleSubmit}
-        className="mb-3 d-flex align-items-center m-0"
-      >
+      <form onSubmit={handleSubmit} className="d-flex mb-3">
         <InputForm
           htmlFor={"body"}
           id={"body"}
@@ -98,7 +75,7 @@ export default function CommentForm({
           type="submit"
           className="rounded-3 d-flex align-items-center m-0"
         >
-          {editingComment ? "Update" : "Comment"}
+          Update
         </Button>
       </form>
       {showSuccessToast && (
@@ -108,7 +85,7 @@ export default function CommentForm({
           variantBody={"success-subtle"}
           title={"Success"}
           titleColor={"white"}
-          description={"Comment has been successfully posted."}
+          description={"Comment has been successfully updated."}
         />
       )}
       {showFailureToast && (
@@ -118,7 +95,7 @@ export default function CommentForm({
           variantBody={"danger-subtle"}
           title={"Failure"}
           titleColor={"white"}
-          description={"You must be logged in to post a comment."}
+          description={"You must be logged in to update a comment."}
         />
       )}
     </>

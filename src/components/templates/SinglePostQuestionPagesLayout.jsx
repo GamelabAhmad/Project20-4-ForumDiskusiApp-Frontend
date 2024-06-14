@@ -18,9 +18,10 @@ import TypographyText from "../atoms/TypographyText/index.jsx";
 import SubheadingText from "../atoms/SubheadingText/index.jsx";
 import IconPlaceholder from "../atoms/IconPlaceholder/index.jsx";
 import Button from "../atoms/Button/index.jsx";
-import CommentForm from "../organisms/CommentForm/index.jsx";
 import { getUserProfile } from "../../api/userApi.js";
 import Toasts from "../molecules/Toasts/index.jsx";
+import EditCommentForm from "../organisms/EditCommentForm/index.jsx";
+import CreateCommentForm from "../organisms/CreateCommentForm/index.jsx";
 
 export default function SinglePostQuestionPagesLayout() {
   const [post, setPost] = useState(null);
@@ -224,11 +225,14 @@ export default function SinglePostQuestionPagesLayout() {
                 </div>
               </div>
               <div>
-                <CommentForm
-                  onNewComment={handleNewComment}
-                  onUpdateComment={handleUpdateComment}
-                  editingComment={editingComment}
-                />
+                {editingComment ? (
+                  <EditCommentForm
+                    onUpdateComment={handleUpdateComment}
+                    editingComment={editingComment}
+                  />
+                ) : (
+                  <CreateCommentForm onNewComment={handleNewComment} />
+                )}
               </div>
               {currentComments.map((comment) => (
                 <>
