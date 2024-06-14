@@ -1,6 +1,24 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
+export async function getUserProfile() {
+  const token = Cookies.get("jwt");
+
+  try {
+    const response = await axios({
+      method: "get",
+      url: `http://localhost:3000/profile/`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function getUserByUsername(id) {
   try {
     const response = await axios({
