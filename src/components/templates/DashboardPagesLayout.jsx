@@ -74,6 +74,17 @@ export default function DashboardPagesLayout() {
               your recent activities.
             </TypographyText>
           </div>
+          <div className="mt-1 mb-3">
+            <Link to={`/profile/${user}/edit`} className="text-decoration-none">
+              <Button
+                variant={"primary"}
+                className="btn-sm d-flex gap-2 rounded-3"
+              >
+                <IconPlaceholder variant={"pencil"} />
+                Edit Profile
+              </Button>
+            </Link>
+          </div>
           <div className="d-flex justify-content-between align-items-center mb-3">
             <SubheadingText cssReset={true} className="fw-semibold ">
               Question Management
