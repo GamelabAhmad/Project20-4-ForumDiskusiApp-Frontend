@@ -21,6 +21,7 @@ import AuthCreateForumFormPages from "./pages/AuthCreateForumFormPages.jsx";
 import AuthEditForumFormPages from "./pages/AuthEditForumFormPages.jsx";
 import AuthCreateTopicFormPages from "./pages/AuthCreateTopicFormPages.jsx";
 import AuthEditTopicFormPages from "./pages/AuthEditTopicFormPages.jsx";
+import UserUpdateProfilePages from "./pages/UserUpdateProfilePages.jsx";
 
 const router = createBrowserRouter([
   {
@@ -94,6 +95,10 @@ const router = createBrowserRouter([
   {
     path: "/profile/:id",
     element: <UserProfilePages />,
+  },
+  {
+    path: "/profile/:id/edit",
+    element: <UserUpdateProfilePages />,
   },
 ]);
 
