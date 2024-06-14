@@ -32,3 +32,21 @@ export async function createCommentById(uuid, data) {
     throw error;
   }
 }
+
+export async function deleteCommentById(uuid) {
+  const token = Cookies.get("jwt");
+
+  try {
+    const response = await axios({
+      method: "delete",
+      url: `http://localhost:3000/comment/${uuid}`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
