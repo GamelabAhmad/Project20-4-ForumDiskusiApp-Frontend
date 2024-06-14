@@ -6,33 +6,34 @@ import ContainerLayout from "./ContainerLayout.jsx";
 import HeadingText from "../atoms/HeadingText/index.jsx";
 import AvatarPlaceHolder from "../atoms/AvatarPlaceholder/index.jsx";
 import { getQuestionByUser } from "../../api/questionApi.js";
-import TypographyText from "../atoms/TypographyText/index.jsx";
 import Card from "../molecules/Card/index.jsx";
 import CardPost from "../organisms/CardPost/index.jsx";
 import Button from "../atoms/Button/index.jsx";
 import { getCommentsByPostId } from "../../api/commentApi.js";
-import { getVotes } from "../../api/voteApi.js";
+import { getFollowers, getFollowing } from "../../api/followApi.js";
 
 export default function UserProfilePagesLayout() {
   const [questions, setQuestions] = useState([]);
   const [user, setUser] = useState(null);
   const [comments, setComments] = useState({});
-  const [votes, setVotes] = useState(0);
+  const [followers, setFollowers] = useState([]);
+  const [following, setFollowing] = useState([]);
   const { id } = useParams();
 
   useEffect(() => {
     async function fetchData() {
       try {
         const fetchedUser = await getUserByUsername(id);
-        setUser(fetchedUser);
         const comments = {};
-        const votes = {};
+        const follower = await getFollowers(fetchedUser.uuid);
+        const following = await getFollowing(fetchedUser.uuid);
         for (let question of questions) {
           comments[question.uuid] = await getCommentsByPostId(question.uuid);
-          votes[question.uuid] = await getVotes(question.uuid);
         }
+        setFollowers(follower);
+        setFollowing(following);
         setComments(comments);
-        setVotes(votes);
+        setUser(fetchedUser);
         if (fetchedUser) {
           const fetchedQuestions = await getQuestionByUser(fetchedUser.uuid);
           setQuestions(fetchedQuestions);
@@ -61,12 +62,23 @@ export default function UserProfilePagesLayout() {
                     className="border border-2 rounded-circle border-primary img-fluid mx-auto mx-md-0"
                   />
                   <div>
-                    <Card.Title className="fw-semibold text-primary">
+                    <Card.Title className="fw-semibold text-primary mb-2">
                       {user.username}
                     </Card.Title>
-                    <Card.Description className="fw-lighter">
-                      <TypographyText>{user.follower} Followers</TypographyText>
-                    </Card.Description>
+                    <div className="d-flex align-items-center mb-3 gap-3 justify-content-center">
+                      <Button
+                        variant={`primary`}
+                        className="rounded-3 pe-none btn-sm"
+                      >
+                        {followers.count || 0} followers
+                      </Button>
+                      <Button
+                        variant={`primary`}
+                        className="rounded-3 pe-none btn-sm"
+                      >
+                        {following.count || 0} following
+                      </Button>
+                    </div>
                     <Card.Description className="fw-lighter mb-3 mb-md-0">
                       {user.bio ? user.bio : "No bio available"}
                     </Card.Description>
@@ -91,7 +103,7 @@ export default function UserProfilePagesLayout() {
                       {question.title}
                     </Link>
                   }
-                  topic={question.topic.name}
+                  topic={question.topic?.name}
                   description={question.body}
                   createdAt={new Date(question.createdAt).toLocaleString()}
                   username={question.createdBy.username}
