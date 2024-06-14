@@ -1,5 +1,6 @@
 import HeadingText from "../atoms/HeadingText/index.jsx";
 import ContainerLayout from "./ContainerLayout.jsx";
+import { Link } from "react-router-dom";
 
 export default function AuthLayout({ label, children }) {
   return (
@@ -15,16 +16,16 @@ export default function AuthLayout({ label, children }) {
           {label === "Register" ? (
             <p>
               Sudah punya akun?{" "}
-              <a href="/login" className="text-decoration-none">
+              <Link to="/login" className="text-decoration-none">
                 Login
-              </a>
+              </Link>
             </p>
           ) : (
             <p>
               Belum punya akun?{" "}
-              <a href="/register" className="text-decoration-none">
+              <Link to="/register" className="text-decoration-none">
                 Register
-              </a>
+              </Link>
             </p>
           )}
         </div>
