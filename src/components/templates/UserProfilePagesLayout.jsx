@@ -91,6 +91,7 @@ export default function UserProfilePagesLayout() {
                       {question.title}
                     </Link>
                   }
+                  topic={question.topic.name}
                   description={question.body}
                   createdAt={new Date(question.createdAt).toLocaleString()}
                   username={question.createdBy.username}
