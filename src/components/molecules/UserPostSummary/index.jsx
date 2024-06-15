@@ -1,6 +1,6 @@
 import TypographyText from "../../atoms/TypographyText/index.jsx";
 
-export default function UserPostSummary({ votes, answers, views }) {
+export default function UserPostSummary({ votes, answers, downvotes }) {
   const postSummary = [
     {
       id: 1,
@@ -9,6 +9,11 @@ export default function UserPostSummary({ votes, answers, views }) {
     },
     {
       id: 2,
+      title: "Downvotes",
+      value: downvotes,
+    },
+    {
+      id: 3,
       title: "Answers",
       value: answers,
     },
