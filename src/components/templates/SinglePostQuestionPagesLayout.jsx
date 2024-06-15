@@ -29,6 +29,8 @@ export default function SinglePostQuestionPagesLayout() {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [votes, setVotes] = useState(0);
+  const [upVotes, setUpVotes] = useState(0);
+  const [downVotes, setDownVotes] = useState(0);
   const [profiles, setProfiles] = useState([]);
   const [sortOrder, setSortOrder] = useState("latest");
   const { id } = useParams();
@@ -64,6 +66,10 @@ export default function SinglePostQuestionPagesLayout() {
         });
         let votes = await getVotes(id);
         setVotes(votes.length);
+        let upVotes = votes.filter((vote) => vote.role === "VOTE");
+        setUpVotes(upVotes.length);
+        let downVotes = votes.filter((vote) => vote.role === "DOWNVOTE");
+        setDownVotes(downVotes.length);
         setProfiles(profile);
         setPost(question);
         setComments(comments);
@@ -168,7 +174,8 @@ export default function SinglePostQuestionPagesLayout() {
                   username={post.createdBy.username}
                   avatarSrc={post.createdBy.avatar}
                   avatarAlt={post.createdBy.username}
-                  votes={votes}
+                  votes={upVotes}
+                  downvotes={downVotes}
                   answers={comments.length || 0}
                   className={"mb-3"}
                 />

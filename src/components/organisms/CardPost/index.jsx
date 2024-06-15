@@ -5,13 +5,18 @@ import IconPlaceholder from "../../atoms/IconPlaceholder/index.jsx";
 import UserPostDate from "../../molecules/UserPostDate/index.jsx";
 import UserPostSummary from "../../molecules/UserPostSummary/index.jsx";
 import { useParams } from "react-router-dom";
-import { getVotes, voteQuestion } from "../../../api/voteApi.js";
+import {
+  downVoteQuestion,
+  getVotes,
+  voteQuestion,
+} from "../../../api/voteApi.js";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import Toasts from "../../molecules/Toasts/index.jsx";
 
 export default function CardPost({
   votes: initialVotes,
+  downvotes: initialDownvotes,
   topic,
   answers,
   title,
@@ -30,23 +35,31 @@ export default function CardPost({
   const { id } = useParams();
   const [upvoteSuccessful, setUpvoteSuccessful] = useState(false);
   const [votes, setVotes] = useState(initialVotes);
+  const [downvotesSuccessful, setDownvotesSuccessful] = useState(false);
+  const [downVotes, setDownVotes] = useState(initialDownvotes);
   const user = Cookies.get("user");
 
   const [showUpvoteSuccessToast, setShowUpvoteSuccessToast] = useState(false);
   const [showUpvoteFailureToast, setShowUpvoteFailureToast] = useState(false);
+  const [showDownvoteSuccessToast, setShowDownvoteSuccessToast] =
+    useState(false);
+  const [showDownvoteFailureToast, setShowDownvoteFailureToast] =
+    useState(false);
 
   useEffect(() => {
     async function checkVoteStatus() {
       try {
         const response = await getVotes(id);
-        const userVote = response.find(
-          (vote) => vote.user.username === user && vote.role === "VOTE",
+        const upVotes = response.filter((vote) => vote.role === "VOTE");
+        const downVotes = response.filter((vote) => vote.role === "DOWNVOTE");
+        setVotes(upVotes.length);
+        setDownVotes(downVotes.length);
+        const userUpvoted = upVotes.some((vote) => vote.user.username === user);
+        const userDownvoted = downVotes.some(
+          (vote) => vote.user.username === user,
         );
-        if (userVote) {
-          setUpvoteSuccessful(true);
-        } else {
-          setUpvoteSuccessful(false);
-        }
+        setUpvoteSuccessful(userUpvoted);
+        setDownvotesSuccessful(userDownvoted);
       } catch (error) {
         console.error("Error checking vote status:", error);
       }
@@ -57,6 +70,12 @@ export default function CardPost({
 
   const handleUpvote = async () => {
     try {
+      if (downvotesSuccessful) {
+        await downVoteQuestion(id);
+        setDownvotesSuccessful(false);
+        setDownVotes(downVotes - 1);
+      }
+
       const response = await voteQuestion(id);
       console.log("Upvoted question:", response);
       if (response.role === "VOTE") {
@@ -66,7 +85,9 @@ export default function CardPost({
         setTimeout(() => setShowUpvoteSuccessToast(false), 3000);
       } else if (response.message === "VOTE removed") {
         setUpvoteSuccessful(false);
-        setVotes(votes - 1);
+        if (votes > 0) {
+          setVotes(votes - 1);
+        }
         setShowUpvoteSuccessToast(true);
         setTimeout(() => setShowUpvoteSuccessToast(false), 3000);
       }
@@ -77,12 +98,46 @@ export default function CardPost({
     }
   };
 
+  const handleDownvote = async () => {
+    try {
+      if (upvoteSuccessful) {
+        await voteQuestion(id);
+        setUpvoteSuccessful(false);
+        setVotes(votes - 1);
+      }
+
+      const response = await downVoteQuestion(id);
+      console.log("Downvoted question:", response);
+      if (response.role === "DOWNVOTE") {
+        setDownvotesSuccessful(true);
+        setDownVotes(downVotes + 1);
+        setShowDownvoteSuccessToast(true);
+        setTimeout(() => setShowDownvoteSuccessToast(false), 3000);
+      } else if (response.message === "DOWNVOTE removed") {
+        setDownvotesSuccessful(false);
+        if (downVotes > 0) {
+          setDownVotes(downVotes - 1);
+        }
+        setShowDownvoteSuccessToast(true);
+        setTimeout(() => setShowDownvoteSuccessToast(false), 3000);
+      }
+    } catch (error) {
+      console.error("Error downvoting question:", error);
+      setShowDownvoteFailureToast(true);
+      setTimeout(() => setShowDownvoteFailureToast(false), 3000);
+    }
+  };
+
   return (
     <>
       <Card className={`shadow-sm p-3 ${className}`} {...props}>
         <div className="row">
           <div className="col-sm-12 col-lg-2 text-start text-lg-end d-flex d-lg-block gap-3 gap-lg-0 mb-3 mb-lg-0">
-            <UserPostSummary votes={votes} answers={answers} />
+            <UserPostSummary
+              votes={votes}
+              downvotes={downVotes}
+              answers={answers}
+            />
           </div>
           <div className="col-12 col-lg-10">
             <div className="">
@@ -123,8 +178,9 @@ export default function CardPost({
                       Upvote
                     </Button>
                     <Button
-                      variant={"primary"}
+                      variant={downvotesSuccessful ? "danger" : "primary"}
                       className="w-100 w-md-auto rounded-3"
+                      onClick={handleDownvote}
                     >
                       <IconPlaceholder variant={"arrow-down"} />
                       Downvote
@@ -169,6 +225,26 @@ export default function CardPost({
           title={"Failure"}
           titleColor={"white"}
           description={"Failed to upvote. Please log in to upvote."}
+        />
+      )}
+      {showDownvoteSuccessToast && (
+        <Toasts
+          onClose={() => setShowDownvoteSuccessToast(false)}
+          variant={"success"}
+          variantBody={"success-subtle"}
+          title={"Success"}
+          titleColor={"white"}
+          description={"Downvote successful."}
+        />
+      )}
+      {showDownvoteFailureToast && (
+        <Toasts
+          onClose={() => setShowDownvoteFailureToast(false)}
+          variant={"danger"}
+          variantBody={"danger-subtle"}
+          title={"Failure"}
+          titleColor={"white"}
+          description={"Failed to downvote. Please log in to downvote."}
         />
       )}
     </>
