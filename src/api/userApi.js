@@ -32,13 +32,13 @@ export async function getUserByUsername(id) {
   }
 }
 
-export async function updateUser(id, data) {
+export async function updateUser(username, data) {
   const token = Cookies.get("jwt");
 
   try {
     const response = await axios({
       method: "put",
-      url: `http://localhost:3000/setting/${id}`,
+      url: `http://localhost:3000/setting/${username}`,
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
