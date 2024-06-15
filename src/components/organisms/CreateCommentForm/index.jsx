@@ -67,7 +67,9 @@ export default function CreateCommentForm({ onNewComment }) {
           id={"body"}
           name={"body"}
           type={"text"}
-          placeholder={`Your comment as ${user}`}
+          placeholder={
+            user ? `Your comment as ${user}` : "Please log in to comment"
+          }
           value={formValues.body}
           onChange={handleChange}
           className="align-items-center d-flex m-0 py-2 text-body"
@@ -76,6 +78,7 @@ export default function CreateCommentForm({ onNewComment }) {
           variant={"primary"}
           type="submit"
           className="rounded-3 d-flex align-items-center m-0 btn-sm"
+          disabled={!token || !user}
         >
           Comment
         </Button>
