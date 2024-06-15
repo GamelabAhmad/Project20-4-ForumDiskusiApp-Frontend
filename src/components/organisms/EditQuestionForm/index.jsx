@@ -9,10 +9,6 @@ export default function EditQuestionForm() {
   const { id } = useParams();
   const [topics, setTopics] = useState([]);
   const [questionImage, setQuestionImage] = useState(null);
-  const [keepCurrentImage, setKeepCurrentImage] = useState(false);
-  const handleCheckboxChange = (event) => {
-    setKeepCurrentImage(event.target.checked);
-  };
 
   const [formValues, setFormValues] = useState({
     title: "",
@@ -59,7 +55,7 @@ export default function EditQuestionForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const fileInput = document.getElementById("image");
-    const image = !keepCurrentImage ? fileInput.files[0] : undefined;
+    const image = fileInput.files[0];
 
     try {
       const questionData = {
@@ -108,16 +104,6 @@ export default function EditQuestionForm() {
                 width={200}
               />
             )}
-            <div>
-              <label className="d-flex gap-2 align-items-center m-0">
-                <input
-                  type="checkbox"
-                  checked={keepCurrentImage}
-                  onChange={handleCheckboxChange}
-                />
-                Keep current image
-              </label>
-            </div>
           </div>
           <div className="w-100">
             <InputForm
