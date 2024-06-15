@@ -65,7 +65,10 @@ export default function UserProfilePagesLayout() {
                     <Card.Title className="fw-semibold text-primary mb-2">
                       {user.username}
                     </Card.Title>
-                    <div className="d-flex align-items-center mb-3 gap-3 justify-content-center">
+                    <Card.Description className="fw-lighter mb-3 mb-md-0">
+                      {user.name ? user.name : "(No name)"}
+                    </Card.Description>
+                    <div className="d-flex align-items-center mt-3 mb-3 gap-3 justify-content-center">
                       <Button
                         variant={`primary`}
                         className="rounded-3 pe-none btn-sm"

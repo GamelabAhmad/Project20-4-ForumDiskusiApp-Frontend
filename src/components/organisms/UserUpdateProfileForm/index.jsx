@@ -1,36 +1,64 @@
+import { useEffect, useState } from "react";
 import InputForm from "../../molecules/InputForm/index.jsx";
 import Button from "../../atoms/Button/index.jsx";
 import Toasts from "../../molecules/Toasts/index.jsx";
-import { useState } from "react";
-import { updateUser } from "../../../api/userApi.js";
+import { getUserProfile, updateUser } from "../../../api/userApi.js";
+import Cookies from "js-cookie";
+import TypographyText from "../../atoms/TypographyText/index.jsx";
 
 export default function UserUpdateProfileForm() {
   const [formValues, setFormValues] = useState({
     name: "",
     bio: "",
-    image: "",
+    avatar: "",
   });
   const [showToast, setShowToast] = useState(false);
   const [toastContent, setToastContent] = useState({});
+  const username = Cookies.get("user");
+
+  useEffect(() => {
+    async function fetchUserProfile() {
+      try {
+        const response = await getUserProfile();
+        setFormValues({
+          name: response.name,
+          bio: response.bio,
+          avatar: response.avatar,
+        });
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+    fetchUserProfile();
+  }, []);
 
   const handleChange = (event) => {
-    setFormValues({
-      ...formValues,
-      [event.target.name]: event.target.value,
-    });
+    if (event.target.name === "avatar") {
+      setFormValues({
+        ...formValues,
+        [event.target.name]: URL.createObjectURL(event.target.files[0]),
+      });
+    } else {
+      setFormValues({
+        ...formValues,
+        [event.target.name]: event.target.value,
+      });
+    }
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await updateUser(formValues);
+      await updateUser(username, formValues);
       setToastContent({
         title: "Success",
         description: "Profile updated successfully",
         variant: "success",
       });
       setShowToast(true);
-      window.location.href = `/profile/${formValues.name}`;
+      setTimeout(() => {
+        window.location.href = "/dashboard";
+      }, 500);
     } catch (error) {
       console.error("Error:", error);
       setToastContent({
@@ -76,22 +104,33 @@ export default function UserUpdateProfileForm() {
           className={"text-body"}
         />
         <InputForm
-          htmlFor={"image"}
-          id={"image"}
-          name={"image"}
-          label={"Image URL"}
+          htmlFor={"avatar"}
+          id={"avatar"}
+          name={"avatar"}
+          label={"Avatar URL"}
           type={"file"}
-          placeholder={"Your image URL"}
-          value={formValues.image}
-          onChange={handleChange}
+          placeholder={"Your avatar URL"}
           className={"mb-3 text-body"}
+          onChange={handleChange}
         />
+        {formValues.avatar && (
+          <>
+            <TypographyText cssReset={true}>Avatar Preview</TypographyText>
+            <img
+              src={formValues.avatar}
+              alt="Avatar Preview"
+              className="img-fluid py-3"
+              height={200}
+              width={200}
+            />
+          </>
+        )}
         <Button
           type={"submit"}
           variant={"primary"}
           className="rounded-3 w-100 mb-3"
         >
-          Create Forum
+          Update Profile
         </Button>
       </form>
     </>
