@@ -119,7 +119,7 @@ export default function AuthTableAdminTopic() {
             variantBody={"success-subtle"}
             title={"Success"}
             titleColor={"white"}
-            description={"Forum has been successfully deleted."}
+            description={"Topic has been successfully deleted."}
           />
         )}
       </ContainerLayout>
