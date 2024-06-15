@@ -30,12 +30,14 @@ export default function QuestionForm() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const fileInput = document.getElementById("image");
+    const image = fileInput.files[0];
 
     try {
       const questionData = {
         title: formValues.title,
         body: formValues.body,
-        image: formValues.image,
+        image: image,
         topic: formValues.topic,
       };
 
