@@ -120,7 +120,7 @@ export default function DashboardPagesLayout() {
                   <tr key={question.id}>
                     <th scope="row">{index + 1}</th>
                     <td>{question.title}</td>
-                    <td>{question.topic.name}</td>
+                    <td>{question.topic?.name}</td>
                     <td>
                       <Button
                         variant={"info"}
