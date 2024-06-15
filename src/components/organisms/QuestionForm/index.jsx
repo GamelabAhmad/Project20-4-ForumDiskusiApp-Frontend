@@ -3,6 +3,7 @@ import InputForm from "../../molecules/InputForm/index.jsx";
 import Button from "../../atoms/Button/index.jsx";
 import { createQuestion } from "../../../api/questionApi";
 import { getTopics } from "../../../api/topicApi.js";
+import Toasts from "../../molecules/Toasts/index.jsx";
 
 export default function QuestionForm() {
   const [topics, setTopics] = useState([]);
@@ -13,6 +14,9 @@ export default function QuestionForm() {
     image: "",
     topic: "",
   });
+
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const [showFailureToast, setShowFailureToast] = useState(false);
 
   const handleChange = (event) => {
     setFormValues({
@@ -43,9 +47,13 @@ export default function QuestionForm() {
 
       const formData = await createQuestion(questionData);
       console.log("Question created:", formData);
-      window.location.href = `/dashboard`;
+      setShowSuccessToast(true);
+      setTimeout(() => {
+        window.location.href = "/dashboard";
+      }, 1500);
     } catch (error) {
       console.error("Error:", error);
+      setShowFailureToast(true);
     }
   };
 
@@ -123,6 +131,26 @@ export default function QuestionForm() {
           className="mt-1 w-100 rounded-3 mb-4"
         />
       </form>
+      {showSuccessToast && (
+        <Toasts
+          onClose={() => setShowSuccessToast(false)}
+          variant={"success"}
+          variantBody={"success-subtle"}
+          title={"Success"}
+          titleColor={"white"}
+          description={"Question has been successfully posted."}
+        />
+      )}
+      {showFailureToast && (
+        <Toasts
+          onClose={() => setShowFailureToast(false)}
+          variant={"danger"}
+          variantBody={"danger-subtle"}
+          title={"Failure"}
+          titleColor={"white"}
+          description={"You must be logged in to post a question."}
+        />
+      )}
     </>
   );
 }
