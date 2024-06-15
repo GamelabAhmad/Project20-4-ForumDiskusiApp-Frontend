@@ -8,6 +8,7 @@ import { useParams } from "react-router-dom";
 import { getVotes, voteQuestion } from "../../../api/voteApi.js";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import Toasts from "../../molecules/Toasts/index.jsx";
 
 export default function CardPost({
   votes: initialVotes,
@@ -30,6 +31,9 @@ export default function CardPost({
   const [upvoteSuccessful, setUpvoteSuccessful] = useState(false);
   const [votes, setVotes] = useState(initialVotes);
   const user = Cookies.get("user");
+
+  const [showUpvoteSuccessToast, setShowUpvoteSuccessToast] = useState(false);
+  const [showUpvoteFailureToast, setShowUpvoteFailureToast] = useState(false);
 
   useEffect(() => {
     async function checkVoteStatus() {
@@ -58,12 +62,18 @@ export default function CardPost({
       if (response.role === "VOTE") {
         setUpvoteSuccessful(true);
         setVotes(votes + 1);
+        setShowUpvoteSuccessToast(true);
+        setTimeout(() => setShowUpvoteSuccessToast(false), 3000);
       } else if (response.message === "VOTE removed") {
         setUpvoteSuccessful(false);
         setVotes(votes - 1);
+        setShowUpvoteSuccessToast(true);
+        setTimeout(() => setShowUpvoteSuccessToast(false), 3000);
       }
     } catch (error) {
       console.error("Error upvoting question:", error);
+      setShowUpvoteFailureToast(true);
+      setTimeout(() => setShowUpvoteFailureToast(false), 3000);
     }
   };
 
@@ -141,6 +151,26 @@ export default function CardPost({
           </div>
         </div>
       </Card>
+      {showUpvoteSuccessToast && (
+        <Toasts
+          onClose={() => setShowUpvoteSuccessToast(false)}
+          variant={"success"}
+          variantBody={"success-subtle"}
+          title={"Success"}
+          titleColor={"white"}
+          description={"Upvote successful."}
+        />
+      )}
+      {showUpvoteFailureToast && (
+        <Toasts
+          onClose={() => setShowUpvoteFailureToast(false)}
+          variant={"danger"}
+          variantBody={"danger-subtle"}
+          title={"Failure"}
+          titleColor={"white"}
+          description={"Failed to upvote. Please log in to upvote."}
+        />
+      )}
     </>
   );
 }

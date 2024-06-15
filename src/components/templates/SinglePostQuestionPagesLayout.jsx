@@ -22,6 +22,7 @@ import { getUserProfile } from "../../api/userApi.js";
 import Toasts from "../molecules/Toasts/index.jsx";
 import EditCommentForm from "../organisms/EditCommentForm/index.jsx";
 import CreateCommentForm from "../organisms/CreateCommentForm/index.jsx";
+import Cookies from "js-cookie";
 
 export default function SinglePostQuestionPagesLayout() {
   const [post, setPost] = useState(null);
@@ -50,7 +51,10 @@ export default function SinglePostQuestionPagesLayout() {
       try {
         const question = await getQuestionById(id);
         let comments = await getCommentsByPostId(id);
-        const profile = await getUserProfile();
+        let profile = null;
+        if (Cookies.get("user")) {
+          profile = await getUserProfile();
+        }
         comments = comments.sort((a, b) => {
           if (sortOrder === "latest") {
             return new Date(b.commentedAt) - new Date(a.commentedAt);
@@ -243,27 +247,28 @@ export default function SinglePostQuestionPagesLayout() {
                           {timeAgo(comment.commentedAt)}
                         </TypographyText>
                         <div className="d-flex gap-2">
-                          {comment.commentedBy.username ===
-                            profiles.username && (
-                            <>
-                              <Button
-                                variant={"success"}
-                                className="rounded-3 btn-sm mb-1"
-                                onClick={() => handleEditComment(comment)}
-                              >
-                                <IconPlaceholder variant={"pencil"} />
-                              </Button>
-                              <Button
-                                variant={"danger"}
-                                className="rounded-3 btn-sm mb-1"
-                                onClick={() =>
-                                  handleDeleteComment(comment.uuid)
-                                }
-                              >
-                                <IconPlaceholder variant={"trash"} />
-                              </Button>
-                            </>
-                          )}
+                          {Cookies.get("user") &&
+                            comment.commentedBy.username ===
+                              profiles.username && (
+                              <>
+                                <Button
+                                  variant={"success"}
+                                  className="rounded-3 btn-sm mb-1"
+                                  onClick={() => handleEditComment(comment)}
+                                >
+                                  <IconPlaceholder variant={"pencil"} />
+                                </Button>
+                                <Button
+                                  variant={"danger"}
+                                  className="rounded-3 btn-sm mb-1"
+                                  onClick={() =>
+                                    handleDeleteComment(comment.uuid)
+                                  }
+                                >
+                                  <IconPlaceholder variant={"trash"} />
+                                </Button>
+                              </>
+                            )}
                           {showSuccessToast && (
                             <Toasts
                               onClose={() => setShowSuccessToast(false)}
