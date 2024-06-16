@@ -1,11 +1,12 @@
-import { getTopicById } from "../../api/topicApi.js";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
+import { getTopicById } from "../../api/topicApi.js";
+import { getQuestionsByTopic } from "../../api/questionApi.js";
+import { getVotes } from "../../api/voteApi.js";
+import { getCommentsByPostId } from "../../api/commentApi.js";
 import PagesLayout from "./PagesLayout.jsx";
 import ContainerLayout from "./ContainerLayout.jsx";
-import { getQuestionsByTopic } from "../../api/questionApi.js";
 import CardPost from "../organisms/CardPost/index.jsx";
-import { getCommentsByPostId } from "../../api/commentApi.js";
 import Card from "../molecules/Card/index.jsx";
 import Sidebar from "../molecules/Sidebar/index.jsx";
 import CardHeader from "../organisms/CardHeader/index.jsx";
@@ -15,25 +16,42 @@ export default function SinglePostTopicPagesLayout() {
   const [questions, setQuestions] = useState([]);
   const [comments, setComments] = useState({});
   const [topic, setTopic] = useState(null);
+  const [votesData, setVotesData] = useState({});
   const { id } = useParams();
+  const fetchDataRef = useRef(false);
 
   useEffect(() => {
-    async function fetchTopic() {
-      try {
-        const topic = await getTopicById(id);
-        setTopic(topic);
-        const questions = await getQuestionsByTopic(id);
-        setQuestions(questions);
-        const comments = {};
-        for (let question of questions) {
-          comments[question.uuid] = await getCommentsByPostId(question.uuid);
+    if (!fetchDataRef.current) {
+      async function fetchTopic() {
+        try {
+          const topic = await getTopicById(id);
+          setTopic(topic);
+          const questions = await getQuestionsByTopic(id);
+          setQuestions(questions);
+          const comments = {};
+          const votesData = {};
+
+          for (let question of questions) {
+            comments[question.uuid] = await getCommentsByPostId(question.uuid);
+            let votes = await getVotes(question.uuid);
+            let upVotes = votes.filter((vote) => vote.role === "VOTE");
+            let downVotes = votes.filter((vote) => vote.role === "DOWNVOTE");
+
+            votesData[question.uuid] = {
+              votes: upVotes.length,
+              downVotes: downVotes.length,
+            };
+          }
+          setComments(comments);
+          setVotesData(votesData);
+          console.log("votesData", votesData);
+        } catch (error) {
+          console.error("Error fetching topic:", error);
         }
-        setComments(comments);
-      } catch (error) {
-        console.error("Error fetching topic:", error);
       }
+      fetchTopic();
+      fetchDataRef.current = true;
     }
-    fetchTopic();
   }, [id]);
 
   return (
@@ -97,7 +115,8 @@ export default function SinglePostTopicPagesLayout() {
                         username={question.createdBy.username}
                         avatarSrc={question.createdBy.avatar}
                         avatarAlt={question.createdBy.username}
-                        votes={question.QuestionVotes.length}
+                        votes={votesData[question.uuid]?.votes || 0}
+                        downVotes={votesData[question.uuid]?.downVotes || 0}
                         answers={
                           comments[question.uuid]
                             ? comments[question.uuid].length
