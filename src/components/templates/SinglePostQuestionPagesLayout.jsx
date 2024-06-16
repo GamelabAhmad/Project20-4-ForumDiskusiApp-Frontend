@@ -22,12 +22,9 @@ import { getUserProfile } from "../../api/userApi.js";
 import Toasts from "../molecules/Toasts/index.jsx";
 import EditCommentForm from "../organisms/EditCommentForm/index.jsx";
 import CreateCommentForm from "../organisms/CreateCommentForm/index.jsx";
-import {
-  upVoteComment,
-  downVoteComment,
-  getCommentVotes,
-} from "../../api/commentVotesApi.js";
 import Cookies from "js-cookie";
+import CommentVote from "../organisms/CommentVote/index.jsx";
+import { getCommentVotes } from "../../api/commentVotesApi.js";
 
 export default function SinglePostQuestionPagesLayout() {
   const [post, setPost] = useState(null);
@@ -52,26 +49,12 @@ export default function SinglePostQuestionPagesLayout() {
   const [showSuccessToast, setShowSuccessToast] = useState(false);
   const [showFailureToast, setShowFailureToast] = useState(false);
   const [formValues, setFormValues] = useState({ body: "" });
-  const user = Cookies.get("user");
-  const [upVotesComments, setUpVotesComments] = useState(0);
-  const [downVotesComments, setDownVotesComments] = useState(0);
-  const [showUpvoteCommentSuccessToast, setShowUpvoteCommentSuccessToast] =
-    useState(false);
-  const [showUpvoteCommentFailureToast, setShowUpvoteCommentFailureToast] =
-    useState(false);
-  const [showDownvoteCommentSuccessToast, setShowDownvoteCommentSuccessToast] =
-    useState(false);
-  const [showDownvoteCommentFailureToast, setShowDownvoteCommentFailureToast] =
-    useState(false);
-  const [upvoteCommentSuccessful, setUpvoteCommentSuccessful] = useState(false);
-  const [downvoteCommentSuccessful, setDownvoteCommentSuccessful] =
-    useState(false);
-  const [upvoteCommentStatus, setUpvoteCommentStatus] = useState({});
-  const [downvoteCommentStatus, setDownvoteCommentStatus] = useState({});
-  const [showUpvoteSuccessToast, setShowUpvoteSuccessToast] = useState(false);
-  const [showUpvoteFailureToast, setShowUpvoteFailureToast] = useState(false);
+  const [commentVotes, setCommentVotes] = useState({});
+  const [commentsData, setCommentsData] = useState([]);
 
   useEffect(() => {
+    let isMounted = true;
+
     async function fetchQuestionAndComments() {
       try {
         const question = await getQuestionById(id);
@@ -88,21 +71,57 @@ export default function SinglePostQuestionPagesLayout() {
           }
         });
         let votes = await getVotes(id);
-        setVotes(votes.length);
-        let upVotes = votes.filter((vote) => vote.role === "VOTE");
-        setUpVotes(upVotes.length);
-        let downVotes = votes.filter((vote) => vote.role === "DOWNVOTE");
-        setDownVotes(downVotes.length);
-        setProfiles(profile);
-        setPost(question);
-        setComments(comments);
-        setLoading(false);
+        if (isMounted) {
+          setVotes(votes.length);
+          let upVotes = votes.filter((vote) => vote.role === "VOTE");
+          setUpVotes(upVotes.length);
+          let downVotes = votes.filter((vote) => vote.role === "DOWNVOTE");
+          setDownVotes(downVotes.length);
+
+          let commentsData = [];
+          let commentVotesData = {};
+
+          for (let comment of comments) {
+            let commentVotes = await getCommentVotes(comment.uuid);
+            let upVotesComments = commentVotes.filter(
+              (commentVote) => commentVote.role === "VOTE",
+            );
+            let downVotesComments = commentVotes.filter(
+              (commentVote) => commentVote.role === "DOWNVOTE",
+            );
+
+            commentVotesData[comment.uuid] = {
+              upVotes: upVotesComments.length,
+              downVotes: downVotesComments.length,
+            };
+
+            commentsData.push({
+              ...comment,
+              upVotes: upVotesComments.length,
+              downVotes: downVotesComments.length,
+            });
+          }
+
+          setCommentsData(commentsData);
+          setCommentVotes(commentVotesData);
+          setProfiles(profile);
+          setComments(comments);
+          setPost(question);
+          setLoading(false);
+        }
       } catch (error) {
         console.error("Error fetching question and comments:", error);
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     }
+
     fetchQuestionAndComments();
+
+    return () => {
+      isMounted = false;
+    };
   }, [id, sortOrder]);
 
   const handleEditComment = (comment) => {
@@ -169,124 +188,6 @@ export default function SinglePostQuestionPagesLayout() {
     startPage + maxPageNumbersToShow - 1,
     Math.ceil(comments.length / commentsPerPage),
   );
-
-  useEffect(() => {
-    async function checkVoteStatus() {
-      try {
-        const response = await getCommentVotes(id);
-        const upVotesComments = response.filter((vote) => vote.role === "VOTE");
-        const downVotesComments = response.filter(
-          (response) => response.role === "DOWNVOTE",
-        );
-        setUpVotesComments(upVotesComments.length);
-        setDownVotesComments(downVotesComments.length);
-        const userUpvoted = upVotesComments.some(
-          (upVotesComments) => upVotesComments.user.username === user,
-        );
-        const userDownvoted = downVotesComments.some(
-          (downVotesComments) => downVotesComments.user.username === user,
-        );
-        setUpvoteCommentSuccessful(userUpvoted);
-        setDownvoteCommentSuccessful(userDownvoted);
-      } catch (error) {
-        console.error("Error checking vote status:", error);
-      }
-    }
-
-    checkVoteStatus();
-  }, [downVotesComments, id, upVotesComments, user]);
-
-  const handleUpvoteComment = async (id) => {
-    try {
-      if (downvoteCommentSuccessful) {
-        await downVoteComment(id);
-        setDownvoteCommentSuccessful(false);
-        setDownVotesComments(downVotesComments - 1);
-      }
-
-      const response = await upVoteComment(id);
-      console.log("Upvoted comment:", response);
-      if (response.role === "VOTE") {
-        setUpvoteCommentSuccessful(true);
-        setUpVotesComments(upVotesComments + 1);
-        setShowUpvoteCommentSuccessToast(true);
-        setTimeout(() => setShowUpvoteCommentSuccessToast(false), 3000);
-        setUpvoteCommentStatus((prevStatus) => ({ ...prevStatus, [id]: true }));
-      } else if (response.message === "VOTE removed") {
-        setUpvoteCommentSuccessful(false);
-        if (upVotesComments > 0) {
-          setUpVotesComments(upVotesComments - 1);
-        }
-        setShowUpvoteCommentSuccessToast(true);
-        setTimeout(() => setShowUpvoteCommentSuccessToast(false), 3000);
-        setUpvoteCommentStatus((prevStatus) => ({
-          ...prevStatus,
-          [id]: false,
-        }));
-      }
-    } catch (error) {
-      console.error("Error upvoting comment:", error);
-      setShowUpvoteCommentFailureToast(true);
-      setTimeout(() => setShowUpvoteCommentFailureToast(false), 3000);
-    }
-  };
-
-  const handleDownvoteComment = async (id) => {
-    try {
-      if (upvoteCommentSuccessful) {
-        await upVoteComment(id);
-        setUpvoteCommentSuccessful(false);
-        setUpVotesComments(upVotesComments - 1);
-      }
-
-      const response = await downVoteComment(id);
-      console.log("Downvoted comment:", response);
-      if (response.role === "DOWNVOTE") {
-        setDownvoteCommentSuccessful(true);
-        setDownVotesComments(downVotesComments + 1);
-        setShowDownvoteCommentSuccessToast(true);
-        setTimeout(() => setShowDownvoteCommentSuccessToast(false), 3000);
-        setDownvoteCommentStatus((prevStatus) => ({
-          ...prevStatus,
-          [id]: true,
-        }));
-      } else if (response.message === "DOWNVOTE removed") {
-        setDownvoteCommentSuccessful(false);
-        if (downVotesComments > 0) {
-          setDownVotesComments(downVotesComments - 1);
-        }
-        setShowDownvoteCommentSuccessToast(true);
-        setTimeout(() => setShowDownvoteCommentSuccessToast(false), 3000);
-        setDownvoteCommentStatus((prevStatus) => ({
-          ...prevStatus,
-          [id]: false,
-        }));
-      }
-    } catch (error) {
-      console.error("Error downvoting comment:", error);
-      setShowDownvoteCommentFailureToast(true);
-      setTimeout(() => setShowDownvoteCommentFailureToast(false), 3000);
-    }
-  };
-
-  useEffect(() => {
-    async function getAllCommentVotes() {
-      try {
-        const votesComment = await getCommentVotes(id);
-        const upVotesComments = votesComment.filter(
-          (votesComment) => votesComment.role === "VOTE",
-        ).length;
-        const downVotesComments = votesComment.filter(
-          (votesComment) => votesComment.role === "DOWNVOTE",
-        ).length;
-        setUpVotesComments(upVotesComments);
-        setDownVotesComments(downVotesComments);
-      } catch (error) {
-        console.error("Error fetching comment votes:", error);
-      }
-    }
-    getAllCommentVotes();
-  }, [id]);
 
   return (
     <>
@@ -387,131 +288,98 @@ export default function SinglePostQuestionPagesLayout() {
                 )}
               </div>
               {currentComments.map((comment) => (
-                <>
-                  {comment && comment.commentedBy && (
-                    <>
-                      <Card key={comment.uuid} className="mb-3 w-100 p-3">
-                        <div className="d-flex w-100">
-                          <div className="d-grid justify-content-center me-4 row">
-                            <TypographyText
-                              cssReset={true}
-                              className="col align-self-start"
-                            >
-                              {upVotesComments}
-                            </TypographyText>
-                            <TypographyText
-                              cssReset={true}
-                              className="col align-self-end"
-                            >
-                              {downVotesComments}
-                            </TypographyText>
-                          </div>
-                          <div className="w-100">
-                            <div className="d-flex justify-content-between m-0 align-items-center">
-                              <TypographyText cssReset={true}>
-                                {timeAgo(comment.commentedAt)}
-                              </TypographyText>
-                              <div className="d-flex gap-2">
-                                {Cookies.get("user") &&
-                                  comment.commentedBy.username ===
-                                    profiles.username && (
-                                    <>
-                                      <Button
-                                        variant={"success"}
-                                        className="rounded-3 btn-sm mb-1"
-                                        onClick={() =>
-                                          handleEditComment(comment)
-                                        }
-                                      >
-                                        <IconPlaceholder variant={"pencil"} />
-                                      </Button>
-                                      <Button
-                                        variant={"danger"}
-                                        className="rounded-3 btn-sm mb-1"
-                                        onClick={() =>
-                                          handleDeleteComment(comment.uuid)
-                                        }
-                                      >
-                                        <IconPlaceholder variant={"trash"} />
-                                      </Button>
-                                    </>
-                                  )}
-                                {showSuccessToast && (
-                                  <Toasts
-                                    onClose={() => setShowSuccessToast(false)}
-                                    variant={"success"}
-                                    variantBody={"success-subtle"}
-                                    title={"Success"}
-                                    titleColor={"white"}
-                                    description={
-                                      "Comment has been successfully deleted."
-                                    }
-                                  />
-                                )}
-                                {showFailureToast && (
-                                  <Toasts
-                                    onClose={() => setShowFailureToast(false)}
-                                    variant={"danger"}
-                                    variantBody={"danger-subtle"}
-                                    title={"Failure"}
-                                    titleColor={"white"}
-                                    description={"Failed to delete comment."}
-                                  />
-                                )}
-                              </div>
-                            </div>
-                            <SubheadingText
-                              cssReset={true}
-                              className="fw-semibold text-primary"
-                            >
-                              <Link
-                                to={`/profile/${comment.commentedBy.username}`}
-                                className="text-decoration-none"
-                              >
-                                {comment.commentedBy.username}
-                              </Link>
-                            </SubheadingText>
-                            <TypographyText cssReset={true} className="py-2">
-                              {comment.body}
-                            </TypographyText>
-                            <div className="d-flex gap-2 align-items-center m-0 mt-2">
-                              {comment && comment.uuid && (
-                                <>
-                                  <Button
-                                    variant={
-                                      upvoteCommentStatus[comment.uuid]
-                                        ? "success"
-                                        : "primary"
-                                    }
-                                    className={"w-100 w-md-auto rounded-3"}
-                                    onClick={() =>
-                                      handleUpvoteComment(comment.uuid)
-                                    }
-                                  >
-                                    <IconPlaceholder variant={"arrow-up"} />
-                                  </Button>
-                                  <Button
-                                    variant={
-                                      downvoteCommentStatus[comment.uuid]
-                                        ? "danger"
-                                        : "primary"
-                                    }
-                                    className="w-100 w-md-auto rounded-3"
-                                    onClick={() =>
-                                      handleDownvoteComment(comment.uuid)
-                                    }
-                                  >
-                                    <IconPlaceholder variant={"arrow-down"} />
-                                  </Button>
-                                </>
-                              )}
-                            </div>
-                          </div>
+                <Card key={comment.uuid} className="mb-3 w-100 p-3">
+                  <div className="d-flex w-100">
+                    <div className="d-grid justify-content-center me-4 row">
+                      <TypographyText
+                        cssReset={true}
+                        className="col align-self-start"
+                      >
+                        {commentVotes[comment.uuid]?.upVotes || 0}
+                      </TypographyText>
+                      <TypographyText
+                        cssReset={true}
+                        className="col align-self-end"
+                      >
+                        {commentVotes[comment.uuid]?.downVotes || 0}
+                      </TypographyText>
+                    </div>
+                    <div className="w-100">
+                      <div className="d-flex justify-content-between m-0 align-items-center">
+                        <TypographyText cssReset={true}>
+                          {timeAgo(comment.commentedAt)}
+                        </TypographyText>
+                        <div className="d-flex gap-2">
+                          {Cookies.get("user") &&
+                            comment.commentedBy.username ===
+                              profiles.username && (
+                              <>
+                                <Button
+                                  variant={"success"}
+                                  className="rounded-3 btn-sm mb-1"
+                                  onClick={() => handleEditComment(comment)}
+                                >
+                                  <IconPlaceholder variant={"pencil"} />
+                                </Button>
+                                <Button
+                                  variant={"danger"}
+                                  className="rounded-3 btn-sm mb-1"
+                                  onClick={() =>
+                                    handleDeleteComment(comment.uuid)
+                                  }
+                                >
+                                  <IconPlaceholder variant={"trash"} />
+                                </Button>
+                              </>
+                            )}
+                          {showSuccessToast && (
+                            <Toasts
+                              onClose={() => setShowSuccessToast(false)}
+                              variant={"success"}
+                              variantBody={"success-subtle"}
+                              title={"Success"}
+                              titleColor={"white"}
+                              description={
+                                "Comment has been successfully deleted."
+                              }
+                            />
+                          )}
+                          {showFailureToast && (
+                            <Toasts
+                              onClose={() => setShowFailureToast(false)}
+                              variant={"danger"}
+                              variantBody={"danger-subtle"}
+                              title={"Failure"}
+                              titleColor={"white"}
+                              description={"Failed to delete comment."}
+                            />
+                          )}
                         </div>
-                      </Card>
-                    </>
-                  )}
-                </>
+                      </div>
+                      <SubheadingText
+                        cssReset={true}
+                        className="fw-semibold text-primary"
+                      >
+                        <Link
+                          to={`/profile/${comment.commentedBy.username}`}
+                          className="text-decoration-none"
+                        >
+                          {comment.commentedBy.username}
+                        </Link>
+                      </SubheadingText>
+                      <TypographyText cssReset={true} className="py-2">
+                        {comment.body}
+                      </TypographyText>
+                      <div className="d-flex gap-2 align-items-center m-0 mt-2">
+                        {comment && comment.uuid && (
+                          <>
+                            <CommentVote commentId={comment.uuid} />
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </Card>
               ))}
               <div className="justify-content-center d-flex">
                 <ul className="pagination">
@@ -568,26 +436,6 @@ export default function SinglePostQuestionPagesLayout() {
           </div>
         </ContainerLayout>
       </PagesLayout>
-      {showUpvoteSuccessToast && (
-        <Toasts
-          onClose={() => setShowUpvoteSuccessToast(false)}
-          variant={"success"}
-          variantBody={"success-subtle"}
-          title={"Success"}
-          titleColor={"white"}
-          description={"Comment has been successfully upvoted."}
-        />
-      )}
-      {showUpvoteFailureToast && (
-        <Toasts
-          onClose={() => setShowUpvoteFailureToast(false)}
-          variant={"danger"}
-          variantBody={"danger-subtle"}
-          title={"Failure"}
-          titleColor={"white"}
-          description={"Failed to upvote comment."}
-        />
-      )}
     </>
   );
 }
