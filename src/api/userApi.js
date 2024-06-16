@@ -40,7 +40,7 @@ export async function updateUser(username, data) {
       method: "put",
       url: `http://localhost:3000/setting/${username}`,
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${token}`,
       },
       data,

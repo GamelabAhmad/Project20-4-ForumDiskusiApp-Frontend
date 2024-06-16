@@ -10,7 +10,7 @@ export default function UserUpdateProfileForm() {
   const [formValues, setFormValues] = useState({
     name: "",
     bio: "",
-    avatar: "",
+    image: null,
   });
   const [showToast, setShowToast] = useState(false);
   const [toastContent, setToastContent] = useState({});
@@ -23,7 +23,7 @@ export default function UserUpdateProfileForm() {
         setFormValues({
           name: response.name,
           bio: response.bio,
-          avatar: response.avatar,
+          image: response.image,
         });
       } catch (error) {
         console.error("Error:", error);
@@ -33,23 +33,34 @@ export default function UserUpdateProfileForm() {
   }, []);
 
   const handleChange = (event) => {
-    if (event.target.name === "avatar") {
+    const { name, value, files } = event.target;
+    if (name === "image" && files.length > 0) {
       setFormValues({
         ...formValues,
-        [event.target.name]: URL.createObjectURL(event.target.files[0]),
+        image: files[0],
       });
     } else {
       setFormValues({
         ...formValues,
-        [event.target.name]: event.target.value,
+        [name]: value,
       });
     }
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const fileInput = document.getElementById("image");
+    const image = fileInput.files[0];
+
+    const formData = new FormData();
+    formData.append("name", formValues.name);
+    formData.append("bio", formValues.bio);
+    if (formValues.image) {
+      formData.append("image", formValues.image);
+    }
+
     try {
-      await updateUser(username, formValues);
+      await updateUser(username, formData);
       setToastContent({
         title: "Success",
         description: "Profile updated successfully",
@@ -104,20 +115,20 @@ export default function UserUpdateProfileForm() {
           className={"text-body"}
         />
         <InputForm
-          htmlFor={"avatar"}
-          id={"avatar"}
-          name={"avatar"}
+          htmlFor={"image"}
+          id={"image"}
+          name={"image"}
           label={"Avatar URL"}
           type={"file"}
-          placeholder={"Your avatar URL"}
+          placeholder={"Upload your avatar"}
           className={"mb-3 text-body"}
           onChange={handleChange}
         />
-        {formValues.avatar && (
+        {formValues.image && (
           <>
             <TypographyText cssReset={true}>Avatar Preview</TypographyText>
             <img
-              src={formValues.avatar}
+              src={URL.createObjectURL(formValues.image)}
               alt="Avatar Preview"
               className="img-fluid py-3"
               height={200}
