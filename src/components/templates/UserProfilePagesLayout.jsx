@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getUserByUsername } from "../../api/userApi.js";
 import PagesLayout from "./PagesLayout.jsx";
@@ -9,7 +9,6 @@ import { getQuestionByUser } from "../../api/questionApi.js";
 import Card from "../molecules/Card/index.jsx";
 import CardPost from "../organisms/CardPost/index.jsx";
 import Button from "../atoms/Button/index.jsx";
-import { getCommentsByPostId } from "../../api/commentApi.js";
 import {
   followUser,
   getFollowersUser,
@@ -18,6 +17,8 @@ import {
 } from "../../api/followApi.js";
 import Toasts from "../molecules/Toasts/index.jsx";
 import Cookies from "js-cookie";
+import { getVotes } from "../../api/voteApi.js";
+import { getCommentsByPostId } from "../../api/commentApi.js";
 
 export default function UserProfilePagesLayout() {
   const [questions, setQuestions] = useState([]);
@@ -31,33 +32,58 @@ export default function UserProfilePagesLayout() {
     useState(false);
   const [showGuestToast, setShowGuestToast] = useState(false);
   const { id } = useParams();
+  const [votesData, setVotesData] = useState({});
+  const fetchDataRef = useRef(false);
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const fetchedUser = await getUserByUsername(id);
-        const comments = {};
-        const getFollowers = await getFollowersUser(fetchedUser.uuid);
-        const getFollowing = await getFollowingUser(fetchedUser.uuid);
-        for (let question of questions) {
-          comments[question.uuid] = await getCommentsByPostId(question.uuid);
-        }
-        setFollow(follow);
-        setGetFollowers(getFollowers);
-        setGetFollowing(getFollowing);
-        setComments(comments);
-        setUser(fetchedUser);
-        if (fetchedUser) {
-          const fetchedQuestions = await getQuestionByUser(fetchedUser.uuid);
-          setQuestions(fetchedQuestions);
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    }
+    if (!fetchDataRef.current) {
+      async function fetchData() {
+        try {
+          const fetchedUser = await getUserByUsername(id);
+          const getFollowers = await getFollowersUser(fetchedUser.uuid);
+          const getFollowing = await getFollowingUser(fetchedUser.uuid);
+          const votesData = {};
 
-    fetchData();
-  }, [id, questions]);
+          if (fetchedUser) {
+            const fetchedQuestions = await getQuestionByUser(fetchedUser.uuid);
+            for (let question of fetchedQuestions) {
+              comments[question.uuid] = await getCommentsByPostId(
+                question.uuid,
+              );
+              let votes = await getVotes(question.uuid);
+              let upVotes = votes.filter((vote) => vote.role === "VOTE");
+              let downVotes = votes.filter((vote) => vote.role === "DOWNVOTE");
+
+              votesData[question.uuid] = {
+                votes: upVotes.length,
+                downVotes: downVotes.length,
+              };
+            }
+            setQuestions(fetchedQuestions);
+          }
+
+          console.log(
+            "Votes data for user",
+            fetchedUser.username,
+            ":",
+            votesData,
+          );
+
+          setVotesData(votesData);
+          setFollow(follow);
+          setComments(comments);
+          setGetFollowers(getFollowers);
+          setGetFollowing(getFollowing);
+          setUser(fetchedUser);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      }
+
+      fetchData();
+      fetchDataRef.current = true;
+    }
+  }, [id]);
 
   const handleFollow = async () => {
     const token = Cookies.get("jwt");
@@ -169,7 +195,8 @@ export default function UserProfilePagesLayout() {
                     username={question.createdBy.username}
                     avatarSrc={question.createdBy.avatar}
                     avatarAlt={question.createdBy.username}
-                    votes={question.QuestionVotes.length}
+                    votes={votesData[question.uuid]?.votes || 0}
+                    downvotes={votesData[question.uuid]?.downVotes || 0}
                     answers={
                       comments[question.uuid]
                         ? comments[question.uuid].length
