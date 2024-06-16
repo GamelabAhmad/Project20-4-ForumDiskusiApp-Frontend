@@ -12,7 +12,6 @@ import { Link, NavLink } from "react-router-dom";
 import { deleteQuestion } from "../../api/questionApi.js";
 import Toasts from "../molecules/Toasts/index.jsx";
 import Modal from "../molecules/Modal/index.jsx";
-import { getUserProfile } from "../../api/userApi.js";
 
 export default function DashboardPagesLayout() {
   const user = Cookies.get("user");
@@ -21,20 +20,6 @@ export default function DashboardPagesLayout() {
   const [showDeleteToast, setShowDeleteToast] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageUrls, setImageUrls] = useState([]);
-  const [userProfile, setUserProfile] = useState(null);
-
-  const fetchUserProfile = async () => {
-    try {
-      const profile = await getUserProfile();
-      setUserProfile(profile);
-    } catch (error) {
-      console.error("Error fetching user profile:", error);
-    }
-  };
-
-  const handleEditProfileClick = () => {
-    fetchUserProfile();
-  };
 
   const handleViewClick = (question) => {
     setCurrentQuestion(question);
@@ -88,21 +73,6 @@ export default function DashboardPagesLayout() {
               <span className="text-primary">{user}</span>! Here you can view
               your recent activities.
             </TypographyText>
-          </div>
-          <div className="mt-1 mb-3">
-            <NavLink
-              to={`/profile/${user}/edit`}
-              className="text-decoration-none"
-            >
-              <Button
-                variant={"primary"}
-                className="btn-sm d-flex gap-2 rounded-3"
-                onClick={handleEditProfileClick}
-              >
-                <IconPlaceholder variant={"pencil"} />
-                Edit Profile
-              </Button>
-            </NavLink>
           </div>
           <div className="d-flex justify-content-between align-items-center mb-3">
             <SubheadingText cssReset={true} className="fw-semibold ">

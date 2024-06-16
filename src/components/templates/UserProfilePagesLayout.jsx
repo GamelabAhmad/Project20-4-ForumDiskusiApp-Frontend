@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { getUserByUsername } from "../../api/userApi.js";
+import { Link, NavLink, useParams } from "react-router-dom";
+import { getUserByUsername, getUserProfile } from "../../api/userApi.js";
 import PagesLayout from "./PagesLayout.jsx";
 import ContainerLayout from "./ContainerLayout.jsx";
 import HeadingText from "../atoms/HeadingText/index.jsx";
@@ -19,6 +19,7 @@ import Toasts from "../molecules/Toasts/index.jsx";
 import Cookies from "js-cookie";
 import { getVotes } from "../../api/voteApi.js";
 import { getCommentsByPostId } from "../../api/commentApi.js";
+import IconPlaceholder from "../atoms/IconPlaceholder/index.jsx";
 
 export default function UserProfilePagesLayout() {
   const [questions, setQuestions] = useState([]);
@@ -33,10 +34,23 @@ export default function UserProfilePagesLayout() {
   const [showGuestToast, setShowGuestToast] = useState(false);
   const { id } = useParams();
   const [votesData, setVotesData] = useState({});
+  const [userProfile, setUserProfile] = useState(null);
   const fetchDataRef = useRef(false);
-
   const loggedInUser = Cookies.get("user");
   const isSameUser = loggedInUser === id;
+
+  const fetchUserProfile = async () => {
+    try {
+      const profile = await getUserProfile();
+      setUserProfile(profile);
+    } catch (error) {
+      console.error("Error fetching user profile:", error);
+    }
+  };
+
+  const handleEditProfileClick = () => {
+    fetchUserProfile();
+  };
 
   useEffect(() => {
     if (!fetchDataRef.current) {
@@ -191,6 +205,24 @@ export default function UserProfilePagesLayout() {
                         </Button>
                       </div>
                     </>
+                  )}
+                  {isSameUser && (
+                    <div className="">
+                      <NavLink
+                        to={`/profile/${user}/edit`}
+                        className="text-decoration-none"
+                      >
+                        <Button
+                          className="btn btn-primary w-100 w-md-auto btn-sm rounded-3 d-flex gap-2"
+                          onClick={handleEditProfileClick}
+                        >
+                          <span className="text-center mx-auto d-flex gap-2">
+                            <IconPlaceholder variant={"pencil"} />
+                            Edit Profile
+                          </span>
+                        </Button>
+                      </NavLink>
+                    </div>
                   )}
                 </div>
               </Card>

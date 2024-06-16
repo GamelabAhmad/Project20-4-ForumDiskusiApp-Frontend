@@ -68,7 +68,7 @@ export default function UserUpdateProfileForm() {
       });
       setShowToast(true);
       setTimeout(() => {
-        window.location.href = "/dashboard";
+        window.location.href = `/profile/${username}`;
       }, 500);
     } catch (error) {
       console.error("Error:", error);
