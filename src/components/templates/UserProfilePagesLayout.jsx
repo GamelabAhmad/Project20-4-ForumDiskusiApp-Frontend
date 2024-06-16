@@ -35,6 +35,9 @@ export default function UserProfilePagesLayout() {
   const [votesData, setVotesData] = useState({});
   const fetchDataRef = useRef(false);
 
+  const loggedInUser = Cookies.get("user");
+  const isSameUser = loggedInUser === id;
+
   useEffect(() => {
     if (!fetchDataRef.current) {
       async function fetchData() {
@@ -89,6 +92,10 @@ export default function UserProfilePagesLayout() {
       setShowGuestToast(true);
       return;
     }
+    if (isSameUser) {
+      console.error("You cannot follow yourself.");
+      return;
+    }
     try {
       await followUser(user.uuid);
       const updatedFollowers = await getFollowersUser(user.uuid);
@@ -104,6 +111,10 @@ export default function UserProfilePagesLayout() {
     const token = Cookies.get("jwt");
     if (!token) {
       setShowGuestToast(true);
+      return;
+    }
+    if (isSameUser) {
+      console.error("You cannot unfollow yourself.");
       return;
     }
     try {
@@ -159,24 +170,28 @@ export default function UserProfilePagesLayout() {
                       </Card.Description>
                     </div>
                   </div>
-                  <div className="">
-                    <Button
-                      variant={"outline-primary"}
-                      className="w-100 w-md-auto"
-                      onClick={handleUnfollow}
-                    >
-                      Unfollow
-                    </Button>
-                  </div>
-                  <div className="">
-                    <Button
-                      variant={"primary"}
-                      className="w-100 w-md-auto"
-                      onClick={handleFollow}
-                    >
-                      Follow
-                    </Button>
-                  </div>
+                  {!isSameUser && (
+                    <>
+                      <div className="">
+                        <Button
+                          variant={"outline-primary"}
+                          className="w-100 w-md-auto"
+                          onClick={handleUnfollow}
+                        >
+                          Unfollow
+                        </Button>
+                      </div>
+                      <div className="">
+                        <Button
+                          variant={"primary"}
+                          className="w-100 w-md-auto"
+                          onClick={handleFollow}
+                        >
+                          Follow
+                        </Button>
+                      </div>
+                    </>
+                  )}
                 </div>
               </Card>
               {questions.length > 0 ? (
