@@ -173,6 +173,7 @@ export default function SinglePostQuestionPagesLayout() {
   const handleSortOrderChange = (order, event) => {
     event.preventDefault();
     setSortOrder(order);
+    setCurrentPage(1);
   };
 
   const handleNewComment = (newComment) => {
