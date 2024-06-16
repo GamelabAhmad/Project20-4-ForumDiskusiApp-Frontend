@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { getQuestions } from "../../api/questionApi.js";
 import { getCommentsByPostId } from "../../api/commentApi.js";
 import Sidebar from "../molecules/Sidebar/index.jsx";
@@ -10,35 +10,59 @@ import CardPost from "../organisms/CardPost/index.jsx";
 import SkeletonPlaceholder from "../atoms/SkeletonPlaceholder/index.jsx";
 import { Link } from "react-router-dom";
 import { getVotes } from "../../api/voteApi.js";
-import Button from "../atoms/Button/index.jsx";
 
 export default function QuestionPagesLayout() {
   const [userPosts, setUserPosts] = useState([]);
   const [comments, setComments] = useState({});
   const [loading, setLoading] = useState(true);
-  const [votes, setVotes] = useState(0);
+  const [votesData, setVotesData] = useState({});
+  const fetchQuestionsAndCommentsRef = useRef(false);
 
   useEffect(() => {
-    async function fetchQuestionsAndComments() {
-      try {
-        const questions = await getQuestions();
-        setUserPosts(questions);
-        const comments = {};
-        const votes = {};
-        for (let question of questions) {
-          comments[question.uuid] = await getCommentsByPostId(question.uuid);
-          votes[question.uuid] = await getVotes(question.uuid);
-        }
-        setComments(comments);
-        setVotes(votes);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching questions and comments:", error);
-        setLoading(false);
-      }
-    }
+    if (!fetchQuestionsAndCommentsRef.current) {
+      async function fetchQuestionsAndComments() {
+        try {
+          const questions = await getQuestions();
+          const comments = {};
+          const votesData = {};
+          for (let question of questions) {
+            comments[question.uuid] = await getCommentsByPostId(question.uuid);
+            let votes = await getVotes(question.uuid);
+            let upVotes = votes.filter((vote) => vote.role === "VOTE");
+            let downVotes = votes.filter((vote) => vote.role === "DOWNVOTE");
 
-    fetchQuestionsAndComments();
+            votesData[question.uuid] = {
+              votes: upVotes.length,
+              downVotes: downVotes.length,
+            };
+          }
+          setUserPosts(questions);
+          setComments(comments);
+          setVotesData(votesData);
+          setLoading(false);
+          console.log("Votes data:", votesData);
+          for (let question of questions) {
+            console.log(
+              "Upvotes for question",
+              question.uuid,
+              ":",
+              votesData[question.uuid].votes,
+            );
+            console.log(
+              "Downvotes for question",
+              question.uuid,
+              ":",
+              votesData[question.uuid].downVotes,
+            );
+          }
+        } catch (error) {
+          console.error("Error fetching questions and comments:", error);
+          setLoading(false);
+        }
+      }
+      fetchQuestionsAndComments();
+      fetchQuestionsAndCommentsRef.current = true;
+    }
   }, []);
 
   return (
@@ -126,7 +150,8 @@ export default function QuestionPagesLayout() {
                     username={post.createdBy.username}
                     avatarSrc={post.createdBy.avatar}
                     avatarAlt={post.createdBy.username}
-                    votes={votes[post.uuid] ? votes[post.uuid].length : 0}
+                    votes={votesData[post.uuid]?.votes || 0}
+                    downvotes={votesData[post.uuid]?.downVotes || 0}
                     answers={comments[post.uuid].length || 0}
                     showImage={false}
                     showButtons={false}
