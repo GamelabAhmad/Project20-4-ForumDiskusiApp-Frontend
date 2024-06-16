@@ -41,20 +41,6 @@ export default function QuestionPagesLayout() {
           setVotesData(votesData);
           setLoading(false);
           console.log("Votes data:", votesData);
-          for (let question of questions) {
-            console.log(
-              "Upvotes for question",
-              question.uuid,
-              ":",
-              votesData[question.uuid].votes,
-            );
-            console.log(
-              "Downvotes for question",
-              question.uuid,
-              ":",
-              votesData[question.uuid].downVotes,
-            );
-          }
         } catch (error) {
           console.error("Error fetching questions and comments:", error);
           setLoading(false);

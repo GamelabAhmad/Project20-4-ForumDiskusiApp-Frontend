@@ -61,14 +61,12 @@ export default function UserProfilePagesLayout() {
             }
             setQuestions(fetchedQuestions);
           }
-
           console.log(
             "Votes data for user",
             fetchedUser.username,
             ":",
             votesData,
           );
-
           setVotesData(votesData);
           setFollow(follow);
           setComments(comments);
