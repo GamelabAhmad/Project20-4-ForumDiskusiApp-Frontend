@@ -6,25 +6,42 @@ import CardHeader from "../organisms/CardHeader/index.jsx";
 import Button from "../atoms/Button/index.jsx";
 import { getForums } from "../../api/forumApi.js";
 import { useState, useEffect } from "react";
+import { joinForum, leaveForum } from "../../api/memberApi.js";
 
 export default function ForumPagesLayout() {
   const [forums, setForums] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchForum() {
       try {
         const forums = await getForums();
         setForums(forums);
-        setLoading(false);
       } catch (error) {
         console.error("Error fetching forum:", error);
-        setLoading(false);
       }
     }
 
     fetchForum();
   }, []);
+
+  const handleJoinForum = async (uuid) => {
+    try {
+      await joinForum(uuid);
+      console.log("Joined forum!");
+    } catch (error) {
+      console.error("Error joining forum:", error);
+    }
+  };
+
+  const handleLeaveForum = async (uuid) => {
+    try {
+      await leaveForum(uuid);
+      console.log("Left forum!");
+    } catch (error) {
+      console.error("Error leaving forum:", error);
+    }
+  };
+
   return (
     <>
       <PagesLayout>
@@ -57,7 +74,26 @@ export default function ForumPagesLayout() {
                         {forum.name}
                       </Card.Title>
                       <Card.Description>{forum.description}</Card.Description>
-                      <Button variant="primary">Join</Button>
+                      <Button
+                        className="btn btn-primary"
+                        onClick={() => handleLeaveForum(forum.uuid)}
+                      >
+                        Leave
+                      </Button>
+                      <Button
+                        className="btn btn-primary"
+                        onClick={() =>
+                          (window.location.href = `/forum/${forum.uuid}`)
+                        }
+                      >
+                        View Forum
+                      </Button>
+                      <Button
+                        className="btn btn-primary"
+                        onClick={() => handleJoinForum(forum.uuid)}
+                      >
+                        Join
+                      </Button>
                     </Card>
                   ))}
                 </div>
