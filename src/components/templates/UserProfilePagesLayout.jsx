@@ -91,6 +91,8 @@ export default function UserProfilePagesLayout() {
     }
     try {
       await followUser(user.uuid);
+      const updatedFollowers = await getFollowersUser(user.uuid);
+      setGetFollowers(updatedFollowers);
       setShowFollowSuccessToast(true);
       console.log("Followed user" + user.username);
     } catch (error) {
@@ -106,6 +108,8 @@ export default function UserProfilePagesLayout() {
     }
     try {
       await unfollowUser(user.uuid);
+      const updatedFollowers = await getFollowersUser(user.uuid);
+      setGetFollowers(updatedFollowers);
       setShowUnfollowSuccessToast(true);
       console.log("Unfollowed user" + user.username);
     } catch (error) {
