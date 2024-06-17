@@ -7,6 +7,7 @@ import AuthTableAdminTopic from "../organisms/AuthTableAdminTopic/index.jsx";
 import AuthTableAdminQuestion from "../organisms/AuthTableAdminQuestion/index.jsx";
 import TypographyText from "../atoms/TypographyText/index.jsx";
 import IconPlaceholder from "../atoms/IconPlaceholder/index.jsx";
+import AuthTableAdminDiscussion from "../organisms/AuthTableAdminDiscussion/index.jsx";
 
 export default function AuthAdminPagesLayout() {
   const user = Cookies.get("user");
@@ -77,6 +78,21 @@ export default function AuthAdminPagesLayout() {
               <div className="collapse w-100 mb-3" id="collapseTopic">
                 <div className="card card-body table-responsive">
                   <AuthTableAdminTopic />
+                </div>
+              </div>
+              <button
+                className="btn btn-primary my-3"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapseDiscussion"
+                aria-expanded="false"
+                aria-controls="collapseDiscussion"
+              >
+                Toggle Topic Table
+              </button>
+              <div className="collapse w-100 mb-3" id="collapseDiscussion">
+                <div className="card card-body table-responsive">
+                  <AuthTableAdminDiscussion />
                 </div>
               </div>
             </div>

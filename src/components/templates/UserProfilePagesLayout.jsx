@@ -227,36 +227,38 @@ export default function UserProfilePagesLayout() {
                 </div>
               </Card>
               {questions.length > 0 ? (
-                questions.map((question) => (
-                  <CardPost
-                    key={question.uuid}
-                    title={
-                      <Link
-                        to={`/question/${question.uuid}`}
-                        className="text-decoration-none"
-                      >
-                        {question.title}
-                      </Link>
-                    }
-                    topic={question.topic?.name}
-                    description={question.body}
-                    createdAt={new Date(question.createdAt).toLocaleString()}
-                    username={question.createdBy.username}
-                    avatarSrc={question.createdBy.avatar}
-                    avatarAlt={question.createdBy.username}
-                    votes={votesData[question.uuid]?.votes || 0}
-                    downvotes={votesData[question.uuid]?.downVotes || 0}
-                    answers={
-                      comments[question.uuid]
-                        ? comments[question.uuid].length
-                        : 0
-                    }
-                    views={question.views || 0}
-                    showImage={false}
-                    showButtons={false}
-                    className={"mb-3"}
-                  />
-                ))
+                questions
+                  .filter((question) => question.forumID === null)
+                  .map((question) => (
+                    <CardPost
+                      key={question.uuid}
+                      title={
+                        <Link
+                          to={`/question/${question.uuid}`}
+                          className="text-decoration-none"
+                        >
+                          {question.title}
+                        </Link>
+                      }
+                      topic={question.topic?.name}
+                      description={question.body}
+                      createdAt={new Date(question.createdAt).toLocaleString()}
+                      username={question.createdBy.username}
+                      avatarSrc={question.createdBy.avatar}
+                      avatarAlt={question.createdBy.username}
+                      votes={votesData[question.uuid]?.votes || 0}
+                      downvotes={votesData[question.uuid]?.downVotes || 0}
+                      answers={
+                        comments[question.uuid]
+                          ? comments[question.uuid].length
+                          : 0
+                      }
+                      views={question.views || 0}
+                      showImage={false}
+                      showButtons={false}
+                      className={"mb-3"}
+                    />
+                  ))
               ) : (
                 <Card>
                   <Card.Title className="d-flex align-items-center justify-content-center fw-semibold">

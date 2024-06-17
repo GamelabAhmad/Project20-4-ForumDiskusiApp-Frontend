@@ -12,11 +12,14 @@ import { Link, NavLink } from "react-router-dom";
 import { deleteQuestion } from "../../api/questionApi.js";
 import Toasts from "../molecules/Toasts/index.jsx";
 import Modal from "../molecules/Modal/index.jsx";
+import { deleteForum } from "../../api/forumApi.js";
 
 export default function DashboardPagesLayout() {
   const user = Cookies.get("user");
   const [questions, setQuestions] = useState([]);
+  const [forums, setForums] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(null);
+  const [currentForum, setCurrentForum] = useState(null);
   const [showDeleteToast, setShowDeleteToast] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageUrls, setImageUrls] = useState([]);
@@ -26,11 +29,31 @@ export default function DashboardPagesLayout() {
     setIsModalOpen(true);
   };
 
+  const handleViewForumClick = (forum) => {
+    setCurrentForum(forum);
+    setIsModalOpen(true);
+  };
+
   const handleDeleteClick = async (uuid) => {
     if (uuid) {
       try {
         await deleteQuestion(uuid);
         setQuestions(questions.filter((question) => question.uuid !== uuid));
+        setShowDeleteToast(true);
+        setTimeout(() => setShowDeleteToast(false), 3000);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    } else {
+      console.error("Error: uuid is undefined");
+    }
+  };
+
+  const handleDeleteForumClick = async (uuid) => {
+    if (uuid) {
+      try {
+        await deleteForum(uuid);
+        setForums(forums.filter((forum) => forum.uuid !== uuid));
         setShowDeleteToast(true);
         setTimeout(() => setShowDeleteToast(false), 3000);
       } catch (error) {
@@ -91,7 +114,7 @@ export default function DashboardPagesLayout() {
               </Button>
             </Link>
           </div>
-          <div className="table-responsive">
+          <div className="table-responsive mb-3">
             <table className="table table-hover table-striped">
               <thead>
                 <tr>
@@ -105,83 +128,197 @@ export default function DashboardPagesLayout() {
                 </tr>
               </thead>
               <tbody>
-                {questions.map((question, index) => (
-                  <tr key={question.id}>
-                    <th scope="row">{index + 1}</th>
-                    <td>{question.title}</td>
-                    <td>{question.topic?.name}</td>
-                    <td>
-                      <Button
-                        variant={"info"}
-                        className="btn-sm d-flex gap-2 rounded-3"
-                        data-bs-toggle="modal"
-                        data-bs-target="#exampleModal"
-                        onClick={() => handleViewClick(question)}
-                      >
-                        <IconPlaceholder variant={"eye"} />
-                        View Images
-                      </Button>
-                      {isModalOpen && (
-                        <div className="modal-backdrop fade show"></div>
-                      )}
-                      <Modal
-                        isOpen={isModalOpen}
-                        onClose={() => setIsModalOpen(false)}
-                        title={
-                          currentQuestion
-                            ? `Images for question ${currentQuestion.title}`
-                            : "Images"
-                        }
-                      >
-                        {currentQuestion && (
-                          <>
-                            <img
-                              src={currentQuestion.imageUrl}
-                              alt="Question"
-                              className="object-fit-contain w-100"
-                            />
-                          </>
-                        )}
-                      </Modal>
-                    </td>
-                    <td>
-                      <div className="d-flex gap-2 justify-content-center">
-                        <Link
-                          to={`/question/${question.uuid}`}
-                          className="text-decoration-none"
-                        >
-                          <Button
-                            variant={"success"}
-                            className="btn-sm d-flex gap-2 rounded-3"
-                          >
-                            <IconPlaceholder variant={"eye"} />
-                            View
-                          </Button>
-                        </Link>
-                        <Link
-                          to={`/dashboard/edit-question/${question.uuid}`}
-                          className="text-decoration-none"
-                        >
-                          <Button
-                            variant={"warning"}
-                            className="btn-sm d-flex gap-2 rounded-3"
-                          >
-                            <IconPlaceholder variant={"pencil"} />
-                            Edit
-                          </Button>
-                        </Link>
+                {questions
+                  .filter((question) => question.forum === null)
+                  .map((question, index) => (
+                    <tr key={question.id}>
+                      <th scope="row">{index + 1}</th>
+                      <td>{question.title}</td>
+                      <td>{question.topic?.name}</td>
+                      <td>
                         <Button
-                          variant={"danger"}
+                          variant={"info"}
                           className="btn-sm d-flex gap-2 rounded-3"
-                          onClick={() => handleDeleteClick(question.uuid)}
+                          data-bs-toggle="modal"
+                          data-bs-target="#exampleModal"
+                          onClick={() => handleViewClick(question)}
                         >
-                          <IconPlaceholder variant={"trash"} />
-                          Delete
+                          <IconPlaceholder variant={"eye"} />
+                          View Images
                         </Button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                        {isModalOpen && (
+                          <div className="modal-backdrop fade show"></div>
+                        )}
+                        <Modal
+                          isOpen={isModalOpen}
+                          onClose={() => setIsModalOpen(false)}
+                          title={
+                            currentQuestion
+                              ? `Images for question ${currentQuestion.title}`
+                              : "Images"
+                          }
+                        >
+                          {currentQuestion && (
+                            <>
+                              <img
+                                src={currentQuestion.imageUrl}
+                                alt="Question"
+                                className="object-fit-contain w-100"
+                              />
+                            </>
+                          )}
+                        </Modal>
+                      </td>
+                      <td>
+                        <div className="d-flex gap-2 justify-content-center">
+                          <Link
+                            to={`/question/${question.uuid}`}
+                            className="text-decoration-none"
+                          >
+                            <Button
+                              variant={"success"}
+                              className="btn-sm d-flex gap-2 rounded-3"
+                            >
+                              <IconPlaceholder variant={"eye"} />
+                              View
+                            </Button>
+                          </Link>
+                          <Link
+                            to={`/dashboard/edit-question/${question.uuid}`}
+                            className="text-decoration-none"
+                          >
+                            <Button
+                              variant={"warning"}
+                              className="btn-sm d-flex gap-2 rounded-3"
+                            >
+                              <IconPlaceholder variant={"pencil"} />
+                              Edit
+                            </Button>
+                          </Link>
+                          <Button
+                            variant={"danger"}
+                            className="btn-sm d-flex gap-2 rounded-3"
+                            onClick={() => handleDeleteClick(question.uuid)}
+                          >
+                            <IconPlaceholder variant={"trash"} />
+                            Delete
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <SubheadingText cssReset={true} className="fw-semibold ">
+              Discussion Management
+            </SubheadingText>
+            <Link to={"/forum"} className="text-decoration-none">
+              <Button
+                variant={"primary"}
+                className="btn-sm d-flex gap-2 rounded-3"
+              >
+                <IconPlaceholder variant={"arrow-right"} />
+                See a Forum Discussion
+              </Button>
+            </Link>
+          </div>
+          <div className="table-responsive">
+            <table className="table table-hover table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Discussion</th>
+                  <th scope="col">Forum</th>
+                  <th scope="col">Topic</th>
+                  <th scope="col">Image</th>
+                  <th scope="col" className="text-center">
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {questions
+                  .filter((question) => question.forum !== null)
+                  .map((question, index) => (
+                    <tr key={question.id}>
+                      <th scope="row">{index + 1}</th>
+                      <td>{question.title}</td>
+                      <td>{question.forum?.name}</td>
+                      <td>{question.topic?.name}</td>
+                      <td>
+                        <Button
+                          variant={"info"}
+                          className="btn-sm d-flex gap-2 rounded-3"
+                          data-bs-toggle="modal"
+                          data-bs-target="#exampleModal"
+                          onClick={() => handleViewClick(question)}
+                        >
+                          <IconPlaceholder variant={"eye"} />
+                          View Images
+                        </Button>
+                        {isModalOpen && (
+                          <div className="modal-backdrop fade show"></div>
+                        )}
+                        <Modal
+                          isOpen={isModalOpen}
+                          onClose={() => setIsModalOpen(false)}
+                          title={
+                            currentQuestion
+                              ? `Images for question ${currentQuestion.title}`
+                              : "Images"
+                          }
+                        >
+                          {currentQuestion && (
+                            <>
+                              <img
+                                src={currentQuestion.imageUrl}
+                                alt="Question"
+                                className="object-fit-contain w-100"
+                              />
+                            </>
+                          )}
+                        </Modal>
+                      </td>
+                      <td>
+                        <div className="d-flex gap-2 justify-content-center">
+                          <Link
+                            to={`/question/${question.uuid}`}
+                            className="text-decoration-none"
+                          >
+                            <Button
+                              variant={"success"}
+                              className="btn-sm d-flex gap-2 rounded-3"
+                            >
+                              <IconPlaceholder variant={"eye"} />
+                              View
+                            </Button>
+                          </Link>
+                          <Link
+                            to={`/dashboard/edit-question/${question.uuid}`}
+                            className="text-decoration-none"
+                          >
+                            <Button
+                              variant={"warning"}
+                              className="btn-sm d-flex gap-2 rounded-3"
+                            >
+                              <IconPlaceholder variant={"pencil"} />
+                              Edit
+                            </Button>
+                          </Link>
+                          <Button
+                            variant={"danger"}
+                            className="btn-sm d-flex gap-2 rounded-3"
+                            onClick={() => handleDeleteClick(question.uuid)}
+                          >
+                            <IconPlaceholder variant={"trash"} />
+                            Delete
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>
