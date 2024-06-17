@@ -58,8 +58,7 @@ export default function ForumPagesLayout() {
                 description={
                   "This is the list of forums that have been created by the community. Feel free to join any of them! If you have a forum, please talk to the admin to create one! We are here to help!"
                 }
-                buttonTitle={"Create a Discussion"}
-                toastsMessage={"create a discussion"}
+                showButton={false}
               />
             </div>
             <div className="col-12 col-lg-10 ms-auto mb-4">
