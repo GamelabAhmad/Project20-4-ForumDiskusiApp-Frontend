@@ -71,18 +71,35 @@ export default function SinglePostTopicPagesLayout() {
                   description={
                     <>
                       <TypographyText>
-                        Total questions: {questions.length}
+                        Total questions:{" "}
+                        {
+                          questions.filter(
+                            (question) => question.forumID === null,
+                          ).length
+                        }
                       </TypographyText>
                       <TypographyText>
                         Oldest question:{" "}
-                        {questions.length > 0
-                          ? questions[0].title
+                        {questions.filter(
+                          (question) => question.forumID === null,
+                        ).length > 0
+                          ? questions.filter(
+                              (question) => question.forumID === null,
+                            )[0].title
                           : "No questions found"}
                       </TypographyText>
                       <TypographyText>
                         Newest question:{" "}
-                        {questions.length > 0
-                          ? questions[questions.length - 1].title
+                        {questions.filter(
+                          (question) => question.forumID === null,
+                        ).length > 0
+                          ? questions.filter(
+                              (question) => question.forumID === null,
+                            )[
+                              questions.filter(
+                                (question) => question.forumID === null,
+                              ).length - 1
+                            ].title
                           : "No questions found"}
                       </TypographyText>
                     </>
