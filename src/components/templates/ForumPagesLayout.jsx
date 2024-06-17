@@ -6,21 +6,35 @@ import CardHeader from "../organisms/CardHeader/index.jsx";
 import Button from "../atoms/Button/index.jsx";
 import { getForums } from "../../api/forumApi.js";
 import { useState, useEffect } from "react";
-import { joinForum, leaveForum } from "../../api/memberApi.js";
+import { joinForum, leaveForum, userMemberForum } from "../../api/memberApi.js";
 import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
 import Toasts from "../molecules/Toasts/index.jsx";
+import IconPlaceholder from "../atoms/IconPlaceholder/index.jsx";
 
 export default function ForumPagesLayout() {
   const [forums, setForums] = useState([]);
   const [showToast, setShowToast] = useState(false);
+  const [showJoinSuccessToast, setShowJoinSuccessToast] = useState(false);
+  const [showLeaveSuccessToast, setShowLeaveSuccessToast] = useState(false);
+  const [showErrorToast, setShowErrorToast] = useState(false);
   const token = Cookies.get("jwt");
 
   useEffect(() => {
     async function fetchForum() {
       try {
         const forums = await getForums();
-        setForums(forums);
+        const updatedForums = await Promise.all(
+          forums.map(async (forum) => {
+            let isMember = false;
+            if (token) {
+              const membership = await userMemberForum(forum.uuid);
+              isMember = membership.isMember;
+            }
+            return { ...forum, isMember };
+          }),
+        );
+        setForums(updatedForums);
       } catch (error) {
         console.error("Error fetching forum:", error);
       }
@@ -38,8 +52,17 @@ export default function ForumPagesLayout() {
 
     try {
       await joinForum(uuid);
+      setForums(
+        forums.map((forum) =>
+          forum.uuid === uuid ? { ...forum, isMember: true } : forum,
+        ),
+      );
+      setShowJoinSuccessToast(true);
+      setTimeout(() => setShowJoinSuccessToast(false), 3000);
       console.log("Joined forum!");
     } catch (error) {
+      setShowErrorToast(true);
+      setTimeout(() => setShowErrorToast(false), 3000);
       console.error("Error joining forum:", error);
     }
   };
@@ -53,8 +76,17 @@ export default function ForumPagesLayout() {
 
     try {
       await leaveForum(uuid);
+      setForums(
+        forums.map((forum) =>
+          forum.uuid === uuid ? { ...forum, isMember: false } : forum,
+        ),
+      );
+      setShowLeaveSuccessToast(true);
+      setTimeout(() => setShowLeaveSuccessToast(false), 3000);
       console.log("Left forum!");
     } catch (error) {
+      setShowErrorToast(true);
+      setTimeout(() => setShowErrorToast(false), 3000);
       console.error("Error leaving forum:", error);
     }
   };
@@ -94,32 +126,41 @@ export default function ForumPagesLayout() {
                         {forum.name}
                       </Card.Title>
                       <Card.Description>{forum.description}</Card.Description>
-                      <Button
-                        className="btn btn-primary"
-                        onClick={() => handleLeaveForum(forum.uuid)}
-                      >
-                        Leave
-                      </Button>
-                      <Link
-                        to={`/forum/${forum.uuid}`}
-                        className="btn btn-primary"
-                        onClick={(e) => {
-                          if (!token) {
-                            e.preventDefault();
-                            setShowToast(true);
-                            setTimeout(() => setShowToast(false), 3000);
-                            return;
-                          }
-                        }}
-                      >
-                        View Forum
-                      </Link>
-                      <Button
-                        className="btn btn-primary"
-                        onClick={() => handleJoinForum(forum.uuid)}
-                      >
-                        Join
-                      </Button>
+                      <div className="d-flex gap-2 w-100">
+                        {forum.isMember ? (
+                          <>
+                            <Button
+                              className="btn btn-primary w-100"
+                              onClick={() => handleLeaveForum(forum.uuid)}
+                            >
+                              <IconPlaceholder variant={"box-arrow-left"} />{" "}
+                              Leave
+                            </Button>
+                            <Link
+                              to={`/forum/${forum.uuid}`}
+                              className="btn btn-primary w-100"
+                              onClick={(e) => {
+                                if (!token) {
+                                  e.preventDefault();
+                                  setShowToast(true);
+                                  setTimeout(() => setShowToast(false), 3000);
+                                  return;
+                                }
+                              }}
+                            >
+                              <IconPlaceholder variant={"eye"} />
+                              View Forum
+                            </Link>
+                          </>
+                        ) : (
+                          <Button
+                            className="btn btn-primary w-100"
+                            onClick={() => handleJoinForum(forum.uuid)}
+                          >
+                            <IconPlaceholder variant={"box-arrow-right"} /> Join
+                          </Button>
+                        )}
+                      </div>
                     </Card>
                   ))}
                 </div>
@@ -136,6 +177,36 @@ export default function ForumPagesLayout() {
           title={"Warning"}
           titleColor={"white"}
           description={`You need to login to join a forum!`}
+        />
+      )}
+      {showJoinSuccessToast && (
+        <Toasts
+          onClose={() => setShowJoinSuccessToast(false)}
+          variant={"success"}
+          variantBody={"success-subtle"}
+          title={"Success"}
+          titleColor={"white"}
+          description={`You have successfully joined the forum!`}
+        />
+      )}
+      {showLeaveSuccessToast && (
+        <Toasts
+          onClose={() => setShowLeaveSuccessToast(false)}
+          variant={"success"}
+          variantBody={"success-subtle"}
+          title={"Success"}
+          titleColor={"white"}
+          description={`You have successfully left the forum!`}
+        />
+      )}
+      {showErrorToast && (
+        <Toasts
+          onClose={() => setShowErrorToast(false)}
+          variant={"danger"}
+          variantBody={"danger-subtle"}
+          title={"Error"}
+          titleColor={"white"}
+          description={`Failed to perform the action. Please try again.`}
         />
       )}
     </>

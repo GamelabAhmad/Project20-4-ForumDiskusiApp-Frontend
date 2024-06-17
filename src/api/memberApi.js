@@ -38,11 +38,16 @@ export async function leaveForum(uuid) {
 }
 
 export async function userMemberForum(uuid) {
+  const token = Cookies.get("jwt");
+
   try {
     const response = await axios({
       method: "get",
       url: `http://localhost:3000/membership/${uuid}`,
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
     });
     return response.data;
   } catch (error) {
