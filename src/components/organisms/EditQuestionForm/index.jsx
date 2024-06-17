@@ -2,13 +2,17 @@ import { useState, useEffect } from "react";
 import InputForm from "../../molecules/InputForm/index.jsx";
 import Button from "../../atoms/Button/index.jsx";
 import { getQuestionById, updateQuestion } from "../../../api/questionApi";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getTopics } from "../../../api/topicApi.js";
+import Toasts from "../../molecules/Toasts/index.jsx";
 
 export default function EditQuestionForm() {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [topics, setTopics] = useState([]);
   const [questionImage, setQuestionImage] = useState(null);
+  const [showEditSuccessToast, setShowEditSuccessToast] = useState(false);
+  const [showEditFailureToast, setShowEditFailureToast] = useState(false);
 
   const [formValues, setFormValues] = useState({
     title: "",
@@ -70,9 +74,13 @@ export default function EditQuestionForm() {
 
       const formData = await updateQuestion(id, questionData);
       console.log("Question updated:", formData);
-      window.location.href = `/dashboard`;
+      setShowEditSuccessToast(true);
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 1500);
     } catch (error) {
       console.error("Error:", error);
+      setShowEditFailureToast(true);
     }
   };
 
@@ -169,6 +177,26 @@ export default function EditQuestionForm() {
           </div>
         </div>
       </form>
+      {showEditSuccessToast && (
+        <Toasts
+          onClose={() => setShowEditSuccessToast(false)}
+          variant={"success"}
+          variantBody={"success-subtle"}
+          title={"Success"}
+          titleColor={"white"}
+          description={"Question has been successfully updated."}
+        />
+      )}
+      {showEditFailureToast && (
+        <Toasts
+          onClose={() => setShowEditFailureToast(false)}
+          variant={"danger"}
+          variantBody={"danger-subtle"}
+          title={"Failure"}
+          titleColor={"white"}
+          description={"Failed to update the question. Please try again."}
+        />
+      )}
     </>
   );
 }

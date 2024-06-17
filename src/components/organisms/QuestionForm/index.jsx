@@ -4,9 +4,13 @@ import Button from "../../atoms/Button/index.jsx";
 import { createQuestion } from "../../../api/questionApi";
 import { getTopics } from "../../../api/topicApi.js";
 import Toasts from "../../molecules/Toasts/index.jsx";
+import { useNavigate } from "react-router-dom";
 
 export default function QuestionForm() {
+  const navigate = useNavigate();
   const [topics, setTopics] = useState([]);
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const [showFailureToast, setShowFailureToast] = useState(false);
 
   const [formValues, setFormValues] = useState({
     title: "",
@@ -14,9 +18,6 @@ export default function QuestionForm() {
     image: "",
     topic: "",
   });
-
-  const [showSuccessToast, setShowSuccessToast] = useState(false);
-  const [showFailureToast, setShowFailureToast] = useState(false);
 
   const handleChange = (event) => {
     setFormValues({
@@ -49,7 +50,7 @@ export default function QuestionForm() {
       console.log("Question created:", formData);
       setShowSuccessToast(true);
       setTimeout(() => {
-        window.location.href = "/dashboard";
+        navigate("/dashboard");
       }, 1500);
     } catch (error) {
       console.error("Error:", error);

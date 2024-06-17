@@ -3,8 +3,10 @@ import Button from "../../atoms/Button/index.jsx";
 import Toasts from "../../molecules/Toasts/index.jsx";
 import { useState } from "react";
 import { createTopic } from "../../../api/topicApi";
+import { useNavigate } from "react-router-dom";
 
 export default function AuthCreateTopicForm() {
+  const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
     name: "",
   });
@@ -24,18 +26,29 @@ export default function AuthCreateTopicForm() {
       await createTopic(formValues);
       setToastContent({
         title: "Success",
+        titleColor: "white",
         description: "Topic created successfully",
         variant: "success",
+        variantBody: "success-subtle",
       });
-      setShowToast(true);
+      setTimeout(() => {
+        setShowToast(true);
+      }, 1500);
+      setTimeout(() => {
+        navigate("/dashboard/admin");
+      }, 3000);
     } catch (error) {
       console.error("Error:", error);
       setToastContent({
         title: "Error",
-        description: "Failed to create topic",
+        titleColor: "white",
+        description: "Failed to create topic. Please try again.",
         variant: "danger",
+        variantBody: "danger-subtle",
       });
-      setShowToast(true);
+      setTimeout(() => {
+        setShowToast(true);
+      }, 1500);
     }
   };
 
@@ -44,8 +57,10 @@ export default function AuthCreateTopicForm() {
       {showToast && (
         <Toasts
           title={toastContent.title}
+          titleColor={toastContent.titleColor}
           description={toastContent.description}
           variant={toastContent.variant}
+          variantBody={toastContent.variantBody}
           onClose={() => setShowToast(false)}
         />
       )}

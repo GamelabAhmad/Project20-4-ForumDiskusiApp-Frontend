@@ -3,17 +3,16 @@ import InputForm from "../../molecules/InputForm/index.jsx";
 import Button from "../../atoms/Button/index.jsx";
 import Toasts from "../../molecules/Toasts/index.jsx";
 import { getTopicById, updateTopic } from "../../../api/topicApi";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function AuthEditTopicForm() {
+  const navigate = useNavigate();
   const { id } = useParams();
-
+  const [showToast, setShowToast] = useState(false);
+  const [toastContent, setToastContent] = useState({});
   const [formValues, setFormValues] = useState({
     name: "",
   });
-
-  const [showToast, setShowToast] = useState(false);
-  const [toastContent, setToastContent] = useState({});
 
   useEffect(() => {
     async function fetchTopic() {
@@ -49,19 +48,29 @@ export default function AuthEditTopicForm() {
       console.log("Topic updated:", formData);
       setToastContent({
         title: "Success",
+        titleColor: "white",
         description: "Topic updated successfully",
         variant: "success",
+        variantBody: "success-subtle",
       });
-      setShowToast(true);
-      window.location.href = `/dashboard/admin`;
+      setTimeout(() => {
+        setShowToast(true);
+      }, 1500);
+      setTimeout(() => {
+        navigate("/dashboard/admin");
+      }, 3000);
     } catch (error) {
       console.error("Error:", error);
       setToastContent({
         title: "Error",
-        description: "Failed to update topic",
+        titleColor: "white",
+        description: "Failed to update topic. Please try again.",
         variant: "danger",
+        variantBody: "danger-subtle",
       });
-      setShowToast(true);
+      setTimeout(() => {
+        setShowToast(true);
+      }, 1500);
     }
   };
 
@@ -70,8 +79,10 @@ export default function AuthEditTopicForm() {
       {showToast && (
         <Toasts
           title={toastContent.title}
+          titleColor={toastContent.titleColor}
           description={toastContent.description}
           variant={toastContent.variant}
+          variantBody={toastContent.variantBody}
           onClose={() => setShowToast(false)}
         />
       )}

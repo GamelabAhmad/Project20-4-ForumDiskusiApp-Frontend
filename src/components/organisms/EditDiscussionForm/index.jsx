@@ -2,11 +2,12 @@ import { useState, useEffect } from "react";
 import InputForm from "../../molecules/InputForm/index.jsx";
 import Button from "../../atoms/Button/index.jsx";
 import { getQuestionById, updateQuestion } from "../../../api/questionApi";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getTopics } from "../../../api/topicApi.js";
 import Toasts from "../../molecules/Toasts/index.jsx";
 
 export default function EditDiscussionForm() {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [topics, setTopics] = useState([]);
   const [questionImage, setQuestionImage] = useState(null);
@@ -78,7 +79,9 @@ export default function EditDiscussionForm() {
       console.log("Question updated:", formData);
       setShowSuccessToast(true);
       setTimeout(() => setShowSuccessToast(false), 3000);
-      window.location.href = `/dashboard`;
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 1500);
     } catch (error) {
       console.error("Error:", error);
       setShowFailureToast(true);

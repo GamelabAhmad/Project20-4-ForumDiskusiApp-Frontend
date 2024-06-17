@@ -3,18 +3,17 @@ import InputForm from "../../molecules/InputForm/index.jsx";
 import Button from "../../atoms/Button/index.jsx";
 import Toasts from "../../molecules/Toasts/index.jsx";
 import { getForumById, updateForum } from "../../../api/forumApi";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function AuthEditForumForm() {
+  const navigate = useNavigate();
   const { id } = useParams();
-
+  const [showToast, setShowToast] = useState(false);
+  const [toastContent, setToastContent] = useState({});
   const [formValues, setFormValues] = useState({
     name: "",
     description: "",
   });
-
-  const [showToast, setShowToast] = useState(false);
-  const [toastContent, setToastContent] = useState({});
 
   useEffect(() => {
     async function fetchForum() {
@@ -52,19 +51,29 @@ export default function AuthEditForumForm() {
       console.log("Forum updated:", formData);
       setToastContent({
         title: "Success",
+        titleColor: "white",
         description: "Forum updated successfully",
         variant: "success",
+        variantBody: "success-subtle",
       });
-      setShowToast(true);
-      window.location.href = `/dashboard/admin`;
+      setTimeout(() => {
+        setShowToast(true);
+      }, 1500);
+      setTimeout(() => {
+        navigate("/dashboard/admin");
+      }, 3000);
     } catch (error) {
       console.error("Error:", error);
       setToastContent({
         title: "Error",
-        description: "Failed to update forum",
+        titleColor: "white",
+        description: "Failed to update forum. Please try again.",
         variant: "danger",
+        variantBody: "danger-subtle",
       });
-      setShowToast(true);
+      setTimeout(() => {
+        setShowToast(true);
+      }, 1500);
     }
   };
 
@@ -73,8 +82,10 @@ export default function AuthEditForumForm() {
       {showToast && (
         <Toasts
           title={toastContent.title}
+          titleColor={toastContent.titleColor}
           description={toastContent.description}
           variant={toastContent.variant}
+          variantBody={toastContent.variantBody}
           onClose={() => setShowToast(false)}
         />
       )}

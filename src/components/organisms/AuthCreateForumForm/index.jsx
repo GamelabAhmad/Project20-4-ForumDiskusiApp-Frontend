@@ -3,8 +3,10 @@ import Button from "../../atoms/Button/index.jsx";
 import Toasts from "../../molecules/Toasts/index.jsx";
 import { useState } from "react";
 import { createForum } from "../../../api/forumApi";
+import { useNavigate } from "react-router-dom";
 
 export default function AuthCreateForumForm() {
+  const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
     name: "",
     description: "",
@@ -25,19 +27,29 @@ export default function AuthCreateForumForm() {
       await createForum(formValues);
       setToastContent({
         title: "Success",
-        description: "Topic created successfully",
+        titleColor: "white",
+        description: "Forum created successfully",
         variant: "success",
+        variantBody: "success-subtle",
       });
-      setShowToast(true);
-      window.location.href = `/dashboard/admin`;
+      setTimeout(() => {
+        setShowToast(true);
+      }, 1500);
+      setTimeout(() => {
+        navigate("/dashboard/admin");
+      }, 3000);
     } catch (error) {
       console.error("Error:", error);
       setToastContent({
         title: "Error",
-        description: "Failed to create topic",
+        titleColor: "white",
+        description: "Failed to create forum. Please try again.",
         variant: "danger",
+        variantBody: "danger-subtle",
       });
-      setShowToast(true);
+      setTimeout(() => {
+        setShowToast(true);
+      }, 1500);
     }
   };
 
@@ -48,6 +60,8 @@ export default function AuthCreateForumForm() {
           title={toastContent.title}
           description={toastContent.description}
           variant={toastContent.variant}
+          titleColor={toastContent.titleColor}
+          variantBody={toastContent.variantBody}
           onClose={() => setShowToast(false)}
         />
       )}
