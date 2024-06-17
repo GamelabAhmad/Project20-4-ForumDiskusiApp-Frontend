@@ -296,7 +296,7 @@ export default function DashboardPagesLayout() {
                             </Button>
                           </Link>
                           <Link
-                            to={`/dashboard/edit-question/${question.uuid}`}
+                            to={`/dashboard/edit-discussion/${question.uuid}`}
                             className="text-decoration-none"
                           >
                             <Button

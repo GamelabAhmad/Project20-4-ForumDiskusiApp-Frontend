@@ -10,6 +10,8 @@ import AuthCreateForumForm from "../organisms/AuthCreateForumForm/index.jsx";
 import AuthCreateTopicForm from "../organisms/AuthCreateTopicForm/index.jsx";
 import AuthEditForumForm from "../organisms/AuthEditForumForm/index.jsx";
 import AuthEditTopicForm from "../organisms/AuthEditTopicForm/index.jsx";
+import DiscussionForm from "../organisms/DiscussionForm/index.jsx";
+import EditDiscussionForm from "../organisms/EditDiscussionForm/index.jsx";
 
 export default function CreateEditQuestionForumTopicPagesLayout({ title }) {
   return (
@@ -28,7 +30,9 @@ export default function CreateEditQuestionForumTopicPagesLayout({ title }) {
             {title}
           </HeadingText>
           {title === "Ask a Question" && <QuestionForm />}
+          {title === "What's on your mind?" && <DiscussionForm />}
           {title === "Edit a Question" && <EditForm />}
+          {title === "Edit a Discussion" && <EditDiscussionForm />}
           {title === "Create a Forum" && <AuthCreateForumForm />}
           {title === "Create a Topic" && <AuthCreateTopicForm />}
           {title === "Edit a Forum" && <AuthEditForumForm />}

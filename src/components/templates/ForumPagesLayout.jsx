@@ -7,9 +7,14 @@ import Button from "../atoms/Button/index.jsx";
 import { getForums } from "../../api/forumApi.js";
 import { useState, useEffect } from "react";
 import { joinForum, leaveForum } from "../../api/memberApi.js";
+import { Link } from "react-router-dom";
+import Cookies from "js-cookie";
+import Toasts from "../molecules/Toasts/index.jsx";
 
 export default function ForumPagesLayout() {
   const [forums, setForums] = useState([]);
+  const [showToast, setShowToast] = useState(false);
+  const token = Cookies.get("jwt");
 
   useEffect(() => {
     async function fetchForum() {
@@ -25,6 +30,12 @@ export default function ForumPagesLayout() {
   }, []);
 
   const handleJoinForum = async (uuid) => {
+    if (!token) {
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 3000);
+      return;
+    }
+
     try {
       await joinForum(uuid);
       console.log("Joined forum!");
@@ -34,12 +45,22 @@ export default function ForumPagesLayout() {
   };
 
   const handleLeaveForum = async (uuid) => {
+    if (!token) {
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 3000);
+      return;
+    }
+
     try {
       await leaveForum(uuid);
       console.log("Left forum!");
     } catch (error) {
       console.error("Error leaving forum:", error);
     }
+  };
+
+  const handleCloseToast = () => {
+    setShowToast(false);
   };
 
   return (
@@ -79,14 +100,20 @@ export default function ForumPagesLayout() {
                       >
                         Leave
                       </Button>
-                      <Button
+                      <Link
+                        to={`/forum/${forum.uuid}`}
                         className="btn btn-primary"
-                        onClick={() =>
-                          (window.location.href = `/forum/${forum.uuid}`)
-                        }
+                        onClick={(e) => {
+                          if (!token) {
+                            e.preventDefault();
+                            setShowToast(true);
+                            setTimeout(() => setShowToast(false), 3000);
+                            return;
+                          }
+                        }}
                       >
                         View Forum
-                      </Button>
+                      </Link>
                       <Button
                         className="btn btn-primary"
                         onClick={() => handleJoinForum(forum.uuid)}
@@ -101,6 +128,16 @@ export default function ForumPagesLayout() {
           </div>
         </ContainerLayout>
       </PagesLayout>
+      {showToast && (
+        <Toasts
+          onClose={handleCloseToast}
+          variant={"danger"}
+          variantBody={"danger-subtle"}
+          title={"Warning"}
+          titleColor={"white"}
+          description={`You need to login to join a forum!`}
+        />
+      )}
     </>
   );
 }

@@ -22,6 +22,8 @@ import AuthEditForumFormPages from "./pages/AuthEditForumFormPages.jsx";
 import AuthCreateTopicFormPages from "./pages/AuthCreateTopicFormPages.jsx";
 import AuthEditTopicFormPages from "./pages/AuthEditTopicFormPages.jsx";
 import UserUpdateProfilePages from "./pages/UserUpdateProfilePages.jsx";
+import CreateDiscussionPages from "./pages/CreateDiscussionPages.jsx";
+import EditDiscussionPages from "./pages/EditDiscussionPages.jsx";
 
 const router = createBrowserRouter([
   {
@@ -69,8 +71,16 @@ const router = createBrowserRouter([
     element: <CreateQuestionPages />,
   },
   {
+    path: "/dashboard/create-discussion",
+    element: <CreateDiscussionPages />,
+  },
+  {
     path: "/dashboard/edit-question/:id",
     element: <EditQuestionPages />,
+  },
+  {
+    path: "/dashboard/edit-discussion/:id",
+    element: <EditDiscussionPages />,
   },
   {
     path: "/dashboard/admin",

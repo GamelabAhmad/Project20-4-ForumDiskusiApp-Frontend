@@ -73,6 +73,24 @@ export async function getQuestionsByTopic(uuid) {
   }
 }
 
+export async function getQuestionsByForum(uuid) {
+  const token = Cookies.get("jwt");
+
+  try {
+    const response = await axios({
+      method: "get",
+      url: `http://localhost:3000/questionsByForum/${uuid}`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function createQuestion(data) {
   const token = Cookies.get("jwt");
   const formData = new FormData();
@@ -85,6 +103,30 @@ export async function createQuestion(data) {
     const response = await axios({
       method: "post",
       url: `http://localhost:3000/question`,
+      data: formData,
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function createQuestionsByForum(uuid, data) {
+  const token = Cookies.get("jwt");
+  const formData = new FormData();
+
+  for (const key in data) {
+    formData.append(key, data[key]);
+  }
+
+  try {
+    const response = await axios({
+      method: "post",
+      url: `http://localhost:3000/questionsByForum/${uuid}`,
       data: formData,
       headers: {
         "Content-Type": "multipart/form-data",
