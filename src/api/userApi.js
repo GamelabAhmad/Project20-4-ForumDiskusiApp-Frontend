@@ -4,6 +4,10 @@ import Cookies from "js-cookie";
 export async function getUserProfile() {
   const token = Cookies.get("jwt");
 
+  if (!token) {
+    return null;
+  }
+
   try {
     const response = await axios({
       method: "get",

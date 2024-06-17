@@ -60,7 +60,8 @@ export default function SinglePostQuestionPagesLayout() {
         const question = await getQuestionById(id);
         let comments = await getCommentsByPostId(id);
         let profile = null;
-        if (Cookies.get("user")) {
+        let isGuest = !Cookies.get("user");
+        if (!isGuest) {
           profile = await getUserProfile();
         }
         comments = comments.sort((a, b) => {
@@ -70,7 +71,7 @@ export default function SinglePostQuestionPagesLayout() {
             return new Date(a.commentedAt) - new Date(b.commentedAt);
           }
         });
-        let votes = await getVotes(id);
+        let votes = isGuest ? [] : await getVotes(id);
         if (isMounted) {
           setVotes(votes.length);
           let upVotes = votes.filter((vote) => vote.role === "VOTE");
@@ -82,7 +83,9 @@ export default function SinglePostQuestionPagesLayout() {
           let commentVotesData = {};
 
           for (let comment of comments) {
-            let commentVotes = await getCommentVotes(comment.uuid);
+            let commentVotes = isGuest
+              ? []
+              : await getCommentVotes(comment.uuid);
             let upVotesComments = commentVotes.filter(
               (commentVote) => commentVote.role === "VOTE",
             );
@@ -313,7 +316,7 @@ export default function SinglePostQuestionPagesLayout() {
                         <div className="d-flex gap-2">
                           {Cookies.get("user") &&
                             comment.commentedBy.username ===
-                              profiles.username && (
+                              profiles?.username && (
                               <>
                                 <Button
                                   variant={"success"}
