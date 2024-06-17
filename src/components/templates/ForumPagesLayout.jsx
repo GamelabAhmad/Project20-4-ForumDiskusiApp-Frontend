@@ -129,36 +129,49 @@ export default function ForumPagesLayout() {
                       <div className="d-flex gap-2 w-100">
                         {forum.isMember ? (
                           <>
-                            <Button
-                              className="btn btn-primary w-100"
-                              onClick={() => handleLeaveForum(forum.uuid)}
-                            >
-                              <IconPlaceholder variant={"box-arrow-left"} />{" "}
-                              Leave
-                            </Button>
-                            <Link
-                              to={`/forum/${forum.uuid}`}
-                              className="btn btn-primary w-100"
-                              onClick={(e) => {
-                                if (!token) {
-                                  e.preventDefault();
-                                  setShowToast(true);
-                                  setTimeout(() => setShowToast(false), 3000);
-                                  return;
-                                }
-                              }}
-                            >
-                              <IconPlaceholder variant={"eye"} />
-                              View Forum
-                            </Link>
+                            <div className="w-100 d-flex gap-2 mx-auto">
+                              <Button
+                                className="btn btn-outline-primary w-100"
+                                onClick={() => handleLeaveForum(forum.uuid)}
+                              >
+                                <IconPlaceholder
+                                  className="me-1"
+                                  variant={"box-arrow-left"}
+                                />
+                                Leave
+                              </Button>
+                            </div>
+                            <div className="w-100 mx-auto">
+                              <Link
+                                to={`/forum/${forum.uuid}`}
+                                className="btn btn-primary w-100"
+                                onClick={(e) => {
+                                  if (!token) {
+                                    e.preventDefault();
+                                    setShowToast(true);
+                                    setTimeout(() => setShowToast(false), 3000);
+                                    return;
+                                  }
+                                }}
+                              >
+                                <IconPlaceholder
+                                  className="me-1"
+                                  variant={"eye"}
+                                />
+                                View Forum
+                              </Link>
+                            </div>
                           </>
                         ) : (
-                          <Button
-                            className="btn btn-primary w-100"
-                            onClick={() => handleJoinForum(forum.uuid)}
-                          >
-                            <IconPlaceholder variant={"box-arrow-right"} /> Join
-                          </Button>
+                          <div className="d-flex gap-2 mx-auto w-100">
+                            <Button
+                              className="btn btn-primary w-100"
+                              onClick={() => handleJoinForum(forum.uuid)}
+                            >
+                              <IconPlaceholder variant={"box-arrow-right"} />{" "}
+                              Join
+                            </Button>
+                          </div>
                         )}
                       </div>
                     </Card>
