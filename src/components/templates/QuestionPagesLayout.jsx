@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 import { getVotes } from "../../api/voteApi.js";
 
 export default function QuestionPagesLayout() {
-  const [userPosts, setUserPosts] = useState([]);
+  const [questions, setQuestions] = useState([]);
   const [comments, setComments] = useState({});
   const [loading, setLoading] = useState(true);
   const [votesData, setVotesData] = useState({});
@@ -36,7 +36,7 @@ export default function QuestionPagesLayout() {
               downVotes: downVotes.length,
             };
           }
-          setUserPosts(questions);
+          setQuestions(questions);
           setComments(comments);
           setVotesData(votesData);
           setLoading(false);
@@ -118,36 +118,38 @@ export default function QuestionPagesLayout() {
                     className={"placeholder-glow mb-3"}
                   />
                 </>
-              ) : userPosts.length > 0 ? (
-                userPosts.map((post) => (
-                  <CardPost
-                    key={post.uuid}
-                    topic={post.topic?.name}
-                    title={
-                      <Link
-                        to={`/question/${post.uuid}`}
-                        className="text-decoration-none"
-                      >
-                        {post.title}
-                      </Link>
-                    }
-                    description={post.body}
-                    createdAt={new Date(post.createdAt).toLocaleString()}
-                    username={post.createdBy.username}
-                    avatarSrc={post.createdBy.avatar}
-                    avatarAlt={post.createdBy.username}
-                    votes={votesData[post.uuid]?.votes || 0}
-                    downvotes={votesData[post.uuid]?.downVotes || 0}
-                    answers={comments[post.uuid].length || 0}
-                    showImage={false}
-                    showButtons={false}
-                    className={"mb-3"}
-                  />
-                ))
+              ) : questions.length > 0 ? (
+                questions
+                  .filter((question) => question.forum === null)
+                  .map((question) => (
+                    <CardPost
+                      key={question.id}
+                      topic={question.topic?.name}
+                      title={
+                        <Link
+                          to={`/question/${question.uuid}`}
+                          className="text-decoration-none"
+                        >
+                          {question.title}
+                        </Link>
+                      }
+                      description={question.body}
+                      createdAt={new Date(question.createdAt).toLocaleString()}
+                      username={question.createdBy.username}
+                      avatarSrc={question.createdBy.avatar}
+                      avatarAlt={question.createdBy.username}
+                      votes={question[questions[0]?.QuestionVotes?.length || 0]}
+                      downvotes={votesData[question.uuid]?.downVotes || 0}
+                      answers={comments[question.uuid].length || 0}
+                      showImage={false}
+                      showButtons={false}
+                      className={"mb-3"}
+                    />
+                  ))
               ) : (
                 <Card>
                   <Card.Title className="d-flex align-items-center justify-content-center fw-semibold">
-                    No posts available
+                    No Questions available
                   </Card.Title>
                 </Card>
               )}
