@@ -87,7 +87,7 @@ export default function Navbar() {
                     name="search"
                     id="search"
                     placeholder=" Search..."
-                    className="d-flex p-1 rounded-3 me-lg-5 w-100"
+                    className="d-flex p-1 rounded-3 me-lg-5 w-100 text-body"
                   />
                 </div>
               </div>
