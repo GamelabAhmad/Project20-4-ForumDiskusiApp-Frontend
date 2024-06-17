@@ -87,7 +87,7 @@ export default function SinglePostTopicPagesLayout() {
                       </TypographyText>
                     </>
                   }
-                  buttonTitle={"Ask a Question with Related Topic"}
+                  buttonTitle={"Ask a Question"}
                   toastsMessage={"ask a question"}
                 />
               )}
