@@ -1,68 +1,42 @@
 import { useState } from "react";
 
-export default function NavTabs() {
-  const [activeTab, setActiveTab] = useState("tab1");
+export default function NavTabs({ onTabClick }) {
+  const [activeTab, setActiveTab] = useState("tab2");
 
-  const handleTabClick = (tabId) => {
+  const handleTabClick = (tabId, event) => {
     setActiveTab(tabId);
+    onTabClick(tabId, event);
   };
 
   const navTabs = [
     {
       id: "tab1",
-      title: "Latest",
-      content: "Content for latest tab...",
+      title: "Oldest",
     },
     {
       id: "tab2",
-      title: "Hot",
-      content: "Content for hot/popular tab...",
-    },
-    {
-      id: "tab3",
-      title: "Week",
-      content: "Content for weekly tab...",
-    },
-    {
-      id: "tab4",
-      title: "Month",
-      content: "Content for monthly tab...",
+      title: "Latest",
     },
   ];
 
   return (
     <>
-      <nav className="nav nav-pills bg-body-secondary flex-column flex-sm-row rounded-5">
+      <nav className="nav nav-pills bg-primary-subtle flex-column flex-sm-row rounded-3">
         {navTabs.map((tab) => (
           <a
             key={tab.id}
             className={
               activeTab === tab.id
-                ? "flex-sm-fill text-sm-center nav-link active"
-                : "flex-sm-fill text-sm-center nav-link"
+                ? "flex-sm-fill text-center nav-link active"
+                : "flex-sm-fill text-center nav-link"
             }
-            onClick={() => handleTabClick(tab.id)}
+            onClick={(event) => handleTabClick(tab.id, event)}
             href={`#${tab.id}`}
           >
             {tab.title}
           </a>
         ))}
       </nav>
-      <div className="tab-content">
-        {navTabs.map((tab) => (
-          <div
-            key={tab.id}
-            className={
-              activeTab === tab.id
-                ? "tab-pane fade show active"
-                : "tab-pane fade"
-            }
-            id={tab.id}
-          >
-            <p>{tab.content}</p>
-          </div>
-        ))}
-      </div>
     </>
   );
 }

@@ -10,6 +10,8 @@ import CardPost from "../organisms/CardPost/index.jsx";
 import SkeletonPlaceholder from "../atoms/SkeletonPlaceholder/index.jsx";
 import { Link } from "react-router-dom";
 import { getVotes } from "../../api/voteApi.js";
+import NavTabs from "../molecules/NavTabs/index.jsx";
+import TypographyText from "../atoms/TypographyText/index.jsx";
 
 export default function QuestionPagesLayout() {
   const [questions, setQuestions] = useState([]);
@@ -19,6 +21,8 @@ export default function QuestionPagesLayout() {
   const fetchQuestionsAndCommentsRef = useRef(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [questionsPerPage] = useState(5);
+  const [sortOrder, setSortOrder] = useState("latest");
+  const [sortedQuestions, setSortedQuestions] = useState([]);
 
   useEffect(() => {
     if (!fetchQuestionsAndCommentsRef.current) {
@@ -53,7 +57,7 @@ export default function QuestionPagesLayout() {
     }
   }, []);
 
-  const filteredQuestions = questions.filter(
+  const filteredQuestions = sortedQuestions.filter(
     (question) => question.forum === null,
   );
   const indexOfLastQuestion = currentPage * questionsPerPage;
@@ -73,6 +77,29 @@ export default function QuestionPagesLayout() {
     startPage = Math.max(endPage - maxPageNumbersToShow + 1, 1);
   }
 
+  const handleSortOrderChange = (tabId, event) => {
+    event.preventDefault();
+    if (tabId === "tab1") {
+      setSortOrder("oldest");
+    } else if (tabId === "tab2") {
+      setSortOrder("latest");
+    }
+    setCurrentPage(1);
+  };
+
+  useEffect(() => {
+    const newSortedQuestions = [...questions];
+    newSortedQuestions.sort((a, b) => {
+      if (sortOrder === "latest") {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      } else {
+        return new Date(a.createdAt) - new Date(b.createdAt);
+      }
+    });
+
+    setSortedQuestions(newSortedQuestions);
+  }, [sortOrder, questions]);
+
   return (
     <>
       <PagesLayout>
@@ -87,7 +114,14 @@ export default function QuestionPagesLayout() {
               <CardHeader
                 title={"Questions"}
                 description={
-                  "This is the list of questions that have been asked by the community. Feel free to answer any of them! If you have a question, feel free to ask! We are here to help!"
+                  <>
+                    <TypographyText cssReset={true} className="mb-3 lh-base">
+                      This is the list of questions that have been asked by the
+                      community. Feel free to answer any of them! If you have a
+                      question, feel free to ask! We are here to help!
+                    </TypographyText>
+                    <NavTabs onTabClick={handleSortOrderChange} />{" "}
+                  </>
                 }
                 buttonTitle={"Ask a Question"}
                 toastsMessage={"ask a question"}
