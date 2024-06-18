@@ -56,7 +56,7 @@ export default function LoginForm() {
           label={"Username"}
           type={"text"}
           placeholder={"Username"}
-          className={"w-100"}
+          className={"w-100 text-body"}
           value={formValues.username}
           onChange={handleChange}
           error={errors.username}
@@ -68,7 +68,7 @@ export default function LoginForm() {
           label={"Password"}
           type={"password"}
           placeholder={"Password"}
-          className={"w-100 mb-3"}
+          className={"w-100 text-body mb-3"}
           value={formValues.password}
           onChange={handleChange}
           error={errors.password}

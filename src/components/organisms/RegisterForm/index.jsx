@@ -57,6 +57,7 @@ export default function RegisterForm() {
           label={"Username"}
           type={"text"}
           placeholder={"Your username"}
+          className={"text-body"}
           value={formValues.username}
           onChange={handleChange}
           error={errors.username}
@@ -68,6 +69,7 @@ export default function RegisterForm() {
           label={"E-mail"}
           type={"email"}
           placeholder={"Your e-mail address"}
+          className={"text-body"}
           value={formValues.email}
           onChange={handleChange}
           error={errors.email}
@@ -79,7 +81,7 @@ export default function RegisterForm() {
           label={"Password"}
           type={"password"}
           placeholder={"Your password"}
-          className={"mb-3"}
+          className={"text-body mb-3"}
           value={formValues.password}
           onChange={handleChange}
           error={errors.password}
