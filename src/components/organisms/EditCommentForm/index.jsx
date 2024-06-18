@@ -8,6 +8,8 @@ import Toasts from "../../molecules/Toasts/index.jsx";
 export default function EditCommentForm({ onUpdateComment, editingComment }) {
   const token = Cookies.get("jwt");
   const user = Cookies.get("user");
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const [showFailureToast, setShowFailureToast] = useState(false);
 
   const [formValues, setFormValues] = useState({
     body: "",
@@ -26,9 +28,6 @@ export default function EditCommentForm({ onUpdateComment, editingComment }) {
     });
   };
 
-  const [showSuccessToast, setShowSuccessToast] = useState(false);
-  const [showFailureToast, setShowFailureToast] = useState(false);
-
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -45,7 +44,6 @@ export default function EditCommentForm({ onUpdateComment, editingComment }) {
 
       const updatedComment = await updateCommentById(editingComment.uuid, data);
       onUpdateComment(updatedComment);
-
       setFormValues({ body: "" });
       window.location.reload();
       setShowSuccessToast(true);

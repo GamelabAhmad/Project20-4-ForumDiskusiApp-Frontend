@@ -49,7 +49,7 @@ export default function CreateCommentForm({ onNewComment }) {
       onNewComment(newComment);
 
       setFormValues({ body: "" });
-      setTimeout(() => window.location.reload(), 500);
+      window.location.reload();
       setShowSuccessToast(true);
       setTimeout(() => setShowSuccessToast(false), 3000);
     } catch (error) {
