@@ -382,7 +382,10 @@ export default function SinglePostQuestionPagesLayout() {
                           {comment.commentedBy.username}
                         </Link>
                       </SubheadingText>
-                      <TypographyText cssReset={true} className="py-2">
+                      <TypographyText
+                        cssReset={true}
+                        className="py-2 text-break"
+                      >
                         {comment.body}
                       </TypographyText>
                       <div className="d-flex gap-2 align-items-center m-0 mt-2">
