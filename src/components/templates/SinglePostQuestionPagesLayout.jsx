@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getQuestionById } from "../../api/questionApi.js";
 import {
@@ -51,6 +51,7 @@ export default function SinglePostQuestionPagesLayout() {
   const [formValues, setFormValues] = useState({ body: "" });
   const [commentVotes, setCommentVotes] = useState({});
   const [commentsData, setCommentsData] = useState([]);
+  const commentFormRef = useRef(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -193,6 +194,12 @@ export default function SinglePostQuestionPagesLayout() {
     Math.ceil(comments.length / commentsPerPage),
   );
 
+  useEffect(() => {
+    if (editingComment && commentFormRef.current) {
+      commentFormRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [editingComment]);
+
   return (
     <>
       <PagesLayout>
@@ -283,12 +290,16 @@ export default function SinglePostQuestionPagesLayout() {
               </div>
               <div>
                 {editingComment ? (
-                  <EditCommentForm
-                    onUpdateComment={handleUpdateComment}
-                    editingComment={editingComment}
-                  />
+                  <div ref={commentFormRef}>
+                    <EditCommentForm
+                      onUpdateComment={handleUpdateComment}
+                      editingComment={editingComment}
+                    />
+                  </div>
                 ) : (
-                  <CreateCommentForm onNewComment={handleNewComment} />
+                  <div ref={commentFormRef}>
+                    <CreateCommentForm onNewComment={handleNewComment} />
+                  </div>
                 )}
               </div>
               {currentComments.map((comment) => (
