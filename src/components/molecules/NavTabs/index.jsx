@@ -1,4 +1,5 @@
 import { useState } from "react";
+import IconPlaceholder from "../../atoms/IconPlaceholder/index.jsx";
 
 export default function NavTabs({ onTabClick }) {
   const [activeTab, setActiveTab] = useState("tab2");
@@ -12,10 +13,12 @@ export default function NavTabs({ onTabClick }) {
     {
       id: "tab1",
       title: "Oldest",
+      icon: "sort-down",
     },
     {
       id: "tab2",
       title: "Latest",
+      icon: "sort-up",
     },
   ];
 
@@ -27,12 +30,13 @@ export default function NavTabs({ onTabClick }) {
             key={tab.id}
             className={
               activeTab === tab.id
-                ? "flex-sm-fill text-center nav-link active"
-                : "flex-sm-fill text-center nav-link"
+                ? "flex-sm-fill text-center nav-link active d-flex gap-2 justify-content-center"
+                : "flex-sm-fill text-center nav-link d-flex gap-2 justify-content-center"
             }
             onClick={(event) => handleTabClick(tab.id, event)}
             href={`#${tab.id}`}
           >
+            <IconPlaceholder variant={tab.icon} />
             {tab.title}
           </a>
         ))}
