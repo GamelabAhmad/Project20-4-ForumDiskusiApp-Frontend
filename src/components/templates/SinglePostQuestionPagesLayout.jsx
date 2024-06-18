@@ -128,6 +128,13 @@ export default function SinglePostQuestionPagesLayout() {
     };
   }, [id, sortOrder]);
 
+  const updateCommentVotes = (commentId, upVotes, downVotes) => {
+    setCommentVotes((prevCommentVotes) => ({
+      ...prevCommentVotes,
+      [commentId]: { upVotes, downVotes },
+    }));
+  };
+
   const handleEditComment = (comment) => {
     setEditingComment(comment);
     setFormValues({ body: comment.body });
@@ -391,7 +398,12 @@ export default function SinglePostQuestionPagesLayout() {
                       <div className="d-flex gap-2 align-items-center m-0 mt-2">
                         {comment && comment.uuid && (
                           <>
-                            <CommentVote commentId={comment.uuid} />
+                            <CommentVote
+                              commentId={comment.uuid}
+                              initialUpvoteStatus={comment.upVotes > 0}
+                              initialDownvoteStatus={comment.downVotes > 0}
+                              updateCommentVotes={updateCommentVotes}
+                            />{" "}
                           </>
                         )}
                       </div>

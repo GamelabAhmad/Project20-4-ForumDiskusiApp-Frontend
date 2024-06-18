@@ -13,6 +13,7 @@ export default function CommentVote({
   commentId,
   initialUpvoteStatus,
   initialDownvoteStatus,
+  updateCommentVotes,
 }) {
   const [upvoteSuccessful, setUpvoteSuccessful] = useState(initialUpvoteStatus);
   const [downvoteSuccessful, setDownvoteSuccessful] = useState(
@@ -62,32 +63,32 @@ export default function CommentVote({
 
   const handleUpvoteComment = async () => {
     try {
+      let updatedUpvotes = upVotesComments;
+      let updatedDownvotes = downVotesComments;
+
       if (downvoteSuccessful) {
         const removeDownvoteResponse = await downVoteComment(commentId);
-        console.log("Remove downvote response:", removeDownvoteResponse);
         if (removeDownvoteResponse.message === "DOWNVOTE removed") {
           setDownvoteSuccessful(false);
-          if (downVotesComments > 0) {
-            setDownVotesComments(downVotesComments - 1);
-          }
+          updatedDownvotes = Math.max(downVotesComments - 1, 0);
+          setDownVotesComments(updatedDownvotes);
         }
       }
       const upvoteResponse = await upVoteComment(commentId);
-      console.log("Upvote response:", upvoteResponse);
       if (upvoteResponse.role === "VOTE") {
         setUpvoteSuccessful(true);
-        setUpVotesComments(upVotesComments + 1);
+        updatedUpvotes = upVotesComments + 1;
+        setUpVotesComments(updatedUpvotes);
         setShowUpvoteSuccessToast(true);
         setTimeout(() => setShowUpvoteSuccessToast(false), 3000);
-        window.location.reload();
       } else if (upvoteResponse.message === "VOTE removed") {
         setUpvoteSuccessful(false);
-        if (upVotesComments > 0) {
-          setUpVotesComments(upVotesComments - 1);
-        }
+        updatedUpvotes = Math.max(upVotesComments - 1, 0);
+        setUpVotesComments(updatedUpvotes);
         setShowUpvoteSuccessToast(true);
         setTimeout(() => setShowUpvoteSuccessToast(false), 3000);
       }
+      updateCommentVotes(commentId, updatedUpvotes, updatedDownvotes);
     } catch (error) {
       console.error("Error upvoting comment:", error);
       setShowUpvoteFailureToast(true);
@@ -97,32 +98,32 @@ export default function CommentVote({
 
   const handleDownvoteComment = async () => {
     try {
+      let updatedUpvotes = upVotesComments;
+      let updatedDownvotes = downVotesComments;
+
       if (upvoteSuccessful) {
         const removeUpvoteResponse = await upVoteComment(commentId);
-        console.log("Remove upvote response:", removeUpvoteResponse);
         if (removeUpvoteResponse.message === "VOTE removed") {
           setUpvoteSuccessful(false);
-          if (upVotesComments > 0) {
-            setUpVotesComments(upVotesComments - 1);
-          }
+          updatedUpvotes = Math.max(upVotesComments - 1, 0);
+          setUpVotesComments(updatedUpvotes);
         }
       }
       const downvoteResponse = await downVoteComment(commentId);
-      console.log("Downvote response:", downvoteResponse);
       if (downvoteResponse.role === "DOWNVOTE") {
         setDownvoteSuccessful(true);
-        setDownVotesComments(downVotesComments + 1);
+        updatedDownvotes = downVotesComments + 1;
+        setDownVotesComments(updatedDownvotes);
         setShowDownvoteSuccessToast(true);
         setTimeout(() => setShowDownvoteSuccessToast(false), 3000);
-        window.location.reload();
       } else if (downvoteResponse.message === "DOWNVOTE removed") {
         setDownvoteSuccessful(false);
-        if (downVotesComments > 0) {
-          setDownVotesComments(downVotesComments - 1);
-        }
+        updatedDownvotes = Math.max(downVotesComments - 1, 0);
+        setDownVotesComments(updatedDownvotes);
         setShowDownvoteSuccessToast(true);
         setTimeout(() => setShowDownvoteSuccessToast(false), 3000);
       }
+      updateCommentVotes(commentId, updatedUpvotes, updatedDownvotes);
     } catch (error) {
       console.error("Error downvoting comment:", error);
       setShowDownvoteFailureToast(true);
