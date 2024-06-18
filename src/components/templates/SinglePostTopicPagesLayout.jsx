@@ -199,7 +199,7 @@ export default function SinglePostTopicPagesLayout() {
                         />
                       ))
                   ) : (
-                    <Card className="shadow-sm">
+                    <Card className="shadow-sm mb-3">
                       <Card.Description className="text-center">
                         No questions found for this topic
                       </Card.Description>
