@@ -94,7 +94,6 @@ export default function UserProfilePagesLayout() {
           setGetFollowing(getFollowing);
           setUser(fetchedUser);
 
-          // Check if the user is followed
           const followed = await isUserFollowed(fetchedUser.uuid);
           setIsFollowed(followed);
         } catch (error) {
@@ -123,7 +122,10 @@ export default function UserProfilePagesLayout() {
       const updatedFollowers = await getFollowersUser(user.uuid);
       setGetFollowers(updatedFollowers);
       setShowFollowSuccessToast(true);
-      setIsFollowed(true); // Update follow state
+      setTimeout(() => {
+        setShowFollowSuccessToast(false);
+      }, 3000);
+      setIsFollowed(true);
       console.log("Followed user" + user.username);
     } catch (error) {
       console.error("Error following user:", error);
@@ -145,7 +147,10 @@ export default function UserProfilePagesLayout() {
       const updatedFollowers = await getFollowersUser(user.uuid);
       setGetFollowers(updatedFollowers);
       setShowUnfollowSuccessToast(true);
-      setIsFollowed(false); // Update follow state
+      setTimeout(() => {
+        setShowUnfollowSuccessToast(false);
+      }, 3000);
+      setIsFollowed(false);
       console.log("Unfollowed user" + user.username);
     } catch (error) {
       console.error("Error unfollowing user:", error);
@@ -302,8 +307,8 @@ export default function UserProfilePagesLayout() {
       {showUnfollowSuccessToast && (
         <Toasts
           onClose={() => setShowUnfollowSuccessToast(false)}
-          variant={"success"}
-          variantBody={"success-subtle"}
+          variant={"warning"}
+          variantBody={"warning-subtle"}
           title={"Success"}
           titleColor={"white"}
           description={"Unfollow successful."}
