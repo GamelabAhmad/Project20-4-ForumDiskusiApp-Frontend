@@ -12,14 +12,11 @@ import { Link, NavLink } from "react-router-dom";
 import { deleteQuestion } from "../../api/questionApi.js";
 import Toasts from "../molecules/Toasts/index.jsx";
 import Modal from "../molecules/Modal/index.jsx";
-import { deleteForum } from "../../api/forumApi.js";
 
 export default function DashboardPagesLayout() {
   const user = Cookies.get("user");
   const [questions, setQuestions] = useState([]);
-  const [forums, setForums] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(null);
-  const [currentForum, setCurrentForum] = useState(null);
   const [showDeleteToast, setShowDeleteToast] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageUrls, setImageUrls] = useState([]);
@@ -29,31 +26,11 @@ export default function DashboardPagesLayout() {
     setIsModalOpen(true);
   };
 
-  const handleViewForumClick = (forum) => {
-    setCurrentForum(forum);
-    setIsModalOpen(true);
-  };
-
   const handleDeleteClick = async (uuid) => {
     if (uuid) {
       try {
         await deleteQuestion(uuid);
         setQuestions(questions.filter((question) => question.uuid !== uuid));
-        setShowDeleteToast(true);
-        setTimeout(() => setShowDeleteToast(false), 3000);
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    } else {
-      console.error("Error: uuid is undefined");
-    }
-  };
-
-  const handleDeleteForumClick = async (uuid) => {
-    if (uuid) {
-      try {
-        await deleteForum(uuid);
-        setForums(forums.filter((forum) => forum.uuid !== uuid));
         setShowDeleteToast(true);
         setTimeout(() => setShowDeleteToast(false), 3000);
       } catch (error) {
