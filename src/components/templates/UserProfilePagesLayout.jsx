@@ -217,7 +217,7 @@ export default function UserProfilePagesLayout() {
                   {isSameUser && (
                     <div className="">
                       <NavLink
-                        to={`/profile/${user}/edit`}
+                        to={`/profile/edit`}
                         className="text-decoration-none"
                       >
                         <Button

@@ -107,7 +107,7 @@ const router = createBrowserRouter([
     element: <UserProfilePages />,
   },
   {
-    path: "/profile/:id/edit",
+    path: "/profile/edit",
     element: <UserUpdateProfilePages />,
   },
 ]);
