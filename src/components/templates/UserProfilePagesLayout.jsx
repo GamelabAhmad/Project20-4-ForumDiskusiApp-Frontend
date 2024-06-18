@@ -14,6 +14,7 @@ import {
   getFollowersUser,
   getFollowingUser,
   unfollowUser,
+  isUserFollowed,
 } from "../../api/followApi.js";
 import Toasts from "../molecules/Toasts/index.jsx";
 import Cookies from "js-cookie";
@@ -32,6 +33,7 @@ export default function UserProfilePagesLayout() {
   const [showUnfollowSuccessToast, setShowUnfollowSuccessToast] =
     useState(false);
   const [showGuestToast, setShowGuestToast] = useState(false);
+  const [isFollowed, setIsFollowed] = useState(false); // New state for follow status
   const { id } = useParams();
   const [votesData, setVotesData] = useState({});
   const [userProfile, setUserProfile] = useState(null);
@@ -90,6 +92,10 @@ export default function UserProfilePagesLayout() {
           setGetFollowers(getFollowers);
           setGetFollowing(getFollowing);
           setUser(fetchedUser);
+
+          // Check if the user is followed
+          const followed = await isUserFollowed(fetchedUser.uuid);
+          setIsFollowed(followed);
         } catch (error) {
           console.error("Error fetching data:", error);
         }
@@ -115,6 +121,7 @@ export default function UserProfilePagesLayout() {
       const updatedFollowers = await getFollowersUser(user.uuid);
       setGetFollowers(updatedFollowers);
       setShowFollowSuccessToast(true);
+      setIsFollowed(true); // Update follow state
       console.log("Followed user" + user.username);
     } catch (error) {
       console.error("Error following user:", error);
@@ -136,6 +143,7 @@ export default function UserProfilePagesLayout() {
       const updatedFollowers = await getFollowersUser(user.uuid);
       setGetFollowers(updatedFollowers);
       setShowUnfollowSuccessToast(true);
+      setIsFollowed(false); // Update follow state
       console.log("Unfollowed user" + user.username);
     } catch (error) {
       console.error("Error unfollowing user:", error);
@@ -187,22 +195,23 @@ export default function UserProfilePagesLayout() {
                   {!isSameUser && (
                     <>
                       <div className="">
-                        <Button
-                          variant={"outline-primary"}
-                          className="w-100 w-md-auto"
-                          onClick={handleUnfollow}
-                        >
-                          Unfollow
-                        </Button>
-                      </div>
-                      <div className="">
-                        <Button
-                          variant={"primary"}
-                          className="w-100 w-md-auto"
-                          onClick={handleFollow}
-                        >
-                          Follow
-                        </Button>
+                        {isFollowed ? (
+                          <Button
+                            variant={"outline-primary"}
+                            className="w-100 w-md-auto"
+                            onClick={handleUnfollow}
+                          >
+                            Unfollow
+                          </Button>
+                        ) : (
+                          <Button
+                            variant={"primary"}
+                            className="w-100 w-md-auto"
+                            onClick={handleFollow}
+                          >
+                            Follow
+                          </Button>
+                        )}
                       </div>
                     </>
                   )}
@@ -267,9 +276,7 @@ export default function UserProfilePagesLayout() {
                 </Card>
               )}
             </>
-          ) : (
-            <HeadingText>User not found</HeadingText>
-          )}
+          ) : null}
         </ContainerLayout>
       </PagesLayout>
       {showFollowSuccessToast && (

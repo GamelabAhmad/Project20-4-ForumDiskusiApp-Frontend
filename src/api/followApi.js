@@ -62,3 +62,21 @@ export async function unfollowUser(id) {
     throw error;
   }
 }
+
+export async function isUserFollowed(id) {
+  const token = Cookies.get("jwt");
+
+  try {
+    const response = await axios({
+      method: "get",
+      url: `http://localhost:3000/isFollowed/${id}`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data.isFollowed;
+  } catch (error) {
+    throw error;
+  }
+}
