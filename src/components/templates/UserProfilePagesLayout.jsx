@@ -39,6 +39,7 @@ export default function UserProfilePagesLayout() {
   const fetchDataRef = useRef(false);
   const loggedInUser = Cookies.get("user");
   const isSameUser = loggedInUser === id;
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchUserProfile = async () => {
     try {
@@ -57,6 +58,7 @@ export default function UserProfilePagesLayout() {
     if (!fetchDataRef.current) {
       async function fetchData() {
         try {
+          setIsLoading(true);
           const fetchedUser = await getUserByUsername(id);
           const getFollowers = await getFollowersUser(fetchedUser.uuid);
           const getFollowing = await getFollowingUser(fetchedUser.uuid);
@@ -98,6 +100,7 @@ export default function UserProfilePagesLayout() {
         } catch (error) {
           console.error("Error fetching data:", error);
         }
+        setIsLoading(false);
       }
 
       fetchData();
@@ -153,7 +156,9 @@ export default function UserProfilePagesLayout() {
     <>
       <PagesLayout>
         <ContainerLayout>
-          {user ? (
+          {isLoading ? (
+            <div>Loading...</div>
+          ) : user ? (
             <>
               <Card key={user.uuid} className="p-3 mb-3">
                 <div className="d-md-flex justify-content-between">
@@ -275,7 +280,13 @@ export default function UserProfilePagesLayout() {
                 </Card>
               )}
             </>
-          ) : null}
+          ) : (
+            <Card>
+              <Card.Title className="d-flex align-items-center justify-content-center fw-semibold">
+                User not found
+              </Card.Title>
+            </Card>
+          )}
         </ContainerLayout>
       </PagesLayout>
       {showFollowSuccessToast && (
