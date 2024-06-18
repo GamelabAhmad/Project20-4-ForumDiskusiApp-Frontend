@@ -175,7 +175,7 @@ export default function UserProfilePagesLayout() {
                         {user.username}
                       </Card.Title>
                       <Card.Description className="fw-lighter mb-3 mb-md-0">
-                        {user.name ? user.name : "(No name)"}
+                        {user.name ? user.name : "-"}
                       </Card.Description>
                       <div className="d-flex align-items-center mt-3 mb-3 gap-3 justify-content-center">
                         <Button
