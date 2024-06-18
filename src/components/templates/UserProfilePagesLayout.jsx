@@ -3,7 +3,6 @@ import { Link, NavLink, useParams } from "react-router-dom";
 import { getUserByUsername, getUserProfile } from "../../api/userApi.js";
 import PagesLayout from "./PagesLayout.jsx";
 import ContainerLayout from "./ContainerLayout.jsx";
-import HeadingText from "../atoms/HeadingText/index.jsx";
 import AvatarPlaceHolder from "../atoms/AvatarPlaceholder/index.jsx";
 import { getQuestionByUser } from "../../api/questionApi.js";
 import Card from "../molecules/Card/index.jsx";
