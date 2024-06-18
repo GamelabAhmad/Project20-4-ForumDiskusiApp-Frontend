@@ -194,8 +194,8 @@ export default function CommentVote({
       {showRemoveUpvoteToast && (
         <Toasts
           onClose={() => setShowRemoveUpvoteToast(false)}
-          variant={"success"}
-          variantBody={"success-subtle"}
+          variant={"warning"}
+          variantBody={"warning-subtle"}
           title={"Success"}
           titleColor={"white"}
           description={"Upvote removed successfully."}
@@ -204,8 +204,8 @@ export default function CommentVote({
       {showRemoveDownvoteToast && (
         <Toasts
           onClose={() => setShowRemoveDownvoteToast(false)}
-          variant={"success"}
-          variantBody={"success-subtle"}
+          variant={"warning"}
+          variantBody={"warning-subtle"}
           title={"Success"}
           titleColor={"white"}
           description={"Downvote removed successfully."}

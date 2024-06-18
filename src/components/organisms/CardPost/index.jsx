@@ -45,6 +45,9 @@ export default function CardPost({
     useState(false);
   const [showDownvoteFailureToast, setShowDownvoteFailureToast] =
     useState(false);
+  const [showUpvoteRemovedToast, setShowUpvoteRemovedToast] = useState(false);
+  const [showDownvoteRemovedToast, setShowDownvoteRemovedToast] =
+    useState(false);
 
   useEffect(() => {
     async function checkVoteStatus() {
@@ -88,8 +91,8 @@ export default function CardPost({
         if (votes > 0) {
           setVotes(votes - 1);
         }
-        setShowUpvoteSuccessToast(true);
-        setTimeout(() => setShowUpvoteSuccessToast(false), 3000);
+        setShowUpvoteRemovedToast(true);
+        setTimeout(() => setShowUpvoteRemovedToast(false), 3000);
       }
     } catch (error) {
       console.error("Error upvoting question:", error);
@@ -118,8 +121,8 @@ export default function CardPost({
         if (downVotes > 0) {
           setDownVotes(downVotes - 1);
         }
-        setShowDownvoteSuccessToast(true);
-        setTimeout(() => setShowDownvoteSuccessToast(false), 3000);
+        setShowDownvoteRemovedToast(true);
+        setTimeout(() => setShowDownvoteRemovedToast(false), 3000);
       }
     } catch (error) {
       console.error("Error downvoting question:", error);
@@ -247,6 +250,26 @@ export default function CardPost({
           title={"Failure"}
           titleColor={"white"}
           description={"Failed to downvote. Please log in to downvote."}
+        />
+      )}
+      {showUpvoteRemovedToast && (
+        <Toasts
+          onClose={() => setShowUpvoteRemovedToast(false)}
+          variant={"warning"}
+          variantBody={"warning-subtle"}
+          title={"Success"}
+          titleColor={"white"}
+          description={"Upvote removed."}
+        />
+      )}
+      {showDownvoteRemovedToast && (
+        <Toasts
+          onClose={() => setShowDownvoteRemovedToast(false)}
+          variant={"warning"}
+          variantBody={"warning-subtle"}
+          title={"Success"}
+          titleColor={"white"}
+          description={"Downvote removed."}
         />
       )}
     </>
