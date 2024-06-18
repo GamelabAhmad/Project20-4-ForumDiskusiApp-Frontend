@@ -4,12 +4,14 @@ import Button from "../../atoms/Button/index.jsx";
 import { createQuestionsByForum } from "../../../api/questionApi";
 import Toasts from "../../molecules/Toasts/index.jsx";
 import { getTopics } from "../../../api/topicApi.js";
+import { useNavigate } from "react-router-dom";
 
 export default function DiscussionForm() {
   const selectedForum = localStorage.getItem("selectedForum");
   const [topics, setTopics] = useState([]);
   const [showSuccessToast, setShowSuccessToast] = useState(false);
   const [showFailureToast, setShowFailureToast] = useState(false);
+  const navigate = useNavigate();
 
   const [formValues, setFormValues] = useState({
     title: "",
@@ -70,8 +72,11 @@ export default function DiscussionForm() {
       localStorage.removeItem("selectedForumId");
       setShowSuccessToast(true);
       setTimeout(() => {
-        window.location.href = "/dashboard";
-      }, 1500);
+        setTimeout(() => {
+          setShowSuccessToast(false);
+        }, 1500);
+        navigate("/dashboard");
+      }, 3000);
     } catch (error) {
       console.error("Error:", error);
       setShowFailureToast(true);
@@ -180,7 +185,9 @@ export default function DiscussionForm() {
           variantBody={"danger-subtle"}
           title={"Failure"}
           titleColor={"white"}
-          description={"You must be logged in to post a discussion."}
+          description={
+            "An error occurred while posting the discussion. Please try again."
+          }
         />
       )}
     </>
