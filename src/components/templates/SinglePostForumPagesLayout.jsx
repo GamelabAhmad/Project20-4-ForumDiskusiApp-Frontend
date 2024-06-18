@@ -11,6 +11,7 @@ import Toasts from "../molecules/Toasts/index.jsx";
 import { getQuestionsByForum } from "../../api/questionApi.js";
 import CardPost from "../organisms/CardPost/index.jsx";
 import { getCommentsByPostId } from "../../api/commentApi.js";
+import NavTabs from "../molecules/NavTabs/index.jsx";
 
 export default function SinglePostForumPagesLayout() {
   const [forum, setForum] = useState(null);
@@ -20,6 +21,10 @@ export default function SinglePostForumPagesLayout() {
   const token = Cookies.get("jwt");
   const [showToast, setShowToast] = useState(false);
   const navigate = useNavigate();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [questionsPerPage] = useState(5);
+  const [sortOrder, setSortOrder] = useState("latest");
+  const [sortedQuestions, setSortedQuestions] = useState([]);
 
   useEffect(() => {
     async function fetchForum() {
@@ -63,6 +68,49 @@ export default function SinglePostForumPagesLayout() {
     setShowToast(false);
   };
 
+  useEffect(() => {
+    const newSortedQuestions = [...questions];
+    newSortedQuestions.sort((a, b) => {
+      if (sortOrder === "latest") {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      } else {
+        return new Date(a.createdAt) - new Date(b.createdAt);
+      }
+    });
+
+    setSortedQuestions(newSortedQuestions);
+  }, [sortOrder, questions]);
+
+  const filteredQuestions = sortedQuestions.filter(
+    (question) => question.forum !== null,
+  );
+  const indexOfLastQuestion = currentPage * questionsPerPage;
+  const indexOfFirstQuestion = indexOfLastQuestion - questionsPerPage;
+  const currentQuestions = filteredQuestions.slice(
+    indexOfFirstQuestion,
+    indexOfLastQuestion,
+  );
+  const maxPageNumbersToShow = 5;
+  const totalPages = Math.ceil(filteredQuestions.length / questionsPerPage);
+  let startPage = Math.max(
+    currentPage - Math.floor(maxPageNumbersToShow / 2),
+    1,
+  );
+  let endPage = Math.min(startPage + maxPageNumbersToShow - 1, totalPages);
+  if (endPage - startPage + 1 < maxPageNumbersToShow && startPage > 1) {
+    startPage = Math.max(endPage - maxPageNumbersToShow + 1, 1);
+  }
+
+  const handleSortOrderChange = (tabId, event) => {
+    event.preventDefault();
+    if (tabId === "tab1") {
+      setSortOrder("oldest");
+    } else if (tabId === "tab2") {
+      setSortOrder("latest");
+    }
+    setCurrentPage(1);
+  };
+
   return (
     <>
       <PagesLayout>
@@ -92,13 +140,14 @@ export default function SinglePostForumPagesLayout() {
                     <Card.Description className="lh-base">
                       {forum.description}
                     </Card.Description>
+                    <NavTabs onTabClick={handleSortOrderChange} />
                   </Card>
                 </>
               ) : (
                 <p>Loading...</p>
               )}
-              {questions.length > 0 ? (
-                questions
+              {currentQuestions.length > 0 ? (
+                currentQuestions
                   .filter((question) => question.forum !== null)
                   .map((question) => (
                     <CardPost
@@ -130,6 +179,55 @@ export default function SinglePostForumPagesLayout() {
                   </Card.Title>
                 </Card>
               )}
+              <div className="justify-content-center d-flex">
+                <ul className="pagination">
+                  <li className="page-item">
+                    <a
+                      role="button"
+                      className="page-link"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (currentPage > 1) {
+                          setCurrentPage(currentPage - 1);
+                        }
+                      }}
+                    >
+                      Previous
+                    </a>
+                  </li>
+                  {Array(endPage - startPage + 1)
+                    .fill()
+                    .map((_, index) => (
+                      <li key={index + startPage} className={`page-item`}>
+                        <a
+                          role="button"
+                          className={`page-link ${currentPage === index + startPage ? "bg-primary-subtle text-body" : ""}`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setCurrentPage(index + startPage);
+                          }}
+                        >
+                          {index + startPage}
+                        </a>
+                      </li>
+                    ))}
+                  <li className="page-item">
+                    <a
+                      role="button"
+                      className="page-link"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (currentPage < totalPages) {
+                          setCurrentPage(currentPage + 1);
+                        }
+                      }}
+                      disabled={currentPage === totalPages}
+                    >
+                      Next
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </ContainerLayout>
