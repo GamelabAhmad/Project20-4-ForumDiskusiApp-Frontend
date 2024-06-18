@@ -29,6 +29,8 @@ export default function CommentVote({
     useState(false);
   const user = Cookies.get("user");
   const hasFetchedVotes = useRef(false);
+  const [showRemoveUpvoteToast, setShowRemoveUpvoteToast] = useState(false);
+  const [showRemoveDownvoteToast, setShowRemoveDownvoteToast] = useState(false);
 
   useEffect(() => {
     if (hasFetchedVotes.current) return;
@@ -85,8 +87,8 @@ export default function CommentVote({
         setUpvoteSuccessful(false);
         updatedUpvotes = Math.max(upVotesComments - 1, 0);
         setUpVotesComments(updatedUpvotes);
-        setShowUpvoteSuccessToast(true);
-        setTimeout(() => setShowUpvoteSuccessToast(false), 3000);
+        setShowRemoveUpvoteToast(true);
+        setTimeout(() => setShowRemoveUpvoteToast(false), 3000);
       }
       updateCommentVotes(commentId, updatedUpvotes, updatedDownvotes);
     } catch (error) {
@@ -120,8 +122,8 @@ export default function CommentVote({
         setDownvoteSuccessful(false);
         updatedDownvotes = Math.max(downVotesComments - 1, 0);
         setDownVotesComments(updatedDownvotes);
-        setShowDownvoteSuccessToast(true);
-        setTimeout(() => setShowDownvoteSuccessToast(false), 3000);
+        setShowRemoveDownvoteToast(true);
+        setTimeout(() => setShowRemoveDownvoteToast(false), 3000);
       }
       updateCommentVotes(commentId, updatedUpvotes, updatedDownvotes);
     } catch (error) {
@@ -187,6 +189,26 @@ export default function CommentVote({
           title={"Failure"}
           titleColor={"white"}
           description={"Failed to downvote. Please log in to downvote."}
+        />
+      )}
+      {showRemoveUpvoteToast && (
+        <Toasts
+          onClose={() => setShowRemoveUpvoteToast(false)}
+          variant={"success"}
+          variantBody={"success-subtle"}
+          title={"Success"}
+          titleColor={"white"}
+          description={"Upvote removed successfully."}
+        />
+      )}
+      {showRemoveDownvoteToast && (
+        <Toasts
+          onClose={() => setShowRemoveDownvoteToast(false)}
+          variant={"success"}
+          variantBody={"success-subtle"}
+          title={"Success"}
+          titleColor={"white"}
+          description={"Downvote removed successfully."}
         />
       )}
     </>
