@@ -72,7 +72,7 @@ export default function CreateCommentForm({ onNewComment }) {
           }
           value={formValues.body}
           onChange={handleChange}
-          className="align-items-center d-flex m-0 py-2 text-body"
+          className="align-items-center d-flex m-0 py-2 text-body  shadow-sm"
         />
         <Button
           variant={"primary"}

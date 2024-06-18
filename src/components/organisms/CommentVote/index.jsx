@@ -134,14 +134,14 @@ export default function CommentVote({
     <>
       <div className="d-flex gap-2 align-items-center m-0 mt-2">
         <Button
-          variant={upvoteSuccessful ? "success" : "primary"}
+          variant={upvoteSuccessful ? "primary" : "outline-primary"}
           className={"w-100 w-md-auto rounded-3"}
           onClick={handleUpvoteComment}
         >
           <IconPlaceholder variant={"arrow-up"} />
         </Button>
         <Button
-          variant={downvoteSuccessful ? "danger" : "primary"}
+          variant={downvoteSuccessful ? "primary" : "outline-primary"}
           className="w-100 w-md-auto rounded-3"
           onClick={handleDownvoteComment}
         >

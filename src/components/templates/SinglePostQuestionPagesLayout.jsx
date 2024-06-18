@@ -330,14 +330,14 @@ export default function SinglePostQuestionPagesLayout() {
                               profiles?.username && (
                               <>
                                 <Button
-                                  variant={"success"}
+                                  variant={"outline-primary"}
                                   className="rounded-3 btn-sm mb-1"
                                   onClick={() => handleEditComment(comment)}
                                 >
                                   <IconPlaceholder variant={"pencil"} />
                                 </Button>
                                 <Button
-                                  variant={"danger"}
+                                  variant={"outline-primary"}
                                   className="rounded-3 btn-sm mb-1"
                                   onClick={() =>
                                     handleDeleteComment(comment.uuid)

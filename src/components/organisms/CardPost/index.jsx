@@ -170,7 +170,7 @@ export default function CardPost({
                 <>
                   <div className={`d-flex gap-3 col-12 col-md-6 mb-3 mb-md-0`}>
                     <Button
-                      variant={upvoteSuccessful ? "success" : "primary"}
+                      variant={upvoteSuccessful ? "primary" : "outline-primary"}
                       className={"w-100 w-md-auto rounded-3"}
                       onClick={handleUpvote}
                     >
@@ -178,7 +178,9 @@ export default function CardPost({
                       Upvote
                     </Button>
                     <Button
-                      variant={downvotesSuccessful ? "danger" : "primary"}
+                      variant={
+                        downvotesSuccessful ? "primary" : "outline-primary"
+                      }
                       className="w-100 w-md-auto rounded-3"
                       onClick={handleDownvote}
                     >
