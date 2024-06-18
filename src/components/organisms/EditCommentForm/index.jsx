@@ -57,7 +57,10 @@ export default function EditCommentForm({ onUpdateComment, editingComment }) {
 
   return (
     <>
-      <form onSubmit={handleSubmit} className="d-flex mb-3">
+      <form
+        onSubmit={handleSubmit}
+        className="d-sm-flex mb-3 align-items-center"
+      >
         <InputForm
           htmlFor={"body"}
           id={"body"}
@@ -66,12 +69,12 @@ export default function EditCommentForm({ onUpdateComment, editingComment }) {
           placeholder={`Your comment as ${user}`}
           value={formValues.body}
           onChange={handleChange}
-          className="align-items-center d-flex m-0 py-2 text-body shadow-sm"
+          className="align-items-center d-flex m-0 py-2 text-body shadow-sm flex-grow-1 me-2 mt-2"
         />
         <Button
           variant={"primary"}
           type="submit"
-          className="rounded-3 d-flex align-items-center m-0"
+          className="rounded-3 d-flex align-items-center m-0 flex-shrink-0 w-100 w-sm-auto justify-content-center justify-content-sm-start"
         >
           Update
         </Button>

@@ -10,6 +10,8 @@ export default function CreateCommentForm({ onNewComment }) {
   const token = Cookies.get("jwt");
   const user = Cookies.get("user");
   const { id } = useParams();
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const [showFailureToast, setShowFailureToast] = useState(false);
 
   const [formValues, setFormValues] = useState({
     body: "",
@@ -21,9 +23,6 @@ export default function CreateCommentForm({ onNewComment }) {
       [event.target.name]: event.target.value,
     });
   };
-
-  const [showSuccessToast, setShowSuccessToast] = useState(false);
-  const [showFailureToast, setShowFailureToast] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -61,7 +60,10 @@ export default function CreateCommentForm({ onNewComment }) {
 
   return (
     <>
-      <form onSubmit={handleSubmit} className="d-flex mb-3">
+      <form
+        onSubmit={handleSubmit}
+        className="d-sm-flex mb-3 align-items-center"
+      >
         <InputForm
           htmlFor={"body"}
           id={"body"}
@@ -72,12 +74,12 @@ export default function CreateCommentForm({ onNewComment }) {
           }
           value={formValues.body}
           onChange={handleChange}
-          className="align-items-center d-flex m-0 py-2 text-body  shadow-sm"
+          className="align-items-center d-flex m-0 py-2 text-body shadow-sm flex-grow-1 me-2 mt-2"
         />
         <Button
           variant={"primary"}
           type="submit"
-          className="rounded-3 d-flex align-items-center m-0 btn-sm"
+          className="rounded-3 d-flex align-items-center m-0 flex-shrink-0 w-100 w-sm-auto justify-content-center justify-content-sm-start"
           disabled={!token || !user}
         >
           Comment
