@@ -22,7 +22,7 @@ export default function CardHeader({
       setShowToast(true);
       setTimeout(() => setShowToast(false), 3000);
     } else {
-      navigate("/dashboard");
+      navigate("/dashboard/create-question");
     }
   };
 
