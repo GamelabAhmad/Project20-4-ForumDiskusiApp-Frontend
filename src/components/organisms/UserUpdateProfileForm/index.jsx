@@ -63,8 +63,10 @@ export default function UserUpdateProfileForm() {
       await updateUser(username, formData);
       setToastContent({
         title: "Success",
+        titleColor: "white",
         description: "Profile updated successfully",
         variant: "success",
+        variantBody: "success-subtle",
       });
       setShowToast(true);
       setTimeout(() => {
@@ -74,8 +76,10 @@ export default function UserUpdateProfileForm() {
       console.error("Error:", error);
       setToastContent({
         title: "Error",
+        titleColor: "white",
         description: "Failed to update profile",
         variant: "danger",
+        variantBody: "danger-subtle",
       });
       setShowToast(true);
     }
@@ -86,8 +90,10 @@ export default function UserUpdateProfileForm() {
       {showToast && (
         <Toasts
           title={toastContent.title}
+          titleColor={toastContent.titleColor}
           description={toastContent.description}
           variant={toastContent.variant}
+          variantBody={toastContent.variantBody}
           onClose={() => setShowToast(false)}
         />
       )}
