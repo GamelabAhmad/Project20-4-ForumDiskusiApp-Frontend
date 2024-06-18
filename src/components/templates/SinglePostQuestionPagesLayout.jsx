@@ -27,7 +27,7 @@ import CommentVote from "../organisms/CommentVote/index.jsx";
 import { getCommentVotes } from "../../api/commentVotesApi.js";
 
 export default function SinglePostQuestionPagesLayout() {
-  const [post, setPost] = useState(null);
+  const [questions, setQuestions] = useState(null);
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [votes, setVotes] = useState(0);
@@ -58,7 +58,7 @@ export default function SinglePostQuestionPagesLayout() {
 
     async function fetchQuestionAndComments() {
       try {
-        const question = await getQuestionById(id);
+        const questions = await getQuestionById(id);
         let comments = await getCommentsByPostId(id);
         let profile = null;
         let isGuest = !Cookies.get("user");
@@ -110,7 +110,7 @@ export default function SinglePostQuestionPagesLayout() {
           setCommentVotes(commentVotesData);
           setProfiles(profile);
           setComments(comments);
-          setPost(question);
+          setQuestions(questions);
           setLoading(false);
         }
       } catch (error) {
@@ -216,17 +216,17 @@ export default function SinglePostQuestionPagesLayout() {
                   variant={"secondary"}
                   className={"col-12"}
                 />
-              ) : post ? (
+              ) : questions ? (
                 <CardPost
-                  title={post.title}
-                  topic={post.topic?.name}
-                  description={post.body}
-                  imageSrc={post.imageUrl}
-                  imageAlt={post.title}
-                  createdAt={new Date(post.createdAt).toLocaleString()}
-                  username={post.createdBy.username}
-                  avatarSrc={post.createdBy.avatar}
-                  avatarAlt={post.createdBy.username}
+                  title={questions.title}
+                  topic={questions.topic?.name}
+                  description={questions.body}
+                  imageSrc={questions.imageUrl}
+                  imageAlt={questions.title}
+                  createdAt={new Date(questions.createdAt).toLocaleString()}
+                  username={questions.createdBy.username}
+                  avatarSrc={questions.createdBy.avatar}
+                  avatarAlt={questions.createdBy.username}
                   votes={upVotes}
                   downvotes={downVotes}
                   answers={comments.length || 0}
@@ -235,7 +235,7 @@ export default function SinglePostQuestionPagesLayout() {
               ) : (
                 <Card>
                   <Card.Title className="d-flex align-items-center justify-content-center fw-semibold">
-                    No post available
+                    No questions available
                   </Card.Title>
                 </Card>
               )}
