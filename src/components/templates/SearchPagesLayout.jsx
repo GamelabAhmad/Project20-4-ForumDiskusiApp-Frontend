@@ -9,9 +9,11 @@ import Card from "../molecules/Card/index.jsx";
 export default function SearchPagesLayout() {
   const [results, setResults] = useState([]);
   const [hasSearched, setHasSearched] = useState(false);
+  const [inputValue, setInputValue] = useState("");
 
-  const handleSearch = (results) => {
+  const handleSearch = (results, value) => {
     setResults(results);
+    setInputValue(value);
     setHasSearched(true);
   };
 
@@ -29,14 +31,9 @@ export default function SearchPagesLayout() {
             <div className="my-3 col-12">
               <SearchBarForm setResults={handleSearch} />
             </div>
-            {hasSearched &&
-              (results.length > 0 ? (
-                <SearchResultsList results={results} />
-              ) : (
-                <div className="col-12 mb-3">
-                  <Card>No results found</Card>
-                </div>
-              ))}
+            {hasSearched && (
+              <SearchResultsList results={results} inputValue={inputValue} />
+            )}
           </div>
         </div>
       </ContainerLayout>

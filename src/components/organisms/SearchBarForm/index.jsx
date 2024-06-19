@@ -12,7 +12,7 @@ export default function SearchBarForm({ setResults }) {
         question.title.toLowerCase().includes(value.toLowerCase()) ||
         question.body.toLowerCase().includes(value.toLowerCase()),
     );
-    setResults(results);
+    setResults(results, value);
   };
 
   const handleChange = (e) => {
@@ -21,7 +21,7 @@ export default function SearchBarForm({ setResults }) {
     if (value.trim() !== "") {
       fetchData(value);
     } else {
-      setResults([]);
+      setResults([], value);
     }
   };
 
