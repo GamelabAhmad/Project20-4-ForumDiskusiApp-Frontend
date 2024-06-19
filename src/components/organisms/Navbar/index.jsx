@@ -82,6 +82,15 @@ export default function Navbar() {
             <div className="offcanvas-body d-xl-flex justify-content-between">
               <div className="row my-2 col-lg-4 ms-auto">
                 <div className="col-lg-12 d-flex justify-content-center justify-content-lg-end gap-2">
+                  <Button variant="primary" className="rounded-5">
+                    <a
+                      href="/search"
+                      className="text-white text-decoration-none d-flex gap-2"
+                    >
+                      <IconPlaceholder variant={"search"} />
+                      Search
+                    </a>
+                  </Button>
                   {token && (
                     <div className="dropdown">
                       <Button
@@ -120,15 +129,6 @@ export default function Navbar() {
                     </Button>
                   ) : (
                     <>
-                      <Button variant="primary" className="rounded-5">
-                        <a
-                          href="/search"
-                          className="text-white text-decoration-none d-flex gap-2"
-                        >
-                          <IconPlaceholder variant={"search"} />
-                          Search
-                        </a>
-                      </Button>
                       <Button variant="primary" className="rounded-5">
                         <Link
                           to="/login"
