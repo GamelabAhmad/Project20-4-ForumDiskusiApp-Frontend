@@ -88,7 +88,7 @@ export default function AuthAdminPagesLayout() {
                 aria-expanded="false"
                 aria-controls="collapseDiscussion"
               >
-                Toggle Topic Table
+                Toggle Discussion Table
               </button>
               <div className="collapse w-100 mb-3" id="collapseDiscussion">
                 <div className="card card-body table-responsive">
