@@ -120,7 +120,9 @@ export default function QuestionPagesLayout() {
                       community. Feel free to answer any of them! If you have a
                       question, feel free to ask! We are here to help!
                     </TypographyText>
-                    <NavTabs onTabClick={handleSortOrderChange} />{" "}
+                    <div className="mt-3 w-100 w-lg-25 ms-auto">
+                      <NavTabs onTabClick={handleSortOrderChange} />
+                    </div>
                   </>
                 }
                 buttonTitle={"Ask a Question"}

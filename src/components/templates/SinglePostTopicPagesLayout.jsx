@@ -151,7 +151,9 @@ export default function SinglePostTopicPagesLayout() {
                               ].title
                             : "No questions found"}
                         </TypographyText>
-                        <NavTabs onTabClick={handleSortOrderChange} />
+                        <div className="mt-3 w-100 w-lg-25 ms-auto">
+                          <NavTabs onTabClick={handleSortOrderChange} />
+                        </div>
                       </div>
                     </>
                   }
