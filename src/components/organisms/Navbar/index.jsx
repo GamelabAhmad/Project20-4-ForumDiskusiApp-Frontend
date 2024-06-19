@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 import HeadingText from "../../atoms/HeadingText/index.jsx";
 import ContainerLayout from "../../templates/ContainerLayout.jsx";
 import Button from "../../atoms/Button/index.jsx";
-import InputForm from "../../molecules/InputForm/index.jsx";
 import IconPlaceholder from "../../atoms/IconPlaceholder/index.jsx";
 import Cookies from "js-cookie";
+import SearchBarForm from "../SearchBarForm/index.jsx";
 
 export default function Navbar() {
   const user = Cookies.get("user");
@@ -80,18 +80,7 @@ export default function Navbar() {
               ></button>
             </div>
             <div className="offcanvas-body d-xl-flex justify-content-between">
-              <div className="row col-lg-8">
-                <div className="col-lg-12 mt-1 ms-xl-4">
-                  <InputForm
-                    type="search"
-                    name="search"
-                    id="search"
-                    placeholder=" Search..."
-                    className="d-flex p-1 rounded-3 me-lg-5 w-100 text-body"
-                  />
-                </div>
-              </div>
-              <div className="row my-2 col-lg-4">
+              <div className="row my-2 col-lg-4 ms-auto">
                 <div className="col-lg-12 d-flex justify-content-center justify-content-lg-end gap-2">
                   {token && (
                     <div className="dropdown">
@@ -131,6 +120,15 @@ export default function Navbar() {
                     </Button>
                   ) : (
                     <>
+                      <Button variant="primary" className="rounded-5">
+                        <a
+                          href="/search"
+                          className="text-white text-decoration-none d-flex gap-2"
+                        >
+                          <IconPlaceholder variant={"search"} />
+                          Search
+                        </a>
+                      </Button>
                       <Button variant="primary" className="rounded-5">
                         <Link
                           to="/login"
